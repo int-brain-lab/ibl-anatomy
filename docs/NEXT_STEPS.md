@@ -15,16 +15,20 @@ Current checkpoint:
   open.
 - the Datoviz retained tree/table contract, native implementation, generated
   Python facade, C/Python examples, and documentation are committed on Datoviz
-  `main`. The overlay now handles sRGB targets correctly and the combined atlas
-  example has a darker, denser presentation modeled on the established Allen
-  hierarchy browser. Its latest screenshot remains build-local pending visual
-  review and the protected gallery-media approval workflow.
+  `main`. The overlay handles sRGB targets correctly, mesh faces have an explicit
+  query target, and linked identities are scoped by channel plus 64-bit key. The
+  combined atlas example has a darker, denser presentation modeled on the established
+  Allen hierarchy browser; its reviewed gallery image is committed in the data submodule.
 - the first `ibl-datoviz` v0.4 consumer is implemented on
   `feature/datoviz-v04-atlas-spike`: real offscreen rendering, dense mesh upload, mapping-only
   updates, per-face signed query keys, probe path, arcball, and explicit destruction are green.
+  A docked retained Allen ontology browser now consumes this package's region catalog, with
+  Allen/Beryl/Cosmos switching, filtering, collapse/expand, official swatches, and linked
+  surface/tree selection.
 - `ephys-atlas-web-v2` now has one deliberately narrow extraction seam: its authoritative region
   builder emits an explicit `allen-ccf-2017` reference-space identity, while this package owns the
-  strict renderer-neutral reader. Projection and volume extraction remain deferred.
+  strict renderer-neutral reader. The change is pushed on
+  `feature/shared-atlas-region-contract`; projection and volume extraction remain deferred.
 
 This document separates immediate, evidence-producing work from the broader
 possibilities in `FUTURE_DIRECTIONS.md`. Work should use small green commits.
@@ -63,6 +67,9 @@ The goal is to close small, proven public-API gaps without delaying v0.4 for
 large atlas-specific features.
 
 ### Recommended to land
+
+The facade adapters and retained tree/table work below have now landed on Datoviz `main`. The list
+remains as rationale and as a release checklist for any composable primitive that is still absent.
 
 1. Add ergonomic Python facade adapters for existing public C functions needed
    by ordinary scientific viewers:
@@ -227,3 +234,8 @@ until the first reader and native consumer answer:
 
 Record those answers in `PROJECT.md`, revise this plan, and select one next
 vertical slice.
+
+The first checkpoint is now recorded in `PROJECT.md`. The next recommended slice is a
+representative real surface pack: make both native and web consumers validate the same immutable
+pack and region catalog, without yet extracting volume/projection pipelines or inventing a shared
+cross-language runtime.

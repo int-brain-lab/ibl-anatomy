@@ -76,9 +76,9 @@ existing miniature mesh pack from independent Python code.
 - Publishing Python or npm packages before the boundary is validated.
 - Migrating production ephys assets or changing their serialized bytes.
 
-## Candidate `ibl-datoviz` vertical slice
+## Completed `ibl-datoviz` vertical slice
 
-After Spike 001, a small native consumer should:
+The first native consumer now:
 
 1. load the miniature mesh geometry through this repository;
 2. render it through Datoviz v0.4;
@@ -89,8 +89,9 @@ After Spike 001, a small native consumer should:
 7. use explicit resource ownership and destruction; and
 8. produce a deterministic offscreen image without network access.
 
-That implementation will provide evidence for Datoviz API requests and for the
-next extraction decision.
+That implementation directly produced the Datoviz retained tree/table API, explicit mesh-face
+query identity, channel-scoped linked keys, and the renderer-neutral region-catalog reader in this
+repository.
 
 ## Decision checkpoint
 
@@ -104,5 +105,23 @@ After the mesh reader and native consumer exist, answer:
   fixtures?
 - Which asset family, if any, should be extracted next?
 
-The answers replace this hypothesis with an accepted scope. Until then, avoid
-expanding the repository beyond the concrete experiment.
+## First checkpoint answers
+
+- `atlas-mesh-pack-v1` is independent of the ephys dataset contract in practice: the Python
+  consumer loads geometry, presentations, provenance, and reference-space identity without an
+  ephys release or browser runtime.
+- The valuable shared surface is schema, immutable bytes, semantic invariants, and conformance
+  fixtures. Renderer upload, GUI state, caching, and application lifecycle remain consumer-owned.
+- The Python reader is materially useful: `ibl-datoviz` consumes it directly and no longer carries
+  a second mesh decoder or presentation-boundary rule.
+- TypeScript decoding should remain in the web application for now. Moving it would add packaging
+  and release coupling before a second TypeScript consumer exists; parity should be enforced with
+  the same fixtures and hashes.
+- Small language-specific adapters plus shared contracts are currently simpler than a shared
+  cross-language runtime.
+- The next evidence-producing slice should use one representative real surface pack and the full
+  region catalog in both consumers. Volume and projection extraction remain deferred until this
+  proves publication, versioning, and cache boundaries on real data.
+
+This is the accepted narrow scope for the next slice. It deliberately does not authorize a broad
+asset platform, shared reducer, or renderer abstraction.
