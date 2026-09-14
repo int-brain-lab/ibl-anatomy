@@ -25,7 +25,18 @@ and atlas computations.
 
 Spike 001 now provides an independent, offline Python reader for raw EAM3 `atlas-mesh-pack-v1` packs. It validates the bundled JSON Schema, the complete immutable resource graph, encoded and decoded byte sizes, SHA-256 identities, signed presentation metadata, component ranges, and decoded geometry before returning owned contiguous NumPy arrays.
 
-The project remains in an evidence-gathering phase. The reader currently rejects `meshopt-quantized-v1`; HTTP fetching, persistent caching, builders, TypeScript, real atlas asset publication, and renderer integration remain deliberately outside the first spike.
+The project remains in an evidence-gathering phase. The reader currently rejects `meshopt-quantized-v1`; persistent runtime caching, builders, TypeScript packaging, and renderer integration remain outside its scope.
+
+The package now ships an immutable lock for the published D070 Allen CCF 2017 surface and the exact matching region catalog. The lock contains URLs, sizes, SHA-256 identities, decoded inventory counts, and renderer-neutral vertex/face presentation fingerprints. The numeric mesh bytes remain in the established immutable atlas origin rather than being copied into this Git repository.
+
+```python
+from ibl_atlas_assets import bundled_asset_set, materialize_asset_set
+
+assets = materialize_asset_set(bundled_asset_set("d070"), "build/atlas-d070")
+print(assets.geometry.positions.shape, assets.regions.reference_space_id)
+```
+
+Materialization creates a new destination atomically, verifies every downloaded byte before decoding, validates the complete mesh graph and region catalog, checks their common reference space and mapped IDs, and proves that every vertex and triangle resolves to the pinned bilateral presentation fingerprint. It does not maintain a cache, overwrite a destination, or select a renderer.
 
 ## Development
 
@@ -47,9 +58,11 @@ geometry = pack.load_geometry()
 print(geometry.positions.shape, geometry.positions.dtype)
 print(geometry.indices.shape, geometry.indices.dtype)
 print(geometry.reference_space, geometry.coordinate_system)
+print(geometry.vertex_presentation_ids().shape)
+print(geometry.face_presentation_ids().shape)
 ```
 
-`open_mesh_pack()` accepts a configurable decoded-resource size limit and defaults to 2 GiB. It never applies an atlas-to-renderer coordinate transform.
+`open_mesh_pack()` accepts a configurable decoded-resource size limit and defaults to 2 GiB. Decoded EAM3 positions are already in the manifest's declared world axes and micrometre units. `source_to_world_um` records the source-to-compiled transform for provenance and must not be applied to decoded positions again. The reader never applies an atlas-to-renderer display transform.
 
 ## Read the Allen region catalog
 

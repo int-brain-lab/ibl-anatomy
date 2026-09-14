@@ -109,6 +109,68 @@ class MeshGeometry:
         )
         return np.ascontiguousarray(np.where(left_mask, left, right), dtype=np.int64)
 
+    def world_positions(self) -> NDArray[np.float32]:
+        """Return owned positions in the pack's declared ML/AP/DV world space.
+
+        EAM3 positions are already compiled into this space. The manifest's
+        ``source_to_world_um`` matrix is provenance for that offline transform;
+        consumers must not apply it again.
+        """
+
+        return np.array(self.positions, dtype=np.float32, order="C", copy=True)
+
+    def world_normals(self) -> NDArray[np.float32]:
+        """Return unit normals transformed to the declared world space."""
+
+        normals = self.normals.astype(np.float64)
+        lengths = np.linalg.norm(normals, axis=1)
+        if np.any(lengths == 0):
+            raise ValueError("mesh contains a zero-length transformed normal")
+        return np.ascontiguousarray(normals / lengths[:, None], dtype=np.float32)
+
+    def vertex_presentation_ids(
+        self, positions_um: NDArray[np.float32] | None = None
+    ) -> NDArray[np.int32]:
+        """Resolve one presentation identity for every mesh vertex."""
+
+        world = self.world_positions() if positions_um is None else positions_um
+        if world.shape != self.positions.shape:
+            raise ValueError("mesh world positions must match mesh positions")
+        ml_axis = self.coordinate_system["world_axes"].index("ml")
+        sentinel = np.iinfo(np.int32).min
+        identities = np.full(len(world), sentinel, dtype=np.int32)
+        for item in self.ranges:
+            selection = slice(item.vertex_start, item.vertex_start + item.vertex_count)
+            identities[selection] = self.presentation_ids_for_component(
+                item.component_id, world[selection, ml_axis]
+            )
+        if np.any(identities == sentinel):
+            raise ValueError("mesh presentation identity does not cover every vertex")
+        return identities
+
+    def face_presentation_ids(
+        self, positions_um: NDArray[np.float32] | None = None
+    ) -> NDArray[np.int32]:
+        """Resolve one presentation identity for every indexed triangle."""
+
+        world = self.world_positions() if positions_um is None else positions_um
+        if world.shape != self.positions.shape:
+            raise ValueError("mesh world positions must match mesh positions")
+        ml_axis = self.coordinate_system["world_axes"].index("ml")
+        triangles = self.indices.reshape(-1, 3)
+        sentinel = np.iinfo(np.int32).min
+        identities = np.full(len(triangles), sentinel, dtype=np.int32)
+        for item in self.ranges:
+            face_start = item.index_start // 3
+            face_end = (item.index_start + item.index_count) // 3
+            centroids_ml = world[triangles[face_start:face_end], ml_axis].mean(axis=1)
+            identities[face_start:face_end] = self.presentation_ids_for_component(
+                item.component_id, centroids_ml
+            )
+        if np.any(identities == sentinel):
+            raise ValueError("mesh presentation identity does not cover every face")
+        return identities
+
 
 class _FrozenList(list[Any]):
     """List-compatible immutable metadata container."""

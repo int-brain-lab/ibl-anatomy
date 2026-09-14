@@ -1,5 +1,15 @@
 """Renderer-neutral readers for versioned IBL atlas assets."""
 
+from .asset_set import (
+    AtlasAssetSet,
+    MaterializedAtlasAssets,
+    PinnedResource,
+    bundled_asset_set,
+    materialize_asset_set,
+    open_asset_set,
+    parse_asset_set,
+    verify_materialized_asset_set,
+)
 from .mesh_pack import MeshComponentRange, MeshGeometry, MeshPack, open_mesh_pack
 from .regions import (
     AtlasRegion,
@@ -9,14 +19,22 @@ from .regions import (
 )
 
 __all__ = [
+    "AtlasAssetSet",
     "AtlasRegion",
     "AtlasRegionCatalog",
+    "MaterializedAtlasAssets",
     "MeshComponentRange",
     "MeshGeometry",
     "MeshPack",
+    "PinnedResource",
+    "bundled_asset_set",
+    "materialize_asset_set",
+    "open_asset_set",
     "open_mesh_pack",
     "open_region_catalog",
+    "parse_asset_set",
     "parse_region_catalog",
+    "verify_materialized_asset_set",
 ]
 
 __version__ = "0.0.0"

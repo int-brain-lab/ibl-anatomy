@@ -1,0 +1,26 @@
+{
+  "format": "ibl-atlas-asset-set-v1",
+  "schema_version": "1.0",
+  "asset_set_id": "allen-ccf-2017-d070-20260908",
+  "reference_space_id": "allen-ccf-2017",
+  "mesh_manifest": {
+    "url": "https://ephys-atlas.iblcore.org/atlas/meshes/ibl-native-d070-71f78c56e0b35eb2/manifest.json",
+    "bytes": 682717,
+    "sha256": "2a2b9145b09f67d175a9ce0d7dbcc9e63a2c0444218e06c86902d19378e8dc9d"
+  },
+  "region_catalog": {
+    "url": "https://raw.githubusercontent.com/int-brain-lab/ephys-atlas-web-v2/e91f021ac7ca096db2b408a7d691a6c32cc336ad/web/public/atlas/allen-ccf-2017/regions.json",
+    "bytes": 657555,
+    "sha256": "0b4e18949950ddd99ed98ea06c80bc469c5e1c0fb2379dcf1afa02cc66ebd8a4"
+  },
+  "expectations": {
+    "pack_id": "ibl-native-d070-71f78c56e0b35eb2",
+    "geometry_sha256": "b5f5abc7d0bb357520a65dacf33a24251e2bd6f75873d7d5ac650ef2cd271799",
+    "vertices": 486674,
+    "triangles": 966645,
+    "components": 1140,
+    "presentations": 1132,
+    "vertex_presentations_sha256": "f3a7395941d05eb03078d58a07ac78c9bb71fb2d8b2d4bf4994984cd4ced9d0e",
+    "face_presentations_sha256": "cdb11d2a0e78ce5fe464e23fd6cf702e6d2af675352a1e7796ee80e065bf5486"
+  }
+}

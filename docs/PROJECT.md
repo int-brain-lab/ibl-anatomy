@@ -1,6 +1,6 @@
 # Project hypothesis and boundaries
 
-Status: mesh boundary accepted after Spike 001 and the first native consumer.
+Status: mesh boundary accepted after Spike 001, the first native consumer, and the real D070 pack checkpoint.
 
 ## Motivation
 
@@ -125,3 +125,18 @@ After the mesh reader and native consumer exist, answer:
 
 This is the accepted narrow scope for the next slice. It deliberately does not authorize a broad
 asset platform, shared reducer, or renderer abstraction.
+
+## Real D070 checkpoint
+
+The first representative real asset set is the published D070 native Allen CCF 2017 surface plus the region catalog emitted by `ephys-atlas-web-v2` commit `e91f021ac7ca096db2b408a7d691a6c32cc336ad`. `ibl-atlas-assets` ships a small immutable lock rather than duplicating the 14 MB numeric geometry in Git. Materialization verifies the complete remote graph before exposing it locally.
+
+This checkpoint also exposes owned world-coordinate arrays and moves per-vertex/per-face presentation classification into the renderer-neutral reader. EAM3 positions are already compiled into declared ML/AP/DV micrometres; the manifest's source transform is provenance and is not applied twice. These operations define the asset's signed anatomical identity and are shared semantics; normalization, GPU upload, colors, interaction, and application state remain consumer responsibilities.
+
+The lock freezes:
+
+- the exact published manifest, geometry, validation report, and region-catalog byte identities;
+- 486,674 vertices, 966,645 triangles, 1,140 components, and 1,132 presentations;
+- the common `allen-ccf-2017` reference space and catalog membership of every non-missing Allen/Beryl/Cosmos mapping; and
+- deterministic vertex and face presentation fingerprints, which provide compact cross-language parity vectors without a shared runtime.
+
+The real checkpoint supports the existing conclusion: share immutable contracts, semantic fingerprints, and small language-native adapters. Do not introduce a cross-language renderer or state runtime.

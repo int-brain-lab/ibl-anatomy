@@ -5,6 +5,7 @@ import hashlib
 import json
 import shutil
 import struct
+from dataclasses import replace
 from pathlib import Path
 
 import numpy as np
@@ -112,6 +113,42 @@ def test_open_verify_and_decode_valid_fixture() -> None:
         None,
         None,
     ]
+    world_positions = geometry.world_positions()
+    world_normals = geometry.world_normals()
+    assert world_positions.dtype == np.float32
+    assert world_normals.dtype == np.float32
+    np.testing.assert_allclose(world_positions, geometry.positions)
+    np.testing.assert_allclose(np.linalg.norm(world_normals, axis=1), 1)
+    np.testing.assert_array_equal(
+        geometry.vertex_presentation_ids(world_positions),
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    )
+    assert geometry.face_presentation_ids(world_positions).shape == (12,)
+    assert set(geometry.face_presentation_ids(world_positions)) == {0, 1}
+
+    provenance_transform = dict(geometry.coordinate_system)
+    provenance_transform["source_to_world_um"] = [
+        0,
+        0,
+        1,
+        -5739,
+        -1,
+        0,
+        0,
+        5400,
+        0,
+        -1,
+        0,
+        332,
+        0,
+        0,
+        0,
+        1,
+    ]
+    np.testing.assert_array_equal(
+        replace(geometry, coordinate_system=provenance_transform).world_positions(),
+        geometry.positions,
+    )
 
 
 def test_renderer_neutral_identity_helpers_and_immutable_metadata() -> None:

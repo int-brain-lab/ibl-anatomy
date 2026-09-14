@@ -29,6 +29,10 @@ Current checkpoint:
   builder emits an explicit `allen-ccf-2017` reference-space identity, while this package owns the
   strict renderer-neutral reader. The change is pushed on
   `feature/shared-atlas-region-contract`; projection and volume extraction remain deferred.
+- the representative real D070 surface is now captured by a packaged immutable asset-set lock.
+  The Python materializer verifies the published mesh graph and exact region catalog together,
+  including complete vertex/triangle presentation fingerprints, without copying numeric geometry
+  into Git or adding a shared cross-language runtime.
 
 This document separates immediate, evidence-producing work from the broader
 possibilities in `FUTURE_DIRECTIONS.md`. Work should use small green commits.
@@ -235,7 +239,7 @@ until the first reader and native consumer answer:
 Record those answers in `PROJECT.md`, revise this plan, and select one next
 vertical slice.
 
-The first checkpoint is now recorded in `PROJECT.md`. The next recommended slice is a
-representative real surface pack: make both native and web consumers validate the same immutable
-pack and region catalog, without yet extracting volume/projection pipelines or inventing a shared
-cross-language runtime.
+The real surface checkpoint is now recorded in `PROJECT.md`. Complete the two consumer adapters
+against the packaged D070 lock and measure native preparation/rendering/picking behavior. Then use
+that evidence to decide whether Datoviz needs a query-performance change and whether annotation
+volume or projection assets should be the next isolated contract spike.
