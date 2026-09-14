@@ -1,6 +1,6 @@
 # Project hypothesis and boundaries
 
-Status: mesh boundary accepted after Spike 001, the first native consumer, and the real D070 pack checkpoint.
+Status: mesh and region-catalog boundary accepted after two consumers and the real D070 checkpoint.
 
 ## Motivation
 
@@ -140,3 +140,24 @@ The lock freezes:
 - deterministic vertex and face presentation fingerprints, which provide compact cross-language parity vectors without a shared runtime.
 
 The real checkpoint supports the existing conclusion: share immutable contracts, semantic fingerprints, and small language-native adapters. Do not introduce a cross-language renderer or state runtime.
+
+## Two-consumer checkpoint
+
+The native and browser consumers now exercise the same real D070 lock independently:
+
+- `ibl-datoviz` verifies the asset graph, uploads the surface once, maps signed Allen probe and
+  regional values into Allen/Beryl/Cosmos presentations, and links native rendering to retained
+  ontology and table widgets;
+- `ephys-atlas-web-v2` parses strict physical, left, and logical catalog views, preserves source
+  indices and mapped identities, and verifies the real mesh and region fingerprints; and
+- both consumers reject malformed hierarchy, mapping, provenance, reference-space, and bilateral
+  identity instead of silently repairing it.
+
+This does not justify a shared runtime package. Python benefits from this repository's reader;
+TypeScript currently has exactly one consumer, whose small language-native decoder is simpler than
+an npm/Wasm release dependency. Browser fetch and cache policy, application selection state,
+scientific feature derivation, GUI composition, and renderer upload remain consumer-owned.
+
+No new `iblatlas` API is required by these slices. No additional `ibl-atlas-assets` lookup or
+aggregation API is being added yet: mapping-aware weighted reduction is currently a presentation
+need in one consumer, not a demonstrated cross-consumer asset primitive.

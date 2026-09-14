@@ -26,9 +26,10 @@ Current checkpoint:
   Allen/Beryl/Cosmos switching, filtering, collapse/expand, official swatches, and linked
   surface/tree selection.
 - `ephys-atlas-web-v2` now has one deliberately narrow extraction seam: its authoritative region
-  builder emits an explicit `allen-ccf-2017` reference-space identity, while this package owns the
-  strict renderer-neutral reader. The change is pushed on
-  `feature/shared-atlas-region-contract`; projection and volume extraction remain deferred.
+  builder emits an explicit `allen-ccf-2017` reference-space identity and its browser decoder now
+  exposes the same strict physical, left, and logical views as the Python reader. Real D070 parity
+  is green on `feature/shared-atlas-region-contract`; projection and volume extraction remain
+  deferred.
 - the representative real D070 surface is now captured by a packaged immutable asset-set lock.
   The Python materializer verifies the published mesh graph and exact region catalog together,
   including complete vertex/triangle presentation fingerprints, without copying numeric geometry
@@ -239,7 +240,7 @@ until the first reader and native consumer answer:
 Record those answers in `PROJECT.md`, revise this plan, and select one next
 vertical slice.
 
-The real surface checkpoint is now recorded in `PROJECT.md`. Complete the two consumer adapters
-against the packaged D070 lock and measure native preparation/rendering/picking behavior. Then use
-that evidence to decide whether Datoviz needs a query-performance change and whether annotation
-volume or projection assets should be the next isolated contract spike.
+The two-consumer checkpoint is now recorded in `PROJECT.md`. It supports shared immutable assets,
+schemas, semantic validators, and parity vectors with small language-native adapters. The next
+asset-family spike should begin only from a concrete volume or projection use case with a pinned
+source artifact; it should not start by designing a generic cross-language runtime.
