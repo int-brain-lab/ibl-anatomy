@@ -2,6 +2,20 @@
 
 Status: active near-term work plan, captured on 2026-09-14.
 
+Current checkpoint:
+
+- `ibl-atlas-assets` Spike 001 is implemented on `main`; the raw EAM3 reader,
+  packaged fixture, validation tests, and completion decision are committed.
+- `iblatlas` hardening is implemented on
+  `feature/atlas-contract-hardening` (never on `main`) and its complete unittest
+  suite passes.
+- the Datoviz retained tree/table contract is committed on Datoviz `main`; its
+  implementation, bindings, examples, and documentation remain the active
+  pre-v0.4-final work.
+- `ibl-datoviz` and `ephys-atlas-web-v2` remain intentionally unchanged until
+  that Datoviz work is validated. The first native consumer is the next
+  boundary-discovery task, not part of Spike 001 itself.
+
 This document separates immediate, evidence-producing work from the broader
 possibilities in `FUTURE_DIRECTIONS.md`. Work should use small green commits.
 Pull requests are not part of the current workflow unless the repository owner
