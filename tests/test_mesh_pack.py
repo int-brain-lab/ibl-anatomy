@@ -184,6 +184,16 @@ def test_manifest_component_ids_are_unique(tmp_path: Path) -> None:
         open_mesh_pack(pack_path).verify()
 
 
+def test_manifest_presentation_ids_are_unique(tmp_path: Path) -> None:
+    pack_path = _copy_pack(tmp_path)
+    manifest = _manifest(pack_path)
+    manifest["presentations"][1]["presentation_id"] = 0
+    _write_manifest(pack_path, manifest)
+
+    with pytest.raises(ValueError, match="presentation IDs are not unique"):
+        open_mesh_pack(pack_path).verify()
+
+
 @pytest.mark.parametrize(
     ("field", "value", "message"),
     [
