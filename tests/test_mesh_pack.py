@@ -128,6 +128,12 @@ def test_renderer_neutral_identity_helpers_and_immutable_metadata() -> None:
     assert geometry.presentation_boundary["coordinate"] == "original-world-ml"
     assert geometry.presentation_for_component(0, -1)["signed_allen_id"] == -315
     assert geometry.mapped_region_id(1, "allen") == 315
+    np.testing.assert_array_equal(
+        geometry.presentation_ids_for_component(0, [-1, 0, 1]), [0, 1, 1]
+    )
+    np.testing.assert_array_equal(
+        geometry.presentation_ids_for_component(1, [-100, 100]), [1, 1]
+    )
 
 
 @pytest.mark.parametrize(

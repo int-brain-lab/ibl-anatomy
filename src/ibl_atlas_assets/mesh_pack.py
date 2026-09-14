@@ -78,6 +78,37 @@ class MeshGeometry:
 
         return _mapped_region_id(self.presentations, presentation_id, mapping)
 
+    def presentation_ids_for_component(
+        self, component_id: int, original_world_ml_um: Any
+    ) -> NDArray[np.int64]:
+        """Resolve presentation IDs for an array of original-world ML coordinates."""
+
+        coordinates = np.asarray(original_world_ml_um, dtype=np.float64)
+        if not np.all(np.isfinite(coordinates)):
+            raise ValueError("mesh presentation ML coordinates must be finite")
+        component = next(
+            (item for item in self.components if item["component_id"] == component_id),
+            None,
+        )
+        if component is None:
+            raise KeyError(f"unknown mesh component: {component_id}")
+        if self.presentation_boundary["coordinate"] != "original-world-ml":
+            raise ValueError("unsupported mesh presentation boundary coordinate")
+        if component["lateralization"] != "neutral":
+            presentation_id = component[
+                f"{component['lateralization']}_presentation_id"
+            ]
+            return np.full(coordinates.shape, presentation_id, dtype=np.int64)
+        left = component["left_presentation_id"]
+        right = component["right_presentation_id"]
+        threshold = self.presentation_boundary["threshold_um"]
+        left_mask = (
+            coordinates <= threshold
+            if self.presentation_boundary["on_plane_side"] == "left"
+            else coordinates < threshold
+        )
+        return np.ascontiguousarray(np.where(left_mask, left, right), dtype=np.int64)
+
 
 class _FrozenList(list[Any]):
     """List-compatible immutable metadata container."""
