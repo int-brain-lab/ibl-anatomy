@@ -9,12 +9,13 @@ Current checkpoint:
 - `iblatlas` hardening is implemented on
   `feature/atlas-contract-hardening` (never on `main`) and its complete unittest
   suite passes.
-- the Datoviz retained tree/table contract is committed on Datoviz `main`; its
-  implementation, bindings, examples, and documentation remain the active
-  pre-v0.4-final work.
-- `ibl-datoviz` and `ephys-atlas-web-v2` remain intentionally unchanged until
-  that Datoviz work is validated. The first native consumer is the next
-  boundary-discovery task, not part of Spike 001 itself.
+- the Datoviz retained tree/table contract, native implementation, generated
+  Python facade, C/Python examples, and documentation are committed on Datoviz
+  `main`. A reviewed screenshot candidate remains build-local pending the
+  protected gallery-media approval workflow.
+- `ibl-datoviz` and `ephys-atlas-web-v2` remain intentionally unchanged. The
+  first `ibl-datoviz` v0.4 consumer is now the next boundary-discovery task,
+  followed by a concrete comparison with the production web implementation.
 
 This document separates immediate, evidence-producing work from the broader
 possibilities in `FUTURE_DIRECTIONS.md`. Work should use small green commits.
