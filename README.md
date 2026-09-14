@@ -23,6 +23,30 @@ and atlas computations.
 
 ## Current status
 
-The project is in an evidence-gathering phase. No decision has yet been made to
-move all anatomy builders, publish Python or TypeScript packages, create a
-cross-language runtime, or replace an application's renderer.
+Spike 001 now provides an independent, offline Python reader for raw EAM3 `atlas-mesh-pack-v1` packs. It validates the bundled JSON Schema, the complete immutable resource graph, encoded and decoded byte sizes, SHA-256 identities, signed presentation metadata, component ranges, and decoded geometry before returning owned contiguous NumPy arrays.
+
+The project remains in an evidence-gathering phase. The reader currently rejects `meshopt-quantized-v1`; HTTP fetching, persistent caching, builders, TypeScript, real atlas asset publication, and renderer integration remain deliberately outside the first spike.
+
+## Development
+
+```sh
+uv sync --extra test
+uv run pytest -q
+uv build
+```
+
+## Read a local mesh pack
+
+```python
+from ibl_atlas_assets import open_mesh_pack
+
+pack = open_mesh_pack("path/to/pack/manifest.json")
+pack.verify()
+geometry = pack.load_geometry()
+
+print(geometry.positions.shape, geometry.positions.dtype)
+print(geometry.indices.shape, geometry.indices.dtype)
+print(geometry.reference_space, geometry.coordinate_system)
+```
+
+`open_mesh_pack()` accepts a configurable decoded-resource size limit and defaults to 2 GiB. It never applies an atlas-to-renderer coordinate transform.

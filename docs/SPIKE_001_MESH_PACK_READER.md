@@ -1,6 +1,6 @@
 # Spike 001: independent mesh-pack reader
 
-Status: proposed first implementation task.
+Status: implemented and validated on 2026-09-14.
 
 ## Question
 
@@ -95,3 +95,19 @@ The completion note must recommend one of:
 
 It must also list concrete candidates for a second extraction, without starting
 that extraction in the same task.
+
+## Result
+
+The independent boundary is useful and small enough to retain here. The package validates the copied `atlas-mesh-pack-v1` schemas and complete local file graph, bounds gzip decompression, decodes raw EAM3 chunks into owned contiguous NumPy arrays, rebases independently indexed chunks, and preserves component and signed presentation metadata without importing ephys, browser, rendering, or atlas-computation code.
+
+The synthetic fixture remains byte-identical to `ephys-atlas-web-v2` commit `58a9418b7408ed3760016173df3a34903280cf24`. Its tests cover the exact fixture hashes, schema and graph validation, corruption, traversal and symlink escape, resource limits, malformed EAM3 input, array bounds, component ranges and counts, presentation identity, missing mappings, and unknown LOD selection.
+
+Decision: keep and stabilize the independent Python reader in this repository. The web application should continue using its browser-specific TypeScript reader for now, with the shared schemas, fixture identities, and conformance behavior as the interoperability boundary.
+
+The next extraction candidates, in order, are:
+
+1. a renderer-independent mesh-pack catalog/source descriptor once the native consumer demonstrates how real immutable assets should be located;
+2. `meshopt-quantized-v1` decoding after a production-pack consumer and a suitable Python decoder dependency are proven; and
+3. TypeScript schema/decoder extraction only after conformance comparison shows that moving code is simpler than maintaining two small readers.
+
+Annotation volumes, projections, networking, caching, builders, and production asset publication remain outside this completed spike.
