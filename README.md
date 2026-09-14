@@ -16,6 +16,7 @@ and atlas computations.
 ## Start here
 
 - [Project hypothesis and boundaries](docs/PROJECT.md)
+- [Immediate cross-repository steps](docs/NEXT_STEPS.md)
 - [Audited source inventory](docs/SOURCE_INVENTORY.md)
 - [Spike 001: independent mesh-pack reader](docs/SPIKE_001_MESH_PACK_READER.md)
 - [Deferred directions and gallery ideas](docs/FUTURE_DIRECTIONS.md)
