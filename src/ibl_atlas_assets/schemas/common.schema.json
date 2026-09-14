@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.internationalbrainlab.org/schema/v1/common.schema.json",
+  "title": "IBL Ephys Atlas common contract types v1",
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "identifier": {"type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"},
+    "datasetId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "dtype": {
+      "enum": ["uint8", "int16", "int32", "uint16", "uint32", "float16", "float32", "float64"]
+    },
+    "codec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "decoded_bytes"],
+      "properties": {
+        "name": {"enum": ["none", "gzip"]},
+        "decoded_bytes": {"type": "integer", "minimum": 0},
+        "level": {"type": "integer", "minimum": 0, "maximum": 9}
+      }
+    },
+    "encodedResource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "media_type", "bytes", "sha256", "codec"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "media_type": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "codec": {"$ref": "#/$defs/codec"}
+      }
+    },
+    "binaryArray": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format", "resource", "dtype", "shape", "order", "endianness"],
+      "properties": {
+        "format": {"const": "raw-binary-array-v1"},
+        "resource": {"$ref": "#/$defs/encodedResource"},
+        "dtype": {"$ref": "#/$defs/dtype"},
+        "shape": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "integer", "minimum": 0}
+        },
+        "order": {"const": "C"},
+        "endianness": {"enum": ["little", "not-applicable"]}
+      }
+    },
+    "jsonResource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format", "resource"],
+      "properties": {
+        "format": {"type": "string", "minLength": 1},
+        "resource": {"$ref": "#/$defs/encodedResource"}
+      }
+    },
+    "matrix4": {
+      "type": "array",
+      "minItems": 16,
+      "maxItems": 16,
+      "items": {"type": "number"}
+    },
+    "viewBox": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        {"type": "number"},
+        {"type": "number"},
+        {"type": "number", "exclusiveMinimum": 0},
+        {"type": "number", "exclusiveMinimum": 0}
+      ],
+      "items": false
+    },
+    "summaryFields": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["count", "missing_count", "min", "max", "mean", "std", "median", "q05", "q25", "q75", "q95"]}
+    },
+    "valueScaleKind": {"enum": ["linear", "log", "symlog"]},
+    "scaleSpec": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {"kind": {"const": "linear"}}
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {"kind": {"const": "log"}}
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "linear_threshold"],
+          "properties": {
+            "kind": {"const": "symlog"},
+            "linear_threshold": {"type": "number", "exclusiveMinimum": 0}
+          }
+        }
+      ]
+    },
+    "distributionDomainKind": {"enum": ["full", "focused"]},
+    "distributionDomainSpec": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {"kind": {"const": "full"}}
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "bounds"],
+          "properties": {
+            "kind": {"const": "focused"},
+            "bounds": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {"type": "number"}
+            }
+          }
+        }
+      ]
+    },
+    "scalarDisplay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scales", "preferred_scale", "distribution_domains", "preferred_distribution_domain"],
+      "properties": {
+        "colormap": {"type": "string", "minLength": 1},
+        "diverging_center": {"type": "number"},
+        "range": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}},
+        "scales": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/scaleSpec"}
+        },
+        "preferred_scale": {"$ref": "#/$defs/valueScaleKind"},
+        "distribution_domains": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/distributionDomainSpec"}
+        },
+        "preferred_distribution_domain": {"$ref": "#/$defs/distributionDomainKind"}
+      }
+    },
+    "distributionBinning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "scale", "domain", "edges", "global_counts",
+        "global_underflow_count", "global_overflow_count", "bin_rule"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "scale": {"$ref": "#/$defs/scaleSpec"},
+        "domain": {"$ref": "#/$defs/distributionDomainSpec"},
+        "edges": {"type": "array", "minItems": 2, "items": {"type": "number"}},
+        "global_counts": {"type": "array", "minItems": 1, "items": {"type": "integer", "minimum": 0}},
+        "global_underflow_count": {"type": "integer", "minimum": 0},
+        "global_overflow_count": {"type": "integer", "minimum": 0},
+        "regional_counts": {"$ref": "#/$defs/binaryArray"},
+        "regional_count_layout": {"const": "underflow-bins-overflow"},
+        "bin_rule": {"const": "left-closed-right-open-last-closed"}
+      }
+    }
+  }
+}

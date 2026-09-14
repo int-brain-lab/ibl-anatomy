@@ -1,0 +1,262 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.internationalbrainlab.org/schema/v1/mesh-pack.schema.json",
+  "title": "Atlas mesh pack v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "format", "pack_id", "geometry_id", "immutable",
+    "purpose", "reference_space_id", "coordinate_system", "sources",
+    "geometry_scope", "geometry_policy", "presentation_boundary",
+    "whole_brain_centroid_um", "presentations", "components",
+    "default_lod_id", "upgrade_lod_id", "lods", "builder", "validation"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "format": {"const": "atlas-mesh-pack-v1"},
+    "pack_id": {"$ref": "common.schema.json#/$defs/identifier"},
+    "geometry_id": {"$ref": "common.schema.json#/$defs/identifier"},
+    "immutable": {"const": true},
+    "purpose": {"enum": ["test-only", "review-only", "production"]},
+    "reference_space_id": {"$ref": "common.schema.json#/$defs/identifier"},
+    "coordinate_system": {"$ref": "#/$defs/coordinateSystem"},
+    "sources": {"$ref": "#/$defs/sources"},
+    "geometry_scope": {"$ref": "#/$defs/geometryScope"},
+    "geometry_policy": {"enum": ["bilateral-cut-cap", "native-components"]},
+    "presentation_boundary": {"$ref": "#/$defs/presentationBoundary"},
+    "whole_brain_centroid_um": {"$ref": "#/$defs/vector3"},
+    "presentations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/presentation"}
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/component"}
+    },
+    "default_lod_id": {"$ref": "common.schema.json#/$defs/identifier"},
+    "upgrade_lod_id": {
+      "oneOf": [
+        {"$ref": "common.schema.json#/$defs/identifier"},
+        {"type": "null"}
+      ]
+    },
+    "lods": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/lod"}
+    },
+    "builder": {"$ref": "#/$defs/builder"},
+    "validation": {"$ref": "#/$defs/validation"}
+  },
+  "$defs": {
+    "vector3": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"type": "number"}
+    },
+    "bounds3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_um", "maximum_um"],
+      "properties": {
+        "minimum_um": {"$ref": "#/$defs/vector3"},
+        "maximum_um": {"$ref": "#/$defs/vector3"}
+      }
+    },
+    "externalIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "url", "bytes", "sha256"],
+      "properties": {
+        "id": {"$ref": "common.schema.json#/$defs/identifier"},
+        "url": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "common.schema.json#/$defs/sha256"}
+      }
+    },
+    "coordinateSystem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["world_axes", "units", "handedness", "source_to_world_um", "transform_evidence"],
+      "properties": {
+        "world_axes": {
+          "type": "array",
+          "prefixItems": [{"const": "ml"}, {"const": "ap"}, {"const": "dv"}],
+          "items": false
+        },
+        "units": {"const": "um"},
+        "handedness": {"enum": ["right-handed", "left-handed"]},
+        "source_to_world_um": {"$ref": "common.schema.json#/$defs/matrix4"},
+        "transform_evidence": {"type": "string", "minLength": 1}
+      }
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_glb", "active_inventory", "projection_pack", "atlas_catalog", "annotation", "lut"],
+      "properties": {
+        "source_glb": {"$ref": "#/$defs/sourceGlb"},
+        "active_inventory": {"$ref": "#/$defs/externalIdentity"},
+        "projection_pack": {"$ref": "#/$defs/externalIdentity"},
+        "atlas_catalog": {"$ref": "#/$defs/externalIdentity"},
+        "annotation": {"$ref": "#/$defs/externalIdentity"},
+        "lut": {"$ref": "#/$defs/externalIdentity"}
+      }
+    },
+    "sourceGlb": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "url", "bytes", "sha256", "inventory_allen_ids"],
+      "properties": {
+        "id": {"$ref": "common.schema.json#/$defs/identifier"},
+        "url": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "common.schema.json#/$defs/sha256"},
+        "inventory_allen_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "geometryScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ontology", "root_allen_id", "root_acronym", "policy", "active_allen_ids", "excluded_allen_ids"],
+      "properties": {
+        "ontology": {"const": "Allen CCF 2017"},
+        "root_allen_id": {"const": 8},
+        "root_acronym": {"const": "grey"},
+        "policy": {"const": "deepest-active-grey-descendants"},
+        "active_allen_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "integer", "minimum": 1}
+        },
+        "excluded_allen_ids": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "mappingValue": {
+      "oneOf": [{"type": "integer", "not": {"const": 0}}, {"type": "null"}]
+    },
+    "presentationBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coordinate", "threshold_um", "on_plane_side", "status"],
+      "properties": {
+        "coordinate": {"const": "original-world-ml"},
+        "threshold_um": {"type": "number", "minimum": 0},
+        "on_plane_side": {"enum": ["left", "right"]},
+        "status": {"enum": ["provisional-test-only", "provisional-review", "reviewed"]}
+      }
+    },
+    "presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "presentation_id", "source_allen_id", "signed_allen_id", "side", "mappings"
+      ],
+      "properties": {
+        "presentation_id": {"type": "integer", "minimum": 0, "maximum": 65535},
+        "source_allen_id": {"type": "integer", "minimum": 1},
+        "signed_allen_id": {"type": "integer", "not": {"const": 0}},
+        "side": {"enum": ["left", "right"]},
+        "mappings": {
+          "type": "object", "additionalProperties": false,
+          "required": ["allen", "beryl", "cosmos"],
+          "properties": {
+            "allen": {"$ref": "#/$defs/mappingValue"},
+            "beryl": {"$ref": "#/$defs/mappingValue"},
+            "cosmos": {"$ref": "#/$defs/mappingValue"}
+          }
+        }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component_id", "source_allen_id", "lateralization",
+        "left_presentation_id", "right_presentation_id", "bounds",
+        "vertex_count", "triangle_count", "centroid_um", "explode_displacement_um"
+      ],
+      "properties": {
+        "component_id": {"type": "integer", "minimum": 0, "maximum": 65535},
+        "source_allen_id": {"type": "integer", "minimum": 1},
+        "lateralization": {"enum": ["left", "right", "neutral"]},
+        "left_presentation_id": {
+          "oneOf": [{"type": "integer", "minimum": 0, "maximum": 65535}, {"type": "null"}]
+        },
+        "right_presentation_id": {
+          "oneOf": [{"type": "integer", "minimum": 0, "maximum": 65535}, {"type": "null"}]
+        },
+        "bounds": {"$ref": "#/$defs/bounds3"},
+        "vertex_count": {"type": "integer", "minimum": 3},
+        "triangle_count": {"type": "integer", "minimum": 1},
+        "centroid_um": {"$ref": "#/$defs/vector3"},
+        "explode_displacement_um": {"$ref": "#/$defs/vector3"}
+      }
+    },
+    "decoderContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["container", "container_version", "encoding", "position_bits", "normal_bits"],
+      "properties": {
+        "container": {"const": "EAM3"},
+        "container_version": {"const": 1},
+        "encoding": {"enum": ["raw-v1", "meshopt-quantized-v1"]},
+        "position_bits": {"type": "integer", "minimum": 0, "maximum": 32},
+        "normal_bits": {"type": "integer", "minimum": 0, "maximum": 32}
+      }
+    },
+    "lod": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "target_triangle_ratio", "actual_triangle_ratio", "triangle_count",
+        "maximum_error_um", "adaptive_fallback_region_count", "resource", "decoder"
+      ],
+      "properties": {
+        "id": {"$ref": "common.schema.json#/$defs/identifier"},
+        "target_triangle_ratio": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "actual_triangle_ratio": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "triangle_count": {"type": "integer", "minimum": 2},
+        "maximum_error_um": {"type": "number", "minimum": 0},
+        "adaptive_fallback_region_count": {"type": "integer", "minimum": 0},
+        "resource": {"$ref": "common.schema.json#/$defs/encodedResource"},
+        "decoder": {"$ref": "#/$defs/decoderContract"}
+      }
+    },
+    "builder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "commit", "command"],
+      "properties": {
+        "name": {"const": "ibl-atlas-mesh-pack-builder"},
+        "version": {"$ref": "common.schema.json#/$defs/identifier"},
+        "commit": {"type": "string", "pattern": "^(?:[0-9a-f]{40}|synthetic)$"},
+        "command": {"type": "string", "minLength": 1}
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report", "rebuild", "coverage", "midline", "topology", "mapping", "bounds", "integrity", "complete_file_graph"],
+      "properties": {
+        "report": {"$ref": "common.schema.json#/$defs/encodedResource"},
+        "rebuild": {"const": true},
+        "coverage": {"const": true},
+        "midline": {"const": true},
+        "topology": {"const": true},
+        "mapping": {"const": true},
+        "bounds": {"const": true},
+        "integrity": {"const": true},
+        "complete_file_graph": {"const": true}
+      }
+    }
+  }
+}
