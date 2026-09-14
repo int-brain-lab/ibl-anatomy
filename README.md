@@ -82,5 +82,9 @@ for region in catalog.left("allen"):
     print(region.acronym, region.logical_id, region.color_hex)
 ```
 
+`catalog.map_allen_ids(ids, mapping)` maps a batch of signed Allen identities. It returns `None`
+when the legacy crosswalk uses root as the absence marker for a non-root Allen row, rather than
+exposing that placeholder as scientific data. The actual Allen root still maps to root.
+
 This is a consumer-side contract spike: the existing web builder remains the
 authoritative producer and is intentionally not moved here.

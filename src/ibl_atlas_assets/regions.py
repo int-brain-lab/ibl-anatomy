@@ -5,7 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from types import MappingProxyType
@@ -80,6 +80,31 @@ class AtlasRegionCatalog:
 
     def logical(self, mapping: str) -> tuple[AtlasRegion, ...]:
         return self.rows(mapping, "logical")
+
+    def map_allen_ids(
+        self, atlas_ids: Iterable[int], mapping: str
+    ) -> tuple[int | None, ...]:
+        """Map signed Allen IDs without turning absent reduced rows into root.
+
+        Legacy crosswalks use root (997) when a non-root Allen row is absent from
+        a reduced mapping. That placeholder is returned as ``None``; the actual
+        Allen root continues to map to root.
+        """
+
+        self.physical(mapping)  # validate the target mapping before consuming IDs
+        by_id = {row.atlas_id: row for row in self.physical("allen")}
+        result: list[int | None] = []
+        for raw_atlas_id in atlas_ids:
+            atlas_id = int(raw_atlas_id)
+            row = by_id.get(atlas_id)
+            if row is None:
+                raise KeyError(f"unknown signed Allen region ID: {atlas_id}")
+            mapped = int(row.mapped_atlas_ids[mapping])
+            is_reduced_root_fallback = (
+                mapping != "allen" and abs(mapped) == 997 and abs(atlas_id) != 997
+            )
+            result.append(None if is_reduced_root_fallback else mapped)
+        return tuple(result)
 
 
 def _record(value: Any, label: str) -> dict[str, Any]:

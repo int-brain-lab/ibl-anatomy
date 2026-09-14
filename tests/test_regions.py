@@ -24,6 +24,10 @@ def test_catalog_views_and_identity() -> None:
     assert [row.logical_id for row in catalog.logical("allen")] == [0, 997, 8]
     assert catalog.left("beryl")[2].mapping_member is False
     assert physical[2].mapped_atlas_ids["beryl"] == 997
+    assert catalog.map_allen_ids([-8, 8, -997, 0], "allen") == (-8, 8, -997, 0)
+    assert catalog.map_allen_ids([-8, 8, -997, 0], "beryl") == (None, None, 997, 0)
+    with pytest.raises(KeyError, match="unknown signed Allen"):
+        catalog.map_allen_ids([123456], "allen")
 
 
 def test_fixture_hash_is_deterministic() -> None:
