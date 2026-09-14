@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.internationalbrainlab.org/schema/ibl-atlas-regions-v1.schema.json",
+  "title": "IBL atlas region catalog v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "schema_version", "atlas", "reference_space_id", "hemisphere_encoding", "mappings", "provenance"],
+  "properties": {
+    "format": {"const": "ibl-atlas-regions-v1"},
+    "schema_version": {"const": "1.0"},
+    "atlas": {"type": "string", "minLength": 1},
+    "reference_space_id": {"const": "allen-ccf-2017"},
+    "hemisphere_encoding": {"const": "signed atlas IDs; negative is left"},
+    "mappings": {"type": "object", "additionalProperties": false, "required": ["allen", "beryl", "cosmos"], "properties": {"allen": {"$ref": "#/$defs/rows"}, "beryl": {"$ref": "#/$defs/rows"}, "cosmos": {"$ref": "#/$defs/rows"}}},
+    "provenance": {"type": "object", "additionalProperties": true, "required": ["iblatlas_commit", "legacy_svg_crosswalk_sha256", "legacy_svg_crosswalk_url"], "properties": {"iblatlas_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "legacy_svg_crosswalk_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "legacy_svg_crosswalk_url": {"type": "string", "format": "uri", "pattern": "^https?://[^\\s]+$"}}}
+  },
+  "$defs": {
+    "rows": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["acronym", "atlas_id", "color_hex", "depth", "idx", "mapped_atlas_ids", "mapping_member", "name", "parent_id"], "properties": {"acronym": {"type": "string", "minLength": 1}, "atlas_id": {"type": "integer"}, "color_hex": {"type": "string", "pattern": "^#[0-9a-f]{6}$"}, "depth": {"type": "integer", "minimum": 0}, "idx": {"type": "integer", "minimum": 0}, "mapped_atlas_ids": {"type": "object", "additionalProperties": false, "required": ["allen", "beryl", "cosmos"], "properties": {"allen": {"type": "integer"}, "beryl": {"type": "integer"}, "cosmos": {"type": "integer"}}}, "mapping_member": {"type": "boolean"}, "name": {"type": "string", "minLength": 1}, "parent_id": {"type": ["integer", "null"]}}}}
+  }
+}

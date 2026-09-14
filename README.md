@@ -50,3 +50,24 @@ print(geometry.reference_space, geometry.coordinate_system)
 ```
 
 `open_mesh_pack()` accepts a configurable decoded-resource size limit and defaults to 2 GiB. It never applies an atlas-to-renderer coordinate transform.
+
+## Read the Allen region catalog
+
+`open_region_catalog()` is a strict reader for the browser's pinned
+`ibl-atlas-regions-v1` document. It checks the schema, signed physical rows,
+parent closure/depth, matching left/right identities, mapping fields, and
+reference-space/provenance identity. The reader deliberately keeps three
+explicit views: `physical(mapping)` preserves all signed rows, `left(mapping)`
+is the canonical signed left tree (plus void), and `logical(mapping)` selects
+one hemisphere-independent/right row per absolute ID.
+
+```python
+from ibl_atlas_assets import open_region_catalog
+
+catalog = open_region_catalog("regions.json", sha256="...")
+for region in catalog.left("allen"):
+    print(region.acronym, region.logical_id, region.color_hex)
+```
+
+This is a consumer-side contract spike: the existing web builder remains the
+authoritative producer and is intentionally not moved here.

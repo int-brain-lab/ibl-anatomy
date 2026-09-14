@@ -22,8 +22,9 @@ Current checkpoint:
 - the first `ibl-datoviz` v0.4 consumer is implemented on
   `feature/datoviz-v04-atlas-spike`: real offscreen rendering, dense mesh upload, mapping-only
   updates, per-face signed query keys, probe path, arcball, and explicit destruction are green.
-- `ephys-atlas-web-v2` remains unchanged. Its read-only comparison established the mesh parity work
-  above and deferred region-catalog, projection, and volume extraction.
+- `ephys-atlas-web-v2` now has one deliberately narrow extraction seam: its authoritative region
+  builder emits an explicit `allen-ccf-2017` reference-space identity, while this package owns the
+  strict renderer-neutral reader. Projection and volume extraction remain deferred.
 
 This document separates immediate, evidence-producing work from the broader
 possibilities in `FUTURE_DIRECTIONS.md`. Work should use small green commits.
@@ -48,8 +49,8 @@ ibl-atlas-assets mesh reader ─────────────────
 
 iblatlas correctness work ──────> later catalog/reference-space integration
 
-ephys-atlas-web-v2 ─────────────> unchanged during Spike 001
-                                  extraction decision after consumer evidence
+ephys-atlas-web-v2 ─────────────> authoritative region-catalog producer
+                                  shared reader contract after consumer evidence
 ```
 
 Datoviz pre-final work and the renderer-independent asset reader may proceed in
@@ -195,8 +196,9 @@ and native-consumer evidence.
 
 ## `ephys-atlas-web-v2`: hold stable, then assess extraction
 
-Do not change the production application during Spike 001. Treat it as the
-working reference and source evidence.
+Treat the production application as the working reference and source evidence.
+The first post-spike change is limited to making the already-versioned region
+catalog independently consumable by declaring its reference-space identity.
 
 After the Python reader and native consumer exist:
 

@@ -36,7 +36,9 @@ the cross-publication sentinel even when publication metadata changes.
   resolution here.
 - Keep HTTP/cache/workers, Three.js objects, shaders, WBOIT, DOM state, and dataset workflows in
   `ephys-atlas-web-v2`.
-- Consider a strict region-catalog contract only after the native consumer needs authoritative
-  names, hierarchy, and colors.
+- Keep the strict `ibl-atlas-regions-v1` reader here now that the native consumer needs
+  authoritative names, hierarchy, mapping membership, and colors. The web application remains
+  the authoritative producer; both consumers validate the same explicit reference-space and
+  signed-hemisphere contract.
 - Treat projection assets as a separate future spike.
 - Do not reuse the ephys scalar-volume schema for atlas annotation/template volumes.
