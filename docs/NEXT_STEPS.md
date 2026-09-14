@@ -3,9 +3,18 @@
 Status: active near-term work plan, captured on 2026-09-14.
 
 This document separates immediate, evidence-producing work from the broader
-possibilities in `FUTURE_DIRECTIONS.md`. Work should use small green commits on
-each repository's `main` branch. Pull requests are not part of the current
-workflow unless the repository owner later requests them.
+possibilities in `FUTURE_DIRECTIONS.md`. Work should use small green commits.
+Pull requests are not part of the current workflow unless the repository owner
+later requests them.
+
+Branch policy for the current work:
+
+- changes to `iblatlas` must be made on a dedicated feature branch, never
+  directly on `main`;
+- before committing in any other repository, record and confirm the intended
+  branch in the working plan; and
+- pushing commits is allowed, but opening pull requests is not currently part
+  of the workflow.
 
 ## Order and dependencies
 
@@ -44,7 +53,7 @@ large atlas-specific features.
    new abstraction.
 
 2. If the public ImGui wrapper is intended to support application panels in
-   v0.4, add the small primitives needed for a scalable ontology browser:
+   v0.4, add the small composable primitives needed by custom interfaces:
 
    - input text;
    - tree node and tree pop;
@@ -52,17 +61,37 @@ large atlas-specific features.
    - begin/end child region; and
    - tooltip and disabled-state helpers.
 
-   A table or list clipper is useful but may be deferred if its API is not
-   settled. Python editable-string ownership must be explicit and tested.
+   Python editable-string ownership must be explicit and tested. These
+   primitives are not by themselves a scalable Python ontology-browser API.
+
+3. Design and, if the ownership and event semantics can be settled before the
+   ABI freeze, add retained batched tree and table widgets. Datoviz v0.3 had
+   batched `dvz_gui_tree()` and `dvz_gui_table()` calls, but their `char**`
+   inputs were re-encoded and allocated by ctypes on every frame. The v0.4
+   design should instead:
+
+   - copy packed node/row records and UTF-8 string storage when data changes;
+   - draw an entire tree or table with one Python-to-C call per GUI frame;
+   - use stable application keys rather than row indices for identity;
+   - keep expansion, sorting, and other ephemeral UI state in native code;
+   - support batched application-driven selection and visibility updates;
+   - return compact events for selection, activation, expansion, sorting, and
+     optional row actions; and
+   - share row styling, filtering, selection, and event concepts between the
+     tree and table without forcing them into one universal widget.
+
+   The Allen ontology browser is the initial demanding test case, but the
+   Datoviz API must remain domain-neutral. A generic serialized ImGui command
+   stream and a fully retained GUI framework are out of scope.
 
 ### Investigate and decide, but do not force into final
 
-3. Establish the intended identity/picking route for multiple anatomical
+4. Establish the intended identity/picking route for multiple anatomical
    components in one indexed mesh. Determine whether existing item, instance,
    face, primitive, or link-key semantics are sufficient. Add a narrow API only
    if the first consumer demonstrates a real gap and the semantics are clear.
 
-4. Confirm the minimal NumPy mesh upload path with an offscreen test:
+5. Confirm the minimal NumPy mesh upload path with an offscreen test:
 
    - `float32[N, 3]` position and normal attributes;
    - `uint8[N, 4]` colors;
@@ -121,7 +150,9 @@ optimization and API-evidence task, not a prerequisite for the first slice.
 
 ## `iblatlas`: independent hardening
 
-Keep this small and compatible where practical:
+All commits in this section must be made on a dedicated feature branch, not on
+`main`. Record the exact branch name before the first commit. Keep this small
+and compatible where practical:
 
 1. fix annotation slice equality handling;
 2. raise the invalid CCF-order error correctly;
