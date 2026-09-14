@@ -6,8 +6,10 @@ import gzip
 import hashlib
 import io
 import json
+import math
 from dataclasses import dataclass
 from pathlib import Path
+from types import MappingProxyType
 from typing import Any
 
 import numpy as np
@@ -54,6 +56,37 @@ class MeshGeometry:
     presentations: tuple[dict[str, Any], ...]
     reference_space: str
     coordinate_system: dict[str, Any]
+    presentation_boundary: dict[str, Any]
+
+    def presentation_for_component(
+        self, component_id: int, original_world_ml_um: float
+    ) -> dict[str, Any] | None:
+        """Resolve presentation metadata at an original-world ML coordinate."""
+
+        return _presentation_for_component(
+            self.components,
+            self.presentations,
+            self.presentation_boundary,
+            component_id,
+            original_world_ml_um,
+        )
+
+    def mapped_region_id(
+        self, presentation_id: int, mapping: str = "allen"
+    ) -> int | None:
+        """Return a signed mapped region ID without renderer-specific state."""
+
+        return _mapped_region_id(self.presentations, presentation_id, mapping)
+
+
+class _FrozenList(list[Any]):
+    """List-compatible immutable metadata container."""
+
+    def _immutable(self, *args: Any, **kwargs: Any) -> None:
+        raise TypeError("mesh metadata is immutable")
+
+    __delitem__ = __setitem__ = __iadd__ = __imul__ = _immutable
+    append = clear = extend = insert = pop = remove = reverse = sort = _immutable
 
 
 def _read_json(path: Path, label: str) -> dict[str, Any]:
@@ -90,6 +123,55 @@ def _nonnegative_int(value: Any, label: str, *, positive: bool = False) -> int:
     return value
 
 
+def _presentation_for_component(
+    components: tuple[dict[str, Any], ...],
+    presentations: tuple[dict[str, Any], ...],
+    boundary: dict[str, Any],
+    component_id: int,
+    original_world_ml_um: float,
+) -> dict[str, Any] | None:
+    if not math.isfinite(original_world_ml_um):
+        raise ValueError("mesh presentation ML coordinate must be finite")
+    component = next(
+        (item for item in components if item["component_id"] == component_id), None
+    )
+    if component is None:
+        raise KeyError(f"unknown mesh component: {component_id}")
+    if boundary["coordinate"] != "original-world-ml":
+        raise ValueError("unsupported mesh presentation boundary coordinate")
+    if component["lateralization"] == "neutral":
+        threshold = boundary["threshold_um"]
+        side = (
+            "left"
+            if original_world_ml_um < threshold
+            else "right"
+            if original_world_ml_um > threshold
+            else boundary["on_plane_side"]
+        )
+    else:
+        side = component["lateralization"]
+    presentation_id = component[f"{side}_presentation_id"]
+    if presentation_id is None:
+        return None
+    return next(
+        item for item in presentations if item["presentation_id"] == presentation_id
+    )
+
+
+def _mapped_region_id(
+    presentations: tuple[dict[str, Any], ...], presentation_id: int, mapping: str
+) -> int | None:
+    if mapping not in ("allen", "beryl", "cosmos"):
+        raise ValueError("mesh mapping must be allen, beryl, or cosmos")
+    presentation = next(
+        (item for item in presentations if item["presentation_id"] == presentation_id),
+        None,
+    )
+    if presentation is None:
+        raise KeyError(f"unknown mesh presentation: {presentation_id}")
+    return presentation["mappings"][mapping]
+
+
 class MeshPack:
     """An immutable mesh-pack manifest and its local resource graph."""
 
@@ -98,7 +180,7 @@ class MeshPack:
     ):
         self.manifest_path = manifest_path
         self.root = manifest_path.parent
-        self.manifest = manifest
+        self.manifest = _freeze(manifest)
         self.max_resource_bytes = max_resource_bytes
         self._decoded_resources: dict[tuple[Any, ...], bytes] = {}
         self._verified = False
@@ -126,6 +208,32 @@ class MeshPack:
         """Return the declared coordinate-system metadata without transforming it."""
 
         return self.manifest["coordinate_system"]
+
+    @property
+    def presentation_boundary(self) -> dict[str, Any]:
+        """Return the validated rule for resolving bilateral presentations."""
+
+        return self.manifest["presentation_boundary"]
+
+    def presentation_for_component(
+        self, component_id: int, original_world_ml_um: float
+    ) -> dict[str, Any] | None:
+        """Resolve immutable presentation metadata at an original-world ML coordinate."""
+
+        return _presentation_for_component(
+            self.components,
+            self.presentations,
+            self.presentation_boundary,
+            component_id,
+            original_world_ml_um,
+        )
+
+    def mapped_region_id(
+        self, presentation_id: int, mapping: str = "allen"
+    ) -> int | None:
+        """Return a signed mapped region ID without renderer-specific state."""
+
+        return _mapped_region_id(self.presentations, presentation_id, mapping)
 
     def _resource(self, descriptor: dict[str, Any]) -> bytes:
         relative = descriptor["path"]
@@ -422,6 +530,7 @@ class MeshPack:
             presentations=self.presentations,
             reference_space=self.reference_space,
             coordinate_system=self.coordinate_system,
+            presentation_boundary=self.presentation_boundary,
         )
 
 
@@ -434,6 +543,16 @@ def _partition_spans(total: int, spans: list[tuple[int, int]]) -> list[tuple[int
         expected.append((start, end))
         cursor = end
     return expected if cursor == total else []
+
+
+def _freeze(value: Any) -> Any:
+    """Recursively freeze manifest metadata before exposing it to callers."""
+
+    if isinstance(value, dict):
+        return MappingProxyType({key: _freeze(item) for key, item in value.items()})
+    if isinstance(value, list):
+        return _FrozenList(_freeze(item) for item in value)
+    return value
 
 
 def _concatenate(

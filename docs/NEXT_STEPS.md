@@ -5,7 +5,9 @@ Status: active near-term work plan, captured on 2026-09-14.
 Current checkpoint:
 
 - `ibl-atlas-assets` Spike 001 is implemented on `main`; the raw EAM3 reader,
-  packaged fixture, validation tests, and completion decision are committed.
+  packaged fixture, validation tests, and completion decision are committed. Mesh semantic parity
+  with the web-v2 v1 validator, immutable metadata, presentation-boundary helpers, and decoded-byte
+  hash gates are now implemented; see `MESH_CONTRACT_PARITY.md`.
 - `iblatlas` hardening is implemented on
   `feature/atlas-contract-hardening` (never on `main`) and its complete unittest
   suite passes. The branch is pushed to the `rossant/iblatlas` fork; the local
@@ -17,9 +19,11 @@ Current checkpoint:
   example has a darker, denser presentation modeled on the established Allen
   hierarchy browser. Its latest screenshot remains build-local pending visual
   review and the protected gallery-media approval workflow.
-- `ibl-datoviz` and `ephys-atlas-web-v2` remain intentionally unchanged. The
-  first `ibl-datoviz` v0.4 consumer is now the next boundary-discovery task,
-  followed by a concrete comparison with the production web implementation.
+- the first `ibl-datoviz` v0.4 consumer is implemented on
+  `feature/datoviz-v04-atlas-spike`: real offscreen rendering, dense mesh upload, mapping-only
+  updates, per-face signed query keys, probe path, arcball, and explicit destruction are green.
+- `ephys-atlas-web-v2` remains unchanged. Its read-only comparison established the mesh parity work
+  above and deferred region-catalog, projection, and volume extraction.
 
 This document separates immediate, evidence-producing work from the broader
 possibilities in `FUTURE_DIRECTIONS.md`. Work should use small green commits.

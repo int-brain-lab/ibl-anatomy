@@ -65,6 +65,23 @@ def test_fixture_identities() -> None:
         assert hashlib.sha256(data).hexdigest() == digest
 
 
+def test_decoded_fixture_identities() -> None:
+    decoded = gzip.decompress((FIXTURE / "default.eam3.gz").read_bytes())
+    assert hashlib.sha256(decoded).hexdigest() == (
+        "92614e2e836828a8b8637342ea8f9384d43351817921833a9d384977b0c17a39"
+    )
+    chunks = decode_raw_lod(decoded)
+    expected = {
+        "positions": "7045ad9561e3e5e096e4b179da64cb08a200c7a12597c9f6a65addd5a5578f4b",
+        "normals": "5b2dc2fe6f552d459b6e6d62a61acb2999a43cb2fd73fa363c878efc8bad3d8f",
+        "component_ids": "23d141876edd0e214adc19f40b085c8d014e0d1eb54eaf6312cca9b02ea5cb15",
+        "indices": "ce813f91b441de766386fa7cf3055ff218df5dd0d398043fb1d32e6e8ff8bd54",
+    }
+    for name, digest in expected.items():
+        payload = b"".join(getattr(chunk, name).tobytes(order="C") for chunk in chunks)
+        assert hashlib.sha256(payload).hexdigest() == digest
+
+
 def test_open_verify_and_decode_valid_fixture() -> None:
     pack = open_mesh_pack(FIXTURE)
     pack.verify()
@@ -95,6 +112,114 @@ def test_open_verify_and_decode_valid_fixture() -> None:
         None,
         None,
     ]
+
+
+def test_renderer_neutral_identity_helpers_and_immutable_metadata() -> None:
+    pack = open_mesh_pack(FIXTURE)
+    assert pack.presentation_for_component(0, -1)["signed_allen_id"] == -315
+    assert pack.presentation_for_component(0, 0)["signed_allen_id"] == 315
+    assert pack.presentation_for_component(1, -100)["signed_allen_id"] == 315
+    assert pack.mapped_region_id(1, "cosmos") == 315
+    with pytest.raises(TypeError, match="mappingproxy|immutable"):
+        pack.components[0]["source_allen_id"] = 999
+    with pytest.raises(TypeError, match="immutable"):
+        pack.coordinate_system["world_axes"].append("bad")
+    geometry = pack.load_geometry()
+    assert geometry.presentation_boundary["coordinate"] == "original-world-ml"
+    assert geometry.presentation_for_component(0, -1)["signed_allen_id"] == -315
+    assert geometry.mapped_region_id(1, "allen") == 315
+
+
+@pytest.mark.parametrize(
+    ("change", "message"),
+    [
+        (
+            lambda manifest: manifest["geometry_scope"]["active_allen_ids"].append(
+                1009
+            ),
+            "overlap",
+        ),
+        (
+            lambda manifest: manifest["components"][0]["centroid_um"].__setitem__(
+                0, float("nan")
+            ),
+            "must be finite",
+        ),
+    ],
+)
+def test_manifest_mesh_semantics_are_validated(
+    tmp_path: Path, change, message: str
+) -> None:
+    pack_path = _copy_pack(tmp_path)
+    manifest = _manifest(pack_path)
+    change(manifest)
+    _write_manifest(pack_path, manifest)
+    with pytest.raises(ValueError, match=message):
+        open_mesh_pack(pack_path)
+
+
+@pytest.mark.parametrize(
+    ("mutate", "message"),
+    [
+        (
+            lambda manifest: manifest["presentations"][1].__setitem__(
+                "presentation_id", 2
+            ),
+            "contiguous",
+        ),
+        (
+            lambda manifest: manifest["presentations"][0]["mappings"].__setitem__(
+                "beryl", 315
+            ),
+            "beryl mapping",
+        ),
+        (
+            lambda manifest: manifest["presentations"][0]["mappings"].__setitem__(
+                "cosmos", -997
+            ),
+            "cosmos mapping",
+        ),
+        (
+            lambda manifest: manifest["components"][1].__setitem__(
+                "lateralization", "neutral"
+            ),
+            "presentation sides",
+        ),
+        (
+            lambda manifest: manifest["components"][0]["centroid_um"].__setitem__(
+                0, 3.0
+            ),
+            "centroid or bounds",
+        ),
+        (
+            lambda manifest: manifest["lods"][0].__setitem__(
+                "actual_triangle_ratio", 0.5
+            ),
+            "triangle ratio",
+        ),
+        (
+            lambda manifest: manifest["lods"][0]["decoder"].__setitem__(
+                "position_bits", 14
+            ),
+            "raw mesh LOD",
+        ),
+        (
+            lambda manifest: manifest["validation"]["report"].__setitem__(
+                "path", "default.eam3.gz"
+            ),
+            "resource path",
+        ),
+    ],
+)
+def test_authoritative_mesh_semantic_regressions(
+    tmp_path: Path, mutate, message: str
+) -> None:
+    pack_path = _copy_pack(tmp_path)
+    manifest = _manifest(pack_path)
+    mutate(manifest)
+    _write_manifest(pack_path, manifest)
+    with pytest.raises(ValueError, match=message):
+        open_mesh_pack(pack_path)
 
 
 def test_hash_failure_precedes_decoding(tmp_path: Path) -> None:

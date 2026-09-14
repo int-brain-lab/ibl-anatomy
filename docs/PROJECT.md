@@ -1,6 +1,6 @@
 # Project hypothesis and boundaries
 
-Status: bootstrap hypothesis, to be revised after Spike 001.
+Status: mesh boundary accepted after Spike 001 and the first native consumer.
 
 ## Motivation
 
@@ -38,7 +38,13 @@ that sharing removes more complexity than it adds.
 
 ## Current repository hypothesis
 
-This repository may eventually own a narrow subset of the following:
+The mesh experiment confirms that this repository should own:
+
+- renderer-neutral atlas mesh schemas, readers, and semantic validators;
+- immutable mesh metadata and presentation-boundary resolution; and
+- deterministic byte-level and decoded-array conformance fixtures.
+
+It may eventually also own a narrow subset of the following:
 
 - renderer-neutral atlas asset schemas;
 - small readers and validators;
