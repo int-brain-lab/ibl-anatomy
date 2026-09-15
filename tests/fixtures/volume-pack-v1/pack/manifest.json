@@ -1,0 +1,87 @@
+{
+  "format": "ibl-atlas-volume-pack-v1",
+  "grid": {
+    "array_axes": [
+      "ap",
+      "ml",
+      "dv"
+    ],
+    "index_to_world_um": [
+      0,
+      100,
+      0,
+      -239,
+      -100,
+      0,
+      0,
+      100,
+      0,
+      0,
+      -100,
+      100,
+      0,
+      0,
+      0,
+      1
+    ],
+    "shape": [
+      4,
+      5,
+      3
+    ],
+    "voxel_coordinates": "centers",
+    "world_axes": [
+      "ml",
+      "ap",
+      "dv"
+    ],
+    "world_units": "um"
+  },
+  "hemisphere_boundary": {
+    "array_axis": "ml",
+    "first_right_index": 2,
+    "on_boundary_side": "right"
+  },
+  "pack_id": "synthetic-atlas-volume-v1",
+  "provenance": {
+    "generator": "tools/build_volume_fixture.py",
+    "kind": "deterministic synthetic test fixture",
+    "license": "MIT"
+  },
+  "purpose": "test-only",
+  "reference_space_id": "allen-ccf-2017",
+  "region_catalog": {
+    "bytes": 3596,
+    "format": "ibl-atlas-regions-v1",
+    "index_field": "mappings.allen[].idx",
+    "path": "regions.json",
+    "sha256": "f757cc3c3e54f5875a75ccf0b6118f06a09443da7b199209d2fa2a20ab84895a"
+  },
+  "schema_version": "1.0",
+  "volumes": {
+    "annotation": {
+      "byte_order": "little",
+      "bytes": 38,
+      "data_type": "uint16",
+      "decoded_bytes": 120,
+      "decoded_sha256": "179489e4b46f45cea2d666e18f4ce0e7c9e51a4927d2ad15e277dcf5bf3da8da",
+      "encoding": "gzip",
+      "outside_value": 0,
+      "path": "annotation.u16.gz",
+      "semantic": "region-catalog-source-index",
+      "sha256": "27d7a4d6551a03acefadb8f3db4d862580281daac3505e1f3e2a43a8cdb45844"
+    },
+    "template": {
+      "byte_order": "little",
+      "bytes": 120,
+      "data_type": "uint16",
+      "decoded_bytes": 120,
+      "decoded_sha256": "03878d98f0fcc9aed2901513ab537faa48ac3e32a7b4c938a7a07c09d8231a3c",
+      "encoding": "gzip",
+      "outside_value": 0,
+      "path": "template.u16.gz",
+      "semantic": "anatomical-template-intensity",
+      "sha256": "78475364912d51fd2fafaa22b9aa97b3d5dc10caf911cddc9d6360506fe4a38c"
+    }
+  }
+}

@@ -17,11 +17,22 @@ from .regions import (
     open_region_catalog,
     parse_region_catalog,
 )
+from .volume_pack import (
+    AtlasVolumeGrid,
+    AtlasVolumePack,
+    AtlasVolumes,
+    AtlasVolumeSlice,
+    open_volume_pack,
+)
 
 __all__ = [
     "AtlasAssetSet",
     "AtlasRegion",
     "AtlasRegionCatalog",
+    "AtlasVolumeGrid",
+    "AtlasVolumePack",
+    "AtlasVolumeSlice",
+    "AtlasVolumes",
     "MaterializedAtlasAssets",
     "MeshComponentRange",
     "MeshGeometry",
@@ -32,6 +43,7 @@ __all__ = [
     "open_asset_set",
     "open_mesh_pack",
     "open_region_catalog",
+    "open_volume_pack",
     "parse_asset_set",
     "parse_region_catalog",
     "verify_materialized_asset_set",

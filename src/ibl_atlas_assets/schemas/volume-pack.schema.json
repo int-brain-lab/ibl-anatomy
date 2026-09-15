@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.internationalbrainlab.org/schema/ibl-atlas-volume-pack-v1.schema.json",
+  "title": "IBL atlas volume pack v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "schema_version", "pack_id", "purpose", "reference_space_id", "grid", "hemisphere_boundary", "region_catalog", "volumes", "provenance"],
+  "properties": {
+    "format": {"const": "ibl-atlas-volume-pack-v1"},
+    "schema_version": {"const": "1.0"},
+    "pack_id": {"type": "string", "minLength": 1},
+    "purpose": {"enum": ["test-only", "production"]},
+    "reference_space_id": {"const": "allen-ccf-2017"},
+    "grid": {
+      "type": "object", "additionalProperties": false,
+      "required": ["array_axes", "shape", "world_axes", "world_units", "voxel_coordinates", "index_to_world_um"],
+      "properties": {
+        "array_axes": {"const": ["ap", "ml", "dv"]},
+        "shape": {"type": "array", "prefixItems": [{"type": "integer", "minimum": 1, "maximum": 65535}, {"type": "integer", "minimum": 1, "maximum": 65535}, {"type": "integer", "minimum": 1, "maximum": 65535}], "items": false},
+        "world_axes": {"const": ["ml", "ap", "dv"]},
+        "world_units": {"const": "um"},
+        "voxel_coordinates": {"const": "centers"},
+        "index_to_world_um": {"type": "array", "minItems": 16, "maxItems": 16, "items": {"type": "number"}}
+      }
+    },
+    "hemisphere_boundary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["array_axis", "first_right_index", "on_boundary_side"],
+      "properties": {
+        "array_axis": {"const": "ml"},
+        "first_right_index": {"type": "integer", "minimum": 0},
+        "on_boundary_side": {"const": "right"}
+      }
+    },
+    "region_catalog": {"$ref": "#/$defs/catalogResource"},
+    "volumes": {
+      "type": "object", "additionalProperties": false, "required": ["template", "annotation"],
+      "properties": {
+        "template": {"allOf": [{"$ref": "#/$defs/volumeResource"}, {"type": "object", "properties": {"semantic": {"const": "anatomical-template-intensity"}}}]},
+        "annotation": {"allOf": [{"$ref": "#/$defs/volumeResource"}, {"type": "object", "properties": {"semantic": {"const": "region-catalog-source-index"}}}]}
+      }
+    },
+    "provenance": {"type": "object", "minProperties": 1, "additionalProperties": true}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "catalogResource": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256", "format", "index_field"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1}, "bytes": {"type": "integer", "minimum": 1}, "sha256": {"$ref": "#/$defs/digest"},
+        "format": {"const": "ibl-atlas-regions-v1"}, "index_field": {"const": "mappings.allen[].idx"}
+      }
+    },
+    "volumeResource": {
+      "type": "object", "additionalProperties": false,
+      "required": ["semantic", "path", "data_type", "byte_order", "encoding", "bytes", "sha256", "decoded_bytes", "decoded_sha256", "outside_value"],
+      "properties": {
+        "semantic": {"type": "string"}, "path": {"type": "string", "minLength": 1},
+        "data_type": {"const": "uint16"}, "byte_order": {"const": "little"}, "encoding": {"const": "gzip"},
+        "bytes": {"type": "integer", "minimum": 1}, "sha256": {"$ref": "#/$defs/digest"},
+        "decoded_bytes": {"type": "integer", "minimum": 2}, "decoded_sha256": {"$ref": "#/$defs/digest"},
+        "outside_value": {"const": 0}
+      }
+    }
+  }
+}

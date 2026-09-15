@@ -29,6 +29,14 @@ def validate_mesh_pack_manifest(manifest: Any) -> dict[str, Any]:
     return manifest
 
 
+def validate_volume_pack_manifest(manifest: Any) -> dict[str, Any]:
+    """Validate and return an atlas volume-pack v1 manifest."""
+
+    Draft202012Validator(_load_schema("volume-pack.schema.json")).validate(manifest)
+    _validate_volume_semantics(manifest)
+    return manifest
+
+
 def _finite(values: list[float], label: str) -> None:
     if not all(math.isfinite(value) for value in values):
         raise ValueError(f"{label} must be finite")
@@ -41,6 +49,58 @@ def _unique(values: list[Any], label: str) -> None:
         if label == "mesh component id":
             raise ValueError("mesh component IDs are not unique")
         raise ValueError(f"duplicate {label}")
+
+
+def _validate_volume_semantics(document: dict[str, Any]) -> None:
+    """Apply coordinate and resource invariants beyond JSON Schema."""
+
+    grid = document["grid"]
+    transform = grid["index_to_world_um"]
+    _finite(transform, "volume index-to-world transform")
+    if transform[12:] != [0, 0, 0, 1]:
+        raise ValueError("volume index-to-world transform must be affine")
+    matrix = [transform[index : index + 4] for index in range(0, 16, 4)]
+    determinant = (
+        matrix[0][0] * (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1])
+        - matrix[0][1] * (matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0])
+        + matrix[0][2] * (matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0])
+    )
+    if math.isclose(determinant, 0):
+        raise ValueError("volume index-to-world transform must be invertible")
+    if (
+        matrix[0][0] != 0
+        or matrix[0][2] != 0
+        or matrix[1][1] != 0
+        or matrix[1][2] != 0
+        or matrix[2][0] != 0
+        or matrix[2][1] != 0
+        or matrix[0][1] <= 0
+        or matrix[1][0] >= 0
+        or matrix[2][2] >= 0
+    ):
+        raise ValueError("volume transform must be axis-aligned IBL AP/ML/DV")
+    spacing = (matrix[0][1], -matrix[1][0], -matrix[2][2])
+    if not math.isclose(spacing[0], spacing[1]) or not math.isclose(
+        spacing[0], spacing[2]
+    ):
+        raise ValueError("volume voxel spacing must be isotropic")
+
+    boundary = document["hemisphere_boundary"]
+    ml_dimension = grid["shape"][grid["array_axes"].index("ml")]
+    if boundary["first_right_index"] >= ml_dimension:
+        raise ValueError("volume first-right index is outside the ML dimension")
+    derived_first_right = math.floor(-matrix[0][3] / matrix[0][1])
+    if boundary["first_right_index"] != derived_first_right:
+        raise ValueError("volume first-right index differs from the IBL grid origin")
+
+    paths = [document["region_catalog"]["path"]]
+    paths.extend(item["path"] for item in document["volumes"].values())
+    _unique(paths, "volume resource path")
+    voxel_count = math.prod(grid["shape"])
+    expected_decoded_bytes = voxel_count * 2
+    for name, resource in document["volumes"].items():
+        if resource["decoded_bytes"] != expected_decoded_bytes:
+            raise ValueError(f"volume {name} decoded byte count differs from grid")
 
 
 def _validate_mesh_semantics(document: dict[str, Any]) -> None:
