@@ -25,10 +25,12 @@ from .regions import (
     parse_region_catalog,
 )
 from .registered_slices import (
+    AnatomyPack,
     IndexedSvgPack,
     RegisteredProjection,
     RegisteredSlice,
     RegisteredSlicePath,
+    open_anatomy_pack,
     open_registered_projection,
 )
 from .volume_pack import (
@@ -41,6 +43,7 @@ from .volume_pack import (
 
 __all__ = [
     "AtlasAssetSet",
+    "AnatomyPack",
     "AtlasRegion",
     "AtlasRegionCatalog",
     "AtlasVolumeGrid",
@@ -62,6 +65,7 @@ __all__ = [
     "RegisteredSlicePath",
     "bundled_asset_set",
     "materialize_asset_set",
+    "open_anatomy_pack",
     "open_asset_set",
     "open_intensity_block_pack",
     "open_mesh_pack",

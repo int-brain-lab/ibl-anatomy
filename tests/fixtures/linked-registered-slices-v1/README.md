@@ -7,6 +7,10 @@ gzip JSON `anatomy-slice-pack-v2` resources. Signed ±997 Allen/Beryl/Cosmos
 paths are synthetic identities; the first coronal path includes an evenodd
 hole. No scientific data is represented.
 
+The top-level `anatomy-v2.json` exercises the complete-pack adapter used for the
+real `ephys-atlas-web-v2` anatomy artifact. The three projection manifests stay
+present for the lower-level reader contract.
+
 Regenerate with:
 
 ```console

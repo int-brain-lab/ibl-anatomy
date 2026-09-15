@@ -1,0 +1,223 @@
+{
+  "coordinate_system": {
+    "matrix_order": "row-major",
+    "name": "synthetic IBL Allen coordinates",
+    "units": "um",
+    "voxel_centers": "integer-indices",
+    "voxel_edges": "half-integer-indices",
+    "world_axes": [
+      "ml",
+      "ap",
+      "dv"
+    ]
+  },
+  "created_at": "2026-09-15T00:00:00Z",
+  "format": "anatomy-pack-v2",
+  "immutable": true,
+  "pack_id": "synthetic-linked-10um-v2",
+  "projections": {
+    "coronal": {
+      "fixed_world_axis": "ap",
+      "pack_sets": {
+        "16": {
+          "pack_depth": 16,
+          "packs": [
+            {
+              "bytes": 333,
+              "compression": "gzip",
+              "first_slice_index": 0,
+              "media_type": "application/json",
+              "pack_index": 0,
+              "path": "registered/coronal-0.json.gz",
+              "sha256": "b935e41c81afdf5d7eab7960715b6b8293fda30c5ac6148fa89d4a9624b44d6b",
+              "slice_count": 9,
+              "uncompressed_bytes": 1706
+            }
+          ],
+          "path_template": "registered/coronal-{pack}.json.gz"
+        }
+      },
+      "plane_axes": [
+        "ml",
+        "dv"
+      ],
+      "plane_index_to_world_um": [
+        0,
+        10,
+        0,
+        -35,
+        -10,
+        0,
+        0,
+        40,
+        0,
+        0,
+        -10,
+        20,
+        0,
+        0,
+        0,
+        1
+      ],
+      "slice_count": 9,
+      "slice_shape": [
+        7,
+        8
+      ],
+      "view_box": [
+        0,
+        0,
+        8,
+        7
+      ]
+    },
+    "horizontal": {
+      "fixed_world_axis": "dv",
+      "pack_sets": {
+        "16": {
+          "pack_depth": 16,
+          "packs": [
+            {
+              "bytes": 321,
+              "compression": "gzip",
+              "first_slice_index": 0,
+              "media_type": "application/json",
+              "pack_index": 0,
+              "path": "registered/horizontal-0.json.gz",
+              "sha256": "6c1a6d8186f096207de6954e8d4e2baaa117fa9acabb827955c39334c05beacc",
+              "slice_count": 7,
+              "uncompressed_bytes": 1401
+            }
+          ],
+          "path_template": "registered/horizontal-{pack}.json.gz"
+        }
+      },
+      "plane_axes": [
+        "ml",
+        "ap"
+      ],
+      "plane_index_to_world_um": [
+        0,
+        10,
+        0,
+        -35,
+        0,
+        0,
+        -10,
+        40,
+        -10,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        1
+      ],
+      "slice_count": 7,
+      "slice_shape": [
+        9,
+        8
+      ],
+      "view_box": [
+        0,
+        0,
+        8,
+        9
+      ]
+    },
+    "sagittal": {
+      "fixed_world_axis": "ml",
+      "pack_sets": {
+        "16": {
+          "pack_depth": 16,
+          "packs": [
+            {
+              "bytes": 326,
+              "compression": "gzip",
+              "first_slice_index": 0,
+              "media_type": "application/json",
+              "pack_index": 0,
+              "path": "registered/sagittal-0.json.gz",
+              "sha256": "1d165cc70346e6077bc3ebbfc335dc4baa35f7988a0180eb4e133a51707033ea",
+              "slice_count": 8,
+              "uncompressed_bytes": 1552
+            }
+          ],
+          "path_template": "registered/sagittal-{pack}.json.gz"
+        }
+      },
+      "plane_axes": [
+        "ap",
+        "dv"
+      ],
+      "plane_index_to_world_um": [
+        10,
+        0,
+        0,
+        -35,
+        0,
+        10,
+        0,
+        -40,
+        0,
+        0,
+        -10,
+        20,
+        0,
+        0,
+        0,
+        1
+      ],
+      "slice_count": 8,
+      "slice_shape": [
+        7,
+        9
+      ],
+      "view_box": [
+        0,
+        0,
+        9,
+        7
+      ]
+    }
+  },
+  "provenance": {
+    "kind": "synthetic test fixture"
+  },
+  "schema_version": "2.0",
+  "source": {
+    "kind": "synthetic test fixture",
+    "resolution_um": 10
+  },
+  "synchronization_sentinels": [
+    {
+      "name": "synthetic-centre",
+      "projection_indices": {
+        "coronal": [
+          4,
+          3,
+          2
+        ],
+        "horizontal": [
+          2,
+          3,
+          4
+        ],
+        "sagittal": [
+          3,
+          4,
+          2
+        ]
+      },
+      "world_um": [
+        -5,
+        0,
+        0
+      ]
+    }
+  ],
+  "validation": {
+    "coordinate_tolerance_um": 1e-06
+  }
+}

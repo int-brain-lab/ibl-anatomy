@@ -18,9 +18,9 @@
     0,
     -35,
     0,
-    -10,
+    10,
     0,
-    40,
+    -40,
     0,
     0,
     -10,
@@ -36,12 +36,12 @@
     "resource": {
       "bytes": 290,
       "codec": {
-        "decoded_bytes": 407,
+        "decoded_bytes": 405,
         "name": "gzip"
       },
       "media_type": "application/json",
       "path": "sagittal-index.json.gz",
-      "sha256": "d5e241276313c06bcbea4cfe5fdaec7c6c31a82324c0a6bbe1d6e10b58119a2f"
+      "sha256": "19fa201c9f8110d42c8bcbafbed45ccf302d522b64c170361aac88101414396a"
     }
   },
   "slice_count": 8,

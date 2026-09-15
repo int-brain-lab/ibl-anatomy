@@ -10,11 +10,20 @@ from pathlib import Path
 
 GRID = "synthetic-10um-grid-v1"
 REFERENCE = "allen-ccf-2017"
+PACK_ID = "synthetic-linked-10um-v2"
 MATRIX = [0, 10, 0, -35, -10, 0, 0, 40, 0, 0, -10, 20, 0, 0, 0, 1]
 PROJECTIONS = {
     "coronal": ("ap", [9, 8, 7], MATRIX),
-    "sagittal": ("ml", [8, 9, 7], [10, 0, 0, -35, 0, -10, 0, 40, 0, 0, -10, 20, 0, 0, 0, 1]),
-    "horizontal": ("dv", [7, 8, 9], [0, 10, 0, -35, 0, 0, -10, 40, -10, 0, 0, 20, 0, 0, 0, 1]),
+    "sagittal": (
+        "ml",
+        [8, 9, 7],
+        [10, 0, 0, -35, 0, 10, 0, -40, 0, 0, -10, 20, 0, 0, 0, 1],
+    ),
+    "horizontal": (
+        "dv",
+        [7, 8, 9],
+        [0, 10, 0, -35, 0, 0, -10, 40, -10, 0, 0, 20, 0, 0, 0, 1],
+    ),
 }
 
 
@@ -32,22 +41,35 @@ def _pack(projection: str, count: int, matrix: list[int]) -> bytes:
     world_row = {"ml": 0, "ap": 1, "dv": 2}[PROJECTIONS[projection][0]]
     slices = []
     for index in range(count):
-        paths = [{
-            "atlas_ids": {"allen": -997, "beryl": -997, "cosmos": -997},
-            "fill_rule": "evenodd",
-            "d": "M-.5 -.5h3v3h-3zM.5 .5h1v1h-1z" if index == 0 else "M-.5 -.5h3v3h-3z",
-        }]
-        if index == count - 1:
-            paths.append({
-                "atlas_ids": {"allen": 997, "beryl": 997, "cosmos": 997},
+        paths = [
+            {
+                "atlas_ids": {"allen": -997, "beryl": -997, "cosmos": -997},
                 "fill_rule": "evenodd",
-                "d": "M2.5 -.5h3v3h-3z",
-            })
-        slices.append({"slice_index": index, "world_coordinate_um": matrix[world_row * 4] * index + matrix[world_row * 4 + 3], "paths": paths})
+                "d": "M-.5 -.5h3v3h-3zM.5 .5h1v1h-1z"
+                if index == 0
+                else "M-.5 -.5h3v3h-3z",
+            }
+        ]
+        if index == count - 1:
+            paths.append(
+                {
+                    "atlas_ids": {"allen": 997, "beryl": 997, "cosmos": 997},
+                    "fill_rule": "evenodd",
+                    "d": "M2.5 -.5h3v3h-3z",
+                }
+            )
+        slices.append(
+            {
+                "slice_index": index,
+                "world_coordinate_um": matrix[world_row * 4] * index
+                + matrix[world_row * 4 + 3],
+                "paths": paths,
+            }
+        )
     document = {
         "format": "anatomy-slice-pack-v2",
         "schema_version": "2.0",
-        "anatomy_pack_id": f"synthetic-{projection}-10um-v2",
+        "anatomy_pack_id": PACK_ID,
         "projection": projection,
         "pack_depth": 16,
         "pack_index": 0,
@@ -55,13 +77,16 @@ def _pack(projection: str, count: int, matrix: list[int]) -> bytes:
         "slice_count": count,
         "slices": slices,
     }
-    return gzip.compress(json.dumps(document, sort_keys=True, separators=(",", ":")).encode(), mtime=0)
+    return gzip.compress(
+        json.dumps(document, sort_keys=True, separators=(",", ":")).encode(), mtime=0
+    )
 
 
 def build(output: Path) -> None:
     output.mkdir(parents=True, exist_ok=True)
     registered = output / "registered"
     registered.mkdir(exist_ok=True)
+    anatomy_projections = {}
     for projection, (axis, shape, matrix) in PROJECTIONS.items():
         count = shape[0]
         pack_path = registered / f"{projection}-0.json.gz"
@@ -71,13 +96,19 @@ def build(output: Path) -> None:
             "schema_version": "1.0",
             "format": "atlas-registered-svg-resource-index-v1",
             "projection_id": projection,
-            "resources": [{
-                "pack_id": f"synthetic-{projection}-10um-v2",
-                "slice_indices": list(range(count)),
-                "resource": _resource(pack_path.relative_to(output).as_posix(), pack_bytes),
-            }],
+            "resources": [
+                {
+                    "pack_id": PACK_ID,
+                    "slice_indices": list(range(count)),
+                    "resource": _resource(
+                        pack_path.relative_to(output).as_posix(), pack_bytes
+                    ),
+                }
+            ],
         }
-        index_raw = json.dumps(index_document, sort_keys=True, separators=(",", ":")).encode()
+        index_raw = json.dumps(
+            index_document, sort_keys=True, separators=(",", ":")
+        ).encode()
         index_bytes = gzip.compress(index_raw, mtime=0)
         (output / f"{projection}-index.json.gz").write_bytes(index_bytes)
         manifest = {
@@ -92,9 +123,78 @@ def build(output: Path) -> None:
             "plane_index_to_world_um": matrix,
             "voxel_edge_extent_um": [-40, 40, -45, 45, -45, 25],
             "display_slices": list(range(count)),
-            "resource_index": {"format": "atlas-registered-svg-resource-index-v1", "resource": _resource(f"{projection}-index.json.gz", index_bytes)},
+            "resource_index": {
+                "format": "atlas-registered-svg-resource-index-v1",
+                "resource": _resource(f"{projection}-index.json.gz", index_bytes),
+            },
         }
-        (output / f"{projection}.json").write_text(json.dumps(manifest, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+        (output / f"{projection}.json").write_text(
+            json.dumps(manifest, sort_keys=True, indent=2) + "\n", encoding="utf-8"
+        )
+        anatomy_projections[projection] = {
+            "fixed_world_axis": axis,
+            "plane_axes": {
+                "coronal": ["ml", "dv"],
+                "sagittal": ["ap", "dv"],
+                "horizontal": ["ml", "ap"],
+            }[projection],
+            "slice_count": count,
+            "slice_shape": [shape[2], shape[1]],
+            "view_box": [0, 0, shape[1], shape[2]],
+            "plane_index_to_world_um": matrix,
+            "pack_sets": {
+                "16": {
+                    "pack_depth": 16,
+                    "path_template": f"registered/{projection}-{{pack}}.json.gz",
+                    "packs": [
+                        {
+                            "bytes": len(pack_bytes),
+                            "compression": "gzip",
+                            "first_slice_index": 0,
+                            "media_type": "application/json",
+                            "pack_index": 0,
+                            "path": pack_path.relative_to(output).as_posix(),
+                            "sha256": hashlib.sha256(pack_bytes).hexdigest(),
+                            "slice_count": count,
+                            "uncompressed_bytes": len(gzip.decompress(pack_bytes)),
+                        }
+                    ],
+                }
+            },
+        }
+    anatomy = {
+        "format": "anatomy-pack-v2",
+        "schema_version": "2.0",
+        "pack_id": PACK_ID,
+        "immutable": True,
+        "created_at": "2026-09-15T00:00:00Z",
+        "source": {"kind": "synthetic test fixture", "resolution_um": 10},
+        "coordinate_system": {
+            "matrix_order": "row-major",
+            "name": "synthetic IBL Allen coordinates",
+            "units": "um",
+            "voxel_centers": "integer-indices",
+            "voxel_edges": "half-integer-indices",
+            "world_axes": ["ml", "ap", "dv"],
+        },
+        "projections": anatomy_projections,
+        "synchronization_sentinels": [
+            {
+                "name": "synthetic-centre",
+                "world_um": [-5, 0, 0],
+                "projection_indices": {
+                    "coronal": [4, 3, 2],
+                    "sagittal": [3, 4, 2],
+                    "horizontal": [2, 3, 4],
+                },
+            }
+        ],
+        "validation": {"coordinate_tolerance_um": 1e-6},
+        "provenance": {"kind": "synthetic test fixture"},
+    }
+    (output / "anatomy-v2.json").write_text(
+        json.dumps(anatomy, sort_keys=True, indent=2) + "\n", encoding="utf-8"
+    )
 
 
 def main() -> None:
