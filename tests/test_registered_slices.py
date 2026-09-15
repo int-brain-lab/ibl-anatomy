@@ -4,6 +4,7 @@ import copy
 import gzip
 import hashlib
 import json
+import struct
 from pathlib import Path
 
 import numpy as np
@@ -74,6 +75,25 @@ def test_registered_projection_reader_preserves_affine_and_resource_index(tmp_pa
         }],
     }
     encoded_index = gzip.compress(json.dumps(index).encode(), mtime=0)
+    svg = b'<svg><path fill-rule="evenodd" data-allen-id="-101" data-beryl-id="-10" data-cosmos-id="-1" d="M0 0h4v4h-4zM1 1h2v2h-2z"/></svg>'
+    pack_header = struct.pack(
+        "<4sBBHHHIIII",
+        b"ISVG", 1, 0, 28, len("coronal"), len("coronal-0"), 1,
+        28 + len("coronal") + len("coronal-0"),
+        28 + len("coronal") + len("coronal-0") + 20, len(svg),
+    )
+    svg_pack = pack_header + b"coronal" + b"coronal-0" + struct.pack(
+        "<idII", 0, 200.0, 0, len(svg)
+    ) + svg
+    encoded_svg = gzip.compress(svg_pack, mtime=0)
+    index["resources"][0]["resource"].update({
+        "bytes": len(encoded_svg),
+        "sha256": hashlib.sha256(encoded_svg).hexdigest(),
+        "codec": {"name": "gzip", "decoded_bytes": len(svg_pack)},
+    })
+    (tmp_path / "registered").mkdir()
+    (tmp_path / "registered/coronal-0.isvg.gz").write_bytes(encoded_svg)
+    encoded_index = gzip.compress(json.dumps(index).encode(), mtime=0)
     document["resource_index"]["resource"].update({
         "bytes": len(encoded_index),
         "sha256": hashlib.sha256(encoded_index).hexdigest(),
@@ -87,6 +107,10 @@ def test_registered_projection_reader_preserves_affine_and_resource_index(tmp_pa
     np.testing.assert_allclose(opened.index_to_world([0, 0, 0]), [100, -50, 5])
     np.testing.assert_allclose(opened.world_to_index([100, -50, 5]), [0, 0, 0])
     assert opened.load_resource_index()["projection_id"] == "coronal"
+    decoded = opened.load_slice(0)
+    assert decoded.paths[0].atlas_ids == {"allen": -101, "beryl": -10, "cosmos": -1}
+    assert decoded.paths[0].ring_count == 2
+    assert decoded.paths[0].fill_rule == "evenodd"
 
 
 def test_registered_projection_rejects_wrong_axis() -> None:

@@ -17,7 +17,13 @@ from .regions import (
     open_region_catalog,
     parse_region_catalog,
 )
-from .registered_slices import RegisteredProjection, open_registered_projection
+from .registered_slices import (
+    IndexedSvgPack,
+    RegisteredProjection,
+    RegisteredSlice,
+    RegisteredSlicePath,
+    open_registered_projection,
+)
 from .volume_pack import (
     AtlasVolumeGrid,
     AtlasVolumePack,
@@ -34,12 +40,15 @@ __all__ = [
     "AtlasVolumePack",
     "AtlasVolumeSlice",
     "AtlasVolumes",
+    "IndexedSvgPack",
     "MaterializedAtlasAssets",
     "MeshComponentRange",
     "MeshGeometry",
     "MeshPack",
     "PinnedResource",
     "RegisteredProjection",
+    "RegisteredSlice",
+    "RegisteredSlicePath",
     "bundled_asset_set",
     "materialize_asset_set",
     "open_asset_set",

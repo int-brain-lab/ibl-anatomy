@@ -5,11 +5,14 @@ from __future__ import annotations
 import gzip
 import hashlib
 import json
+import re
+import struct
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from types import MappingProxyType
 from typing import Any, Literal
+from xml.etree import ElementTree
 
 import numpy as np
 
@@ -19,6 +22,43 @@ from .schema import (
 )
 
 ProjectionId = Literal["coronal", "sagittal", "horizontal"]
+MappingName = Literal["allen", "beryl", "cosmos"]
+
+
+@dataclass(frozen=True)
+class RegisteredSlicePath:
+    """One indexed-SVG path with all signed atlas identities preserved."""
+
+    atlas_ids: Mapping[str, int]
+    fill_rule: str
+    d: str
+
+    @property
+    def ring_count(self) -> int:
+        """Return the number of SVG subpaths, including hole rings."""
+
+        return len(re.findall(r"[Mm]", self.d))
+
+
+@dataclass(frozen=True)
+class RegisteredSlice:
+    """One decoded registered slice; path order and SVG topology are retained."""
+
+    slice_index: int
+    world_coordinate_um: float
+    paths: tuple[RegisteredSlicePath, ...]
+
+
+@dataclass(frozen=True)
+class IndexedSvgPack:
+    """Decoded indexed-SVG pack with immutable slice fragments."""
+
+    projection: str
+    pack_id: str
+    slices: tuple[RegisteredSlice, ...]
+
+    def slice(self, slice_index: int) -> RegisteredSlice | None:
+        return next((item for item in self.slices if item.slice_index == slice_index), None)
 
 
 @dataclass(frozen=True)
@@ -118,6 +158,26 @@ class RegisteredProjection:
                 return entry["resource"]
         raise KeyError(f"registered slice has no resource: {slice_index}")
 
+    def load_slice(self, slice_index: int) -> RegisteredSlice:
+        """Decode one indexed-SVG slice while preserving IDs, rings, and holes."""
+
+        index = self.load_resource_index()
+        entry = next(
+            (item for item in index["resources"] if slice_index in item["slice_indices"]),
+            None,
+        )
+        if entry is None:
+            raise KeyError(f"registered slice has no resource: {slice_index}")
+        descriptor = entry["resource"]
+        decoded = _read_resource(self.root, descriptor, "registered SVG pack")
+        pack = _decode_indexed_svg_pack(decoded)
+        if pack.projection != self.projection_id or pack.pack_id != entry["pack_id"]:
+            raise ValueError("registered SVG pack identity differs from resource index")
+        result = pack.slice(slice_index)
+        if result is None:
+            raise KeyError(f"registered SVG pack has no slice: {slice_index}")
+        return result
+
 
 def open_registered_projection(path: str | Path) -> RegisteredProjection:
     """Open and validate a registered projection manifest from a local path."""
@@ -164,6 +224,66 @@ def _read_resource(root: Path, descriptor: Mapping[str, Any], label: str) -> byt
     if len(decoded) != codec["decoded_bytes"]:
         raise ValueError(f"{label} decoded byte length differs")
     return decoded
+
+
+def _decode_indexed_svg_pack(data: bytes) -> IndexedSvgPack:
+    """Decode ISVG-1 bytes matching the browser's fixed-header codec."""
+
+    header_size = 28
+    entry_size = 20
+    if len(data) < header_size or data[:4] != b"ISVG":
+        raise ValueError("indexed SVG pack header is invalid")
+    version, flags, declared_header = data[4], data[5], struct.unpack_from("<H", data, 6)[0]
+    projection_len, pack_len, count, table_offset, payload_offset, payload_length = struct.unpack_from("<HHIIII", data, 8)
+    if version != 1 or flags != 0 or declared_header != header_size:
+        raise ValueError("indexed SVG pack version or header is invalid")
+    strings_end = header_size + projection_len + pack_len
+    if count > 1_000_000 or table_offset != strings_end or payload_offset != table_offset + count * entry_size or payload_offset + payload_length != len(data):
+        raise ValueError("indexed SVG pack offsets are invalid")
+    try:
+        projection = data[header_size : header_size + projection_len].decode("utf-8")
+        pack_id = data[header_size + projection_len : strings_end].decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise ValueError("indexed SVG pack identity is invalid UTF-8") from error
+    if not projection or not pack_id or "\0" in projection + pack_id:
+        raise ValueError("indexed SVG pack identity is invalid")
+    entries: list[tuple[int, float, int, int]] = []
+    previous = -1
+    expected_offset = 0
+    for offset in range(count):
+        at = table_offset + offset * entry_size
+        slice_index, world_coordinate, payload_start, length = struct.unpack_from("<idII", data, at)
+        if slice_index <= previous or not np.isfinite(world_coordinate) or payload_start != expected_offset or payload_start + length > payload_length:
+            raise ValueError("indexed SVG pack fragment table is invalid")
+        entries.append((slice_index, world_coordinate, payload_start, length))
+        previous = slice_index
+        expected_offset += length
+    if expected_offset != payload_length:
+        raise ValueError("indexed SVG pack fragment table does not cover payload")
+    slices: list[RegisteredSlice] = []
+    for slice_index, world_coordinate, payload_start, length in entries:
+        fragment = data[payload_offset + payload_start : payload_offset + payload_start + length]
+        try:
+            root = ElementTree.fromstring(fragment)
+        except ElementTree.ParseError as error:
+            raise ValueError("indexed SVG fragment is invalid XML") from error
+        paths: list[RegisteredSlicePath] = []
+        for element in root.iter():
+            if element.tag.rsplit("}", 1)[-1] != "path":
+                continue
+            d = element.attrib.get("d")
+            fill_rule = element.attrib.get("fill-rule", "evenodd")
+            if d is None or not d.startswith(("M", "m")):
+                raise ValueError("indexed SVG path geometry is invalid")
+            try:
+                atlas_ids = {name: int(element.attrib[f"data-{name}-id"]) for name in ("allen", "beryl", "cosmos")}
+            except (KeyError, ValueError) as error:
+                raise ValueError("indexed SVG path mapping IDs are invalid") from error
+            if any(value == 0 for value in atlas_ids.values()) or len({value < 0 for value in atlas_ids.values()}) != 1:
+                raise ValueError("indexed SVG path signed mappings are inconsistent")
+            paths.append(RegisteredSlicePath(MappingProxyType(atlas_ids), fill_rule, d))
+        slices.append(RegisteredSlice(slice_index, world_coordinate, tuple(paths)))
+    return IndexedSvgPack(projection, pack_id, tuple(slices))
 
 
 def _freeze(value: Any) -> Any:
