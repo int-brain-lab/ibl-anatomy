@@ -1,0 +1,67 @@
+{
+  "display_slices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "grid_id": "synthetic-10um-grid-v1",
+  "id": "sagittal",
+  "kind": "registered-slice-stack",
+  "plane_index_to_world_um": [
+    10,
+    0,
+    0,
+    -35,
+    0,
+    -10,
+    0,
+    40,
+    0,
+    0,
+    -10,
+    20,
+    0,
+    0,
+    0,
+    1
+  ],
+  "reference_space_id": "allen-ccf-2017",
+  "resource_index": {
+    "format": "atlas-registered-svg-resource-index-v1",
+    "resource": {
+      "bytes": 290,
+      "codec": {
+        "decoded_bytes": 407,
+        "name": "gzip"
+      },
+      "media_type": "application/json",
+      "path": "sagittal-index.json.gz",
+      "sha256": "d5e241276313c06bcbea4cfe5fdaec7c6c31a82324c0a6bbe1d6e10b58119a2f"
+    }
+  },
+  "slice_count": 8,
+  "slice_shape": [
+    9,
+    7
+  ],
+  "view_box": [
+    0,
+    0,
+    9,
+    7
+  ],
+  "voxel_edge_extent_um": [
+    -40,
+    40,
+    -45,
+    45,
+    -45,
+    25
+  ],
+  "world_slice_axis": "ml"
+}

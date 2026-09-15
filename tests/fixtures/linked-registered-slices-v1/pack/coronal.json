@@ -1,0 +1,68 @@
+{
+  "display_slices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "grid_id": "synthetic-10um-grid-v1",
+  "id": "coronal",
+  "kind": "registered-slice-stack",
+  "plane_index_to_world_um": [
+    0,
+    10,
+    0,
+    -35,
+    -10,
+    0,
+    0,
+    40,
+    0,
+    0,
+    -10,
+    20,
+    0,
+    0,
+    0,
+    1
+  ],
+  "reference_space_id": "allen-ccf-2017",
+  "resource_index": {
+    "format": "atlas-registered-svg-resource-index-v1",
+    "resource": {
+      "bytes": 290,
+      "codec": {
+        "decoded_bytes": 406,
+        "name": "gzip"
+      },
+      "media_type": "application/json",
+      "path": "coronal-index.json.gz",
+      "sha256": "2f7edf861e3823e5cf3a251a275ef173967ace18d5287bd94829fba4fd875fc4"
+    }
+  },
+  "slice_count": 9,
+  "slice_shape": [
+    8,
+    7
+  ],
+  "view_box": [
+    0,
+    0,
+    8,
+    7
+  ],
+  "voxel_edge_extent_um": [
+    -40,
+    40,
+    -45,
+    45,
+    -45,
+    25
+  ],
+  "world_slice_axis": "ap"
+}
