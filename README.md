@@ -19,9 +19,18 @@ Experimental measurements such as AGEA or MERFISH, BWM/session/unit data, scient
 
 ## Current status
 
+`ibl-anatomy` is currently an **incubating, unreleased contract repository**. There is no
+supported package release or stable public API yet. Early consumers must pin a full Git commit
+SHA, validate the fixtures they use, and upgrade deliberately. Serialized assets already published
+under immutable IDs remain immutable even while readers, builders, schemas, and repository layout
+continue to evolve.
+
 Spike 001 now provides an independent, offline Python reader for raw EAM3 `atlas-mesh-pack-v1` packs. It validates the bundled JSON Schema, the complete immutable resource graph, encoded and decoded byte sizes, SHA-256 identities, signed presentation metadata, component ranges, and decoded geometry before returning owned contiguous NumPy arrays.
 
-The project remains in an evidence-gathering phase. The reader currently rejects `meshopt-quantized-v1`; persistent runtime caching, builders, TypeScript packaging, and renderer integration remain outside its scope.
+The project remains in an evidence-gathering phase. A package version in project metadata is for
+build/install identity only and does not imply a release. The reader currently rejects
+`meshopt-quantized-v1`; persistent runtime caching, TypeScript packaging, and renderer integration
+remain outside its scope.
 
 The package now ships an immutable lock for the published D070 Allen CCF 2017 surface and the exact matching region catalog. The lock contains URLs, sizes, SHA-256 identities, decoded inventory counts, and renderer-neutral vertex/face presentation fingerprints. The numeric mesh bytes remain in the established immutable atlas origin rather than being copied into this Git repository.
 
