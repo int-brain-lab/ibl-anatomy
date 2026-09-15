@@ -45,10 +45,12 @@ Current checkpoint:
 - `ibl-atlas-volume-pack-v1` now has a strict Python reader, deterministic synthetic fixture, and
   pinned-source 50-um builder. The real template and annotation pair verifies locally as a common
   264-by-228-by-160 AP/ML/DV grid. `ibl-atlas-intensity-blocks-v1` adds bounded projection-native
-  scalar section reads, and the registered-slice reader accepts both indexed SVG and exact
-  anatomy-v2 JSON packs. A linked 10-um synthetic fixture proves all three registered projections
-  against the same grid as the intensity transport. Real derived bytes remain unpublished until
-  an immutable origin and Allen terms/citation treatment are recorded.
+  scalar section reads, and the registered-slice reader accepts both projection manifests and a
+  complete anatomy-v2 pack without copying its resources. A linked 10-um synthetic fixture proves
+  all three registered projections against the same grid as the intensity transport. The official
+  10-um average-template NRRD has now been converted and benchmarked locally: eight-section gzip-6
+  blocks total 1.258 GB, with 52-76 ms cold and below 0.1 ms warm median reads. Real derived bytes
+  remain unpublished until an immutable origin and Allen terms/citation treatment are recorded.
 
 This document separates immediate, evidence-producing work from the broader
 possibilities in `FUTURE_DIRECTIONS.md`. Work should use small green commits.

@@ -122,7 +122,11 @@ intensity = open_intensity_block_pack("path/to/intensity-blocks")
 section = intensity.read_section("ml", 570)
 ```
 
-This remains a local prototype; no 10-um Allen asset is committed or published.
+The builder accepts either a C-order AP/ML/DV NumPy file or the official embedded-gzip Allen NRRD
+directly. NRRD decoding uses a temporary memory map instead of allocating the 2.4 GB decoded volume
+on the Python heap. Source and generated assets remain outside Git.
+
+This remains a local prototype; no 10-um Allen intensity asset is committed or published.
 
 ## Read registered annotation slices
 
@@ -136,6 +140,21 @@ from ibl_atlas_assets import open_registered_projection
 coronal = open_registered_projection("path/to/coronal.json")
 section = coronal.load_slice(540)
 world_um = coronal.index_to_world([540, 570, 400])
+```
+
+The complete `anatomy-pack-v2` produced by `ephys-atlas-web-v2` can be consumed without copying its
+resources. Because that older manifest predates explicit reference-space and grid fields, callers
+must supply the identities from their pinned asset record:
+
+```python
+from ibl_atlas_assets import open_anatomy_pack
+
+anatomy = open_anatomy_pack(
+    "path/to/anatomy-pack-v2",
+    reference_space_id="allen-ccf-2017",
+    grid_id="allen-ccf-2017-10um",
+)
+coronal = anatomy.projections["coronal"]
 ```
 
 The committed linked fixture shares one synthetic 10-um grid with the intensity-block fixture and

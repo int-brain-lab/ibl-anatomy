@@ -49,8 +49,8 @@ def test_fixture_identities_and_deterministic_builder(tmp_path) -> None:
             "23ffa84ef847d74342a8c0b531e2af13a48a68d10f4986539f974ac5bd303569",
         ),
         "manifest.json": (
-            5204,
-            "36f5d64cc1b3f452da31935e3e541812d2cf4538fdfbf6e01ee0844834c13b7e",
+            5313,
+            "751bd44d3c0032a2ff41a58e65a7c6ed6045be67ffcfbeab43106c166f692974",
         ),
         "ml.u16.blocks": (
             1062,

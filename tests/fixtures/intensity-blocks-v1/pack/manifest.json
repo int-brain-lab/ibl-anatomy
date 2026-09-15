@@ -168,7 +168,12 @@
   "provenance": {
     "generator": "tools/build_intensity_fixture.py",
     "kind": "deterministic axis-coded synthetic fixture",
-    "license": "MIT"
+    "license": "MIT",
+    "transport": {
+      "codec": "gzip",
+      "compression_level": 9,
+      "sections_per_block": 3
+    }
   },
   "recommended_display_range": [
     1,

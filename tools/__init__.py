@@ -1,1 +1,1 @@
-"""Repository-local atlas asset build and benchmark tools."""
+"""Reusable atlas asset build tooling."""
