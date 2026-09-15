@@ -123,3 +123,20 @@ section = intensity.read_section("ml", 570)
 ```
 
 This remains a local prototype; no 10-um Allen asset is committed or published.
+
+## Read registered annotation slices
+
+Registered projections retain exact signed Allen/Beryl/Cosmos identities and even-odd SVG path
+semantics without coupling the asset contract to a renderer. The reader supports indexed SVG packs
+and the exact gzip JSON slice packs currently produced by `ephys-atlas-web-v2`:
+
+```python
+from ibl_atlas_assets import open_registered_projection
+
+coronal = open_registered_projection("path/to/coronal.json")
+section = coronal.load_slice(540)
+world_um = coronal.index_to_world([540, 570, 400])
+```
+
+The committed linked fixture shares one synthetic 10-um grid with the intensity-block fixture and
+covers every AP, ML, and DV section. It is a contract and integration test, not scientific data.

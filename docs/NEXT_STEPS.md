@@ -44,8 +44,11 @@ Current checkpoint:
   or general browser-export contract.
 - `ibl-atlas-volume-pack-v1` now has a strict Python reader, deterministic synthetic fixture, and
   pinned-source 50-um builder. The real template and annotation pair verifies locally as a common
-  264-by-228-by-160 AP/ML/DV grid. Its derived bytes remain unpublished until an immutable origin
-  and Allen terms/citation treatment are recorded.
+  264-by-228-by-160 AP/ML/DV grid. `ibl-atlas-intensity-blocks-v1` adds bounded projection-native
+  scalar section reads, and the registered-slice reader accepts both indexed SVG and exact
+  anatomy-v2 JSON packs. A linked 10-um synthetic fixture proves all three registered projections
+  against the same grid as the intensity transport. Real derived bytes remain unpublished until
+  an immutable origin and Allen terms/citation treatment are recorded.
 
 This document separates immediate, evidence-producing work from the broader
 possibilities in `FUTURE_DIRECTIONS.md`. Work should use small green commits.
@@ -259,15 +262,26 @@ source artifact; it should not start by designing a generic cross-language runti
 
 ## Selected next vertical slice
 
-The next evidence-producing slice is a registered Allen atlas-volume pack used by a native Linked
-Atlas Navigator. Start with a deterministic miniature fixture and one pinned, manageable-resolution
-real source. The contract must keep anatomical template intensities distinct from categorical
-annotation labels while making their common grid, voxel-center transform, axis order, units,
-reference-space identity, outside semantics, provenance, and byte integrity explicit.
+The registered mixed-resolution slice is now implemented and tested end to end. A native Linked
+Atlas Navigator can combine independently registered scalar slices and vector annotations with a
+separate dense 3-D volume. The synthetic contract test caught and fixed a real `slice_shape`
+convention mismatch: registered projection shapes are `[u, v]`, while image arrays are
+`[row=v, column=u]`.
 
-`ibl-atlas-assets` owns only the immutable pack, validation, decoding, and renderer-neutral
-coordinate/lookup semantics. `ibl-datoviz` owns slice composition, 3-D rendering, crosshairs,
-selection, GUI state, and GPU lifetime. `ephys-atlas-web-v2` should not change until the native
-consumer proves the contract; it may then validate or consume the same contract with a small
-language-native adapter. `iblatlas` remains the authoritative generation source and should change
-only if generation exposes a concrete correctness or metadata gap.
+The next evidence-producing step is publication, not another format redesign:
+
+1. record the exact licensed 10-um Allen template and annotation inputs and their immutable hashes;
+2. build registered projections and the scalar block transport from those same inputs;
+3. verify grid/reference/affine identity and representative signed-region parity against the web
+   producer;
+4. measure compressed size, cold/warm section latency, and desktop memory on the real bytes;
+5. publish at an immutable origin with terms and citation metadata; and
+6. only then redirect either consumer, preserving the web application's current display resolution
+   and defaults until its independent parity gate passes.
+
+`ibl-atlas-assets` owns immutable packs, validation, decoding, and renderer-neutral coordinate and
+lookup semantics. `ibl-datoviz` owns slice composition, 3-D rendering, crosshairs, selection, GUI
+state, workers, caches, and GPU lifetime. `ephys-atlas-web-v2` remains the authoritative producer
+for its current anatomy projection assets until published shared bytes pass byte/semantic parity;
+its current display resolution must not change as a side effect. `iblatlas` remains the scientific
+authority and should change only if real generation exposes a concrete correctness or metadata gap.
