@@ -10,7 +10,8 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from ibl_atlas_assets import open_registered_projection
+from ibl_atlas_assets import RegisteredProjection, open_registered_projection
+from ibl_atlas_assets.registered_slices import _decode_indexed_svg_pack
 from ibl_atlas_assets.schema import validate_registered_projection_manifest
 
 
@@ -47,6 +48,18 @@ CASES = (
 )
 
 
+def _binary_pack(svg: bytes, *, slice_index: int = 0, world: float = -50.0) -> bytes:
+    projection = b"coronal"
+    pack_id = b"coronal-0"
+    table = 28 + len(projection) + len(pack_id)
+    payload = table + 20
+    header = struct.pack(
+        "<4sBBHHHIIII", b"ISVG", 1, 0, 28, len(projection), len(pack_id), 1,
+        table, payload, len(svg),
+    )
+    return header + projection + pack_id + struct.pack("<idII", slice_index, world, 0, len(svg)) + svg
+
+
 @pytest.mark.parametrize("document", CASES, ids=lambda item: item["id"])
 def test_representative_registered_projection_semantics(document: dict) -> None:
     validate_registered_projection_manifest(document)
@@ -64,7 +77,7 @@ def test_registered_projection_reader_preserves_affine_and_resource_index(tmp_pa
         "projection_id": "coronal",
         "resources": [{
             "pack_id": "coronal-0",
-            "slice_indices": [0, 1],
+            "slice_indices": [0],
             "resource": {
                 "path": "registered/coronal-0.isvg.gz",
                 "media_type": "application/vnd.ibl.indexed-svg",
@@ -76,15 +89,7 @@ def test_registered_projection_reader_preserves_affine_and_resource_index(tmp_pa
     }
     encoded_index = gzip.compress(json.dumps(index).encode(), mtime=0)
     svg = b'<svg><path fill-rule="evenodd" data-allen-id="-101" data-beryl-id="-10" data-cosmos-id="-1" d="M0 0h4v4h-4zM1 1h2v2h-2z"/></svg>'
-    pack_header = struct.pack(
-        "<4sBBHHHIIII",
-        b"ISVG", 1, 0, 28, len("coronal"), len("coronal-0"), 1,
-        28 + len("coronal") + len("coronal-0"),
-        28 + len("coronal") + len("coronal-0") + 20, len(svg),
-    )
-    svg_pack = pack_header + b"coronal" + b"coronal-0" + struct.pack(
-        "<idII", 0, 200.0, 0, len(svg)
-    ) + svg
+    svg_pack = _binary_pack(svg)
     encoded_svg = gzip.compress(svg_pack, mtime=0)
     index["resources"][0]["resource"].update({
         "bytes": len(encoded_svg),
@@ -118,3 +123,24 @@ def test_registered_projection_rejects_wrong_axis() -> None:
     document["world_slice_axis"] = "ml"
     with pytest.raises(ValueError, match="slice the ap"):
         validate_registered_projection_manifest(document)
+
+
+@pytest.mark.parametrize(
+    "svg",
+    [
+        b'<svg><path fill-rule="nonzero" data-allen-id="-1" data-beryl-id="-1" data-cosmos-id="-1" d="M0 0Z"/></svg>',
+        b'<svg><path fill-rule="evenodd" data-allen-id="0" data-beryl-id="-1" data-cosmos-id="-1" d="M0 0Z"/></svg>',
+        b"<svg></svg>",
+    ],
+)
+def test_indexed_svg_corruption_rejects_invalid_path_contract(svg: bytes) -> None:
+    with pytest.raises(ValueError, match="fill-rule|signed mappings|no paths"):
+        _decode_indexed_svg_pack(_binary_pack(svg))
+
+
+def test_registered_projection_rejects_invalid_slice_arguments() -> None:
+    projection = RegisteredProjection(Path("."), CASES[0])
+    with pytest.raises(TypeError, match="integer"):
+        projection.resource_for_slice("0")
+    with pytest.raises(IndexError, match="outside"):
+        projection.resource_for_slice(2)

@@ -148,10 +148,7 @@ class RegisteredProjection:
     def resource_for_slice(self, slice_index: int) -> Mapping[str, Any]:
         """Return the verified resource descriptor containing one native slice."""
 
-        if not isinstance(slice_index, int) or isinstance(slice_index, bool):
-            raise TypeError("registered slice index must be an integer")
-        if slice_index < 0 or slice_index >= self.slice_count:
-            raise IndexError("registered slice index is outside the native domain")
+        self._validate_slice_index(slice_index)
         index = self.load_resource_index()
         for entry in index["resources"]:
             if slice_index in entry["slice_indices"]:
@@ -161,6 +158,7 @@ class RegisteredProjection:
     def load_slice(self, slice_index: int) -> RegisteredSlice:
         """Decode one indexed-SVG slice while preserving IDs, rings, and holes."""
 
+        self._validate_slice_index(slice_index)
         index = self.load_resource_index()
         entry = next(
             (item for item in index["resources"] if slice_index in item["slice_indices"]),
@@ -173,10 +171,25 @@ class RegisteredProjection:
         pack = _decode_indexed_svg_pack(decoded)
         if pack.projection != self.projection_id or pack.pack_id != entry["pack_id"]:
             raise ValueError("registered SVG pack identity differs from resource index")
+        inventory = tuple(item.slice_index for item in pack.slices)
+        declared = tuple(entry["slice_indices"])
+        if inventory != declared:
+            raise ValueError("registered SVG pack slice inventory differs from resource index")
         result = pack.slice(slice_index)
         if result is None:
             raise KeyError(f"registered SVG pack has no slice: {slice_index}")
+        expected = self.index_to_world([slice_index, 0, 0])[
+            {"ml": 0, "ap": 1, "dv": 2}[self.world_slice_axis]
+        ]
+        if not np.isclose(result.world_coordinate_um, expected, rtol=1e-10, atol=1e-9):
+            raise ValueError("registered SVG slice world coordinate differs from projection affine")
         return result
+
+    def _validate_slice_index(self, slice_index: int) -> None:
+        if not isinstance(slice_index, int) or isinstance(slice_index, bool):
+            raise TypeError("registered slice index must be an integer")
+        if slice_index < 0 or slice_index >= self.slice_count:
+            raise IndexError("registered slice index is outside the native domain")
 
 
 def open_registered_projection(path: str | Path) -> RegisteredProjection:
@@ -272,9 +285,11 @@ def _decode_indexed_svg_pack(data: bytes) -> IndexedSvgPack:
             if element.tag.rsplit("}", 1)[-1] != "path":
                 continue
             d = element.attrib.get("d")
-            fill_rule = element.attrib.get("fill-rule", "evenodd")
+            fill_rule = element.attrib.get("fill-rule")
             if d is None or not d.startswith(("M", "m")):
                 raise ValueError("indexed SVG path geometry is invalid")
+            if fill_rule != "evenodd":
+                raise ValueError("indexed SVG path fill-rule must be evenodd")
             try:
                 atlas_ids = {name: int(element.attrib[f"data-{name}-id"]) for name in ("allen", "beryl", "cosmos")}
             except (KeyError, ValueError) as error:
@@ -282,6 +297,8 @@ def _decode_indexed_svg_pack(data: bytes) -> IndexedSvgPack:
             if any(value == 0 for value in atlas_ids.values()) or len({value < 0 for value in atlas_ids.values()}) != 1:
                 raise ValueError("indexed SVG path signed mappings are inconsistent")
             paths.append(RegisteredSlicePath(MappingProxyType(atlas_ids), fill_rule, d))
+        if not paths:
+            raise ValueError("indexed SVG slice contains no paths")
         slices.append(RegisteredSlice(slice_index, world_coordinate, tuple(paths)))
     return IndexedSvgPack(projection, pack_id, tuple(slices))
 
