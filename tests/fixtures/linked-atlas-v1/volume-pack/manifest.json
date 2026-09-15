@@ -1,0 +1,87 @@
+{
+  "format": "ibl-atlas-volume-pack-v1",
+  "grid": {
+    "array_axes": [
+      "ap",
+      "ml",
+      "dv"
+    ],
+    "index_to_world_um": [
+      0,
+      1,
+      0,
+      -3,
+      -1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      -1,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "shape": [
+      3,
+      9,
+      3
+    ],
+    "voxel_coordinates": "centers",
+    "world_axes": [
+      "ml",
+      "ap",
+      "dv"
+    ],
+    "world_units": "um"
+  },
+  "hemisphere_boundary": {
+    "array_axis": "ml",
+    "first_right_index": 3,
+    "on_boundary_side": "right"
+  },
+  "pack_id": "synthetic-linked-atlas-v1",
+  "provenance": {
+    "generator": "tools/build_volume_fixture.py",
+    "kind": "deterministic synthetic test fixture",
+    "license": "MIT"
+  },
+  "purpose": "test-only",
+  "reference_space_id": "allen-ccf-2017",
+  "region_catalog": {
+    "bytes": 7825,
+    "format": "ibl-atlas-regions-v1",
+    "index_field": "mappings.allen[].idx",
+    "path": "regions.json",
+    "sha256": "e1a7da62db7fa5806090de08f931d1b320059d31f2fa86feb7103b0903870f0e"
+  },
+  "schema_version": "1.0",
+  "volumes": {
+    "annotation": {
+      "byte_order": "little",
+      "bytes": 31,
+      "data_type": "uint16",
+      "decoded_bytes": 162,
+      "decoded_sha256": "f45636c694c206368cae95390beabefa25978a2fdcd5650ef2f17f5727b41658",
+      "encoding": "gzip",
+      "outside_value": 0,
+      "path": "annotation.u16.gz",
+      "semantic": "region-catalog-source-index",
+      "sha256": "cd5fe17c1cd890932b7cd2632a52a920565a732ad8f5cb5605e2bb607c2050bd"
+    },
+    "template": {
+      "byte_order": "little",
+      "bytes": 159,
+      "data_type": "uint16",
+      "decoded_bytes": 162,
+      "decoded_sha256": "c292f5f27c955efccfb27e52a30d2ef97850d1e2f06c60f965b74035de929d83",
+      "encoding": "gzip",
+      "outside_value": 0,
+      "path": "template.u16.gz",
+      "semantic": "anatomical-template-intensity",
+      "sha256": "76aa5db6d04a8a1f09107ed840aba266411542887b8dc14d4bb0693ea66d1e7e"
+    }
+  }
+}

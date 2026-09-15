@@ -1,0 +1,335 @@
+{
+  "atlas": "Allen Mouse CCF 2017",
+  "format": "ibl-atlas-regions-v1",
+  "hemisphere_encoding": "signed atlas IDs; negative is left",
+  "mappings": {
+    "allen": [
+      {
+        "acronym": "void",
+        "atlas_id": 0,
+        "color_hex": "#000000",
+        "depth": 0,
+        "idx": 0,
+        "mapped_atlas_ids": {
+          "allen": 0,
+          "beryl": 0,
+          "cosmos": 0
+        },
+        "mapping_member": true,
+        "name": "void",
+        "parent_id": null
+      },
+      {
+        "acronym": "root",
+        "atlas_id": 997,
+        "color_hex": "#ffffff",
+        "depth": 0,
+        "idx": 1,
+        "mapped_atlas_ids": {
+          "allen": 997,
+          "beryl": 997,
+          "cosmos": 997
+        },
+        "mapping_member": true,
+        "name": "root",
+        "parent_id": null
+      },
+      {
+        "acronym": "grey",
+        "atlas_id": 8,
+        "color_hex": "#bfdae3",
+        "depth": 1,
+        "idx": 2,
+        "mapped_atlas_ids": {
+          "allen": 8,
+          "beryl": 997,
+          "cosmos": 997
+        },
+        "mapping_member": true,
+        "name": "Basic cell groups and regions",
+        "parent_id": 997
+      },
+      {
+        "acronym": "root",
+        "atlas_id": -997,
+        "color_hex": "#ffffff",
+        "depth": 0,
+        "idx": 3,
+        "mapped_atlas_ids": {
+          "allen": -997,
+          "beryl": 997,
+          "cosmos": 997
+        },
+        "mapping_member": true,
+        "name": "root (left)",
+        "parent_id": null
+      },
+      {
+        "acronym": "grey",
+        "atlas_id": -8,
+        "color_hex": "#bfdae3",
+        "depth": 1,
+        "idx": 4,
+        "mapped_atlas_ids": {
+          "allen": -8,
+          "beryl": 997,
+          "cosmos": 997
+        },
+        "mapping_member": true,
+        "name": "Basic cell groups and regions (left)",
+        "parent_id": -997
+      },
+      {
+        "acronym": "MOp",
+        "atlas_id": -315,
+        "color_hex": "#e87d8f",
+        "depth": 2,
+        "idx": 5,
+        "mapped_atlas_ids": {
+          "allen": -315,
+          "beryl": 997,
+          "cosmos": -315
+        },
+        "mapping_member": true,
+        "name": "Primary motor area",
+        "parent_id": -8
+      },
+      {
+        "acronym": "MOp",
+        "atlas_id": 315,
+        "color_hex": "#e87d8f",
+        "depth": 2,
+        "idx": 6,
+        "mapped_atlas_ids": {
+          "allen": 315,
+          "beryl": 997,
+          "cosmos": 315
+        },
+        "mapping_member": true,
+        "name": "Primary motor area",
+        "parent_id": 8
+      }
+    ],
+    "beryl": [
+      {
+        "acronym": "void",
+        "atlas_id": 0,
+        "color_hex": "#000000",
+        "depth": 0,
+        "idx": 0,
+        "mapped_atlas_ids": {
+          "allen": 0,
+          "beryl": 0,
+          "cosmos": 0
+        },
+        "mapping_member": true,
+        "name": "void",
+        "parent_id": null
+      },
+      {
+        "acronym": "root",
+        "atlas_id": 997,
+        "color_hex": "#ffffff",
+        "depth": 0,
+        "idx": 1,
+        "mapped_atlas_ids": {
+          "allen": 997,
+          "beryl": 997,
+          "cosmos": 997
+        },
+        "mapping_member": true,
+        "name": "root",
+        "parent_id": null
+      },
+      {
+        "acronym": "grey",
+        "atlas_id": 8,
+        "color_hex": "#bfdae3",
+        "depth": 1,
+        "idx": 2,
+        "mapped_atlas_ids": {
+          "allen": 8,
+          "beryl": 997,
+          "cosmos": 997
+        },
+        "mapping_member": false,
+        "name": "Basic cell groups and regions",
+        "parent_id": 997
+      },
+      {
+        "acronym": "root",
+        "atlas_id": -997,
+        "color_hex": "#ffffff",
+        "depth": 0,
+        "idx": 3,
+        "mapped_atlas_ids": {
+          "allen": -997,
+          "beryl": 997,
+          "cosmos": 997
+        },
+        "mapping_member": true,
+        "name": "root (left)",
+        "parent_id": null
+      },
+      {
+        "acronym": "grey",
+        "atlas_id": -8,
+        "color_hex": "#bfdae3",
+        "depth": 1,
+        "idx": 4,
+        "mapped_atlas_ids": {
+          "allen": -8,
+          "beryl": 997,
+          "cosmos": 997
+        },
+        "mapping_member": false,
+        "name": "Basic cell groups and regions (left)",
+        "parent_id": -997
+      },
+      {
+        "acronym": "MOp",
+        "atlas_id": -315,
+        "color_hex": "#e87d8f",
+        "depth": 2,
+        "idx": 5,
+        "mapped_atlas_ids": {
+          "allen": -315,
+          "beryl": 997,
+          "cosmos": -315
+        },
+        "mapping_member": false,
+        "name": "Primary motor area",
+        "parent_id": -8
+      },
+      {
+        "acronym": "MOp",
+        "atlas_id": 315,
+        "color_hex": "#e87d8f",
+        "depth": 2,
+        "idx": 6,
+        "mapped_atlas_ids": {
+          "allen": 315,
+          "beryl": 997,
+          "cosmos": 315
+        },
+        "mapping_member": false,
+        "name": "Primary motor area",
+        "parent_id": 8
+      }
+    ],
+    "cosmos": [
+      {
+        "acronym": "void",
+        "atlas_id": 0,
+        "color_hex": "#000000",
+        "depth": 0,
+        "idx": 0,
+        "mapped_atlas_ids": {
+          "allen": 0,
+          "beryl": 0,
+          "cosmos": 0
+        },
+        "mapping_member": true,
+        "name": "void",
+        "parent_id": null
+      },
+      {
+        "acronym": "root",
+        "atlas_id": 997,
+        "color_hex": "#ffffff",
+        "depth": 0,
+        "idx": 1,
+        "mapped_atlas_ids": {
+          "allen": 997,
+          "beryl": 997,
+          "cosmos": 997
+        },
+        "mapping_member": true,
+        "name": "root",
+        "parent_id": null
+      },
+      {
+        "acronym": "grey",
+        "atlas_id": 8,
+        "color_hex": "#bfdae3",
+        "depth": 1,
+        "idx": 2,
+        "mapped_atlas_ids": {
+          "allen": 8,
+          "beryl": 997,
+          "cosmos": 997
+        },
+        "mapping_member": false,
+        "name": "Basic cell groups and regions",
+        "parent_id": 997
+      },
+      {
+        "acronym": "root",
+        "atlas_id": -997,
+        "color_hex": "#ffffff",
+        "depth": 0,
+        "idx": 3,
+        "mapped_atlas_ids": {
+          "allen": -997,
+          "beryl": 997,
+          "cosmos": 997
+        },
+        "mapping_member": true,
+        "name": "root (left)",
+        "parent_id": null
+      },
+      {
+        "acronym": "grey",
+        "atlas_id": -8,
+        "color_hex": "#bfdae3",
+        "depth": 1,
+        "idx": 4,
+        "mapped_atlas_ids": {
+          "allen": -8,
+          "beryl": 997,
+          "cosmos": 997
+        },
+        "mapping_member": false,
+        "name": "Basic cell groups and regions (left)",
+        "parent_id": -997
+      },
+      {
+        "acronym": "MOp",
+        "atlas_id": -315,
+        "color_hex": "#e87d8f",
+        "depth": 2,
+        "idx": 5,
+        "mapped_atlas_ids": {
+          "allen": -315,
+          "beryl": 997,
+          "cosmos": -315
+        },
+        "mapping_member": true,
+        "name": "Primary motor area",
+        "parent_id": -8
+      },
+      {
+        "acronym": "MOp",
+        "atlas_id": 315,
+        "color_hex": "#e87d8f",
+        "depth": 2,
+        "idx": 6,
+        "mapped_atlas_ids": {
+          "allen": 315,
+          "beryl": 997,
+          "cosmos": 315
+        },
+        "mapping_member": true,
+        "name": "Primary motor area",
+        "parent_id": 8
+      }
+    ]
+  },
+  "provenance": {
+    "iblatlas_commit": "52083adf44825d0622a503705e095699a5957587",
+    "legacy_svg_crosswalk_sha256": "9fca5fe4feeb368c715853c25a97667cb199d5a7ce160385771833ba61cedfc8",
+    "legacy_svg_crosswalk_url": "https://atlas.internationalbrainlab.org/data/json/regions.json"
+  },
+  "reference_space_id": "allen-ccf-2017",
+  "schema_version": "1.0"
+}
