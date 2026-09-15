@@ -42,6 +42,10 @@ Current checkpoint:
   fixture's signed identities, opaque indexed mesh, probe sites, and arcball through native and
   WASM packet runners. This is evidence for portable scene semantics, not a Python, ImGui, WBOIT,
   or general browser-export contract.
+- `ibl-atlas-volume-pack-v1` now has a strict Python reader, deterministic synthetic fixture, and
+  pinned-source 50-um builder. The real template and annotation pair verifies locally as a common
+  264-by-228-by-160 AP/ML/DV grid. Its derived bytes remain unpublished until an immutable origin
+  and Allen terms/citation treatment are recorded.
 
 This document separates immediate, evidence-producing work from the broader
 possibilities in `FUTURE_DIRECTIONS.md`. Work should use small green commits.

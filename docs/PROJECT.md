@@ -171,3 +171,8 @@ The next selected asset-family experiment is a registered Allen template-and-ann
 pack serving a native linked slice/3-D navigator. It remains a separate spike: its exact source,
 grid, encoding, and real-asset lock must be evidenced before any projection or browser extraction
 is accepted.
+
+The synthetic portion of that experiment is now implemented as `ibl-atlas-volume-pack-v1`. A
+pinned-source builder also verifies the complete 50-um real pack locally. This does not yet promote
+the volume boundary: the native consumer must prove it, and the real derived bytes still require a
+legitimate immutable publication location under the Allen Institute's terms.

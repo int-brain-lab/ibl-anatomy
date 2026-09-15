@@ -19,6 +19,7 @@ and atlas computations.
 - [Immediate cross-repository steps](docs/NEXT_STEPS.md)
 - [Audited source inventory](docs/SOURCE_INVENTORY.md)
 - [Spike 001: independent mesh-pack reader](docs/SPIKE_001_MESH_PACK_READER.md)
+- [Spike 002: registered Allen atlas volumes](docs/SPIKE_002_ATLAS_VOLUME_PACK.md)
 - [Deferred directions and gallery ideas](docs/FUTURE_DIRECTIONS.md)
 
 ## Current status
@@ -88,3 +89,23 @@ exposing that placeholder as scientific data. The actual Allen root still maps t
 
 This is a consumer-side contract spike: the existing web builder remains the
 authoritative producer and is intentionally not moved here.
+
+## Read a local atlas volume pack
+
+Spike 002 adds a strict, bounded reader for a registered anatomical-template and source-index
+annotation pair. Arrays use explicit AP/ML/DV storage and an ML/AP/DV micrometre transform; the
+annotation is cryptographically bound to its signed region catalog.
+
+```python
+from ibl_atlas_assets import open_volume_pack
+
+pack = open_volume_pack("path/to/volume-pack")
+pack.verify()
+volumes = pack.load_volumes()
+coronal = volumes.slice("annotation", "ap", 108)
+region = volumes.region_for_source_index(int(coronal.values[100, 50]))
+```
+
+Only deterministic synthetic volume bytes are committed. A pinned-source 50-um Allen builder and
+local verification checkpoint exist, but the real derived bytes await an immutable publication
+location and must retain the Allen Institute terms and citation metadata.
