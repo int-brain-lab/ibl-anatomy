@@ -20,6 +20,7 @@ and atlas computations.
 - [Audited source inventory](docs/SOURCE_INVENTORY.md)
 - [Spike 001: independent mesh-pack reader](docs/SPIKE_001_MESH_PACK_READER.md)
 - [Spike 002: registered Allen atlas volumes](docs/SPIKE_002_ATLAS_VOLUME_PACK.md)
+- [Spike 003: 10-um intensity block transport](docs/SPIKE_003_INTENSITY_BLOCK_TRANSPORT.md)
 - [Deferred directions and gallery ideas](docs/FUTURE_DIRECTIONS.md)
 
 ## Current status
@@ -109,3 +110,16 @@ region = volumes.region_for_source_index(int(coronal.values[100, 50]))
 Only deterministic synthetic volume bytes are committed. A pinned-source 50-um Allen builder and
 local verification checkpoint exist, but the real derived bytes await an immutable publication
 location and must retain the Allen Institute terms and citation metadata.
+
+For large scalar templates, the experimental indexed-block transport reads one projection-native
+compressed block rather than loading a complete volume. It provides explicit grid identity and
+world registration, bounded decoding, a byte-accounted in-memory LRU, and per-block integrity:
+
+```python
+from ibl_atlas_assets import open_intensity_block_pack
+
+intensity = open_intensity_block_pack("path/to/intensity-blocks")
+section = intensity.read_section("ml", 570)
+```
+
+This remains a local prototype; no 10-um Allen asset is committed or published.

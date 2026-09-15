@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.internationalbrainlab.org/schema/ibl-atlas-intensity-blocks-v1.schema.json",
+  "title": "IBL projection-oriented intensity blocks v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "schema_version", "dataset_id", "reference_space_id", "grid_id", "array_axes", "shape", "world_axes", "world_units", "voxel_coordinates", "index_to_world_um", "data_type", "byte_order", "encoding", "value_range", "recommended_display_range", "projections", "provenance"],
+  "properties": {
+    "format": {"const": "ibl-atlas-intensity-blocks-v1"},
+    "schema_version": {"const": "1.0"},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "reference_space_id": {"type": "string", "minLength": 1},
+    "grid_id": {"type": "string", "minLength": 1},
+    "array_axes": {"const": ["ap", "ml", "dv"]},
+    "shape": {"type": "array", "prefixItems": [{"type": "integer", "minimum": 1}, {"type": "integer", "minimum": 1}, {"type": "integer", "minimum": 1}], "items": false},
+    "world_axes": {"const": ["ml", "ap", "dv"]},
+    "world_units": {"const": "um"},
+    "voxel_coordinates": {"const": "centers"},
+    "index_to_world_um": {"type": "array", "minItems": 16, "maxItems": 16, "items": {"type": "number"}},
+    "data_type": {"const": "uint16"},
+    "byte_order": {"const": "little"},
+    "encoding": {"const": "gzip-members"},
+    "value_range": {"$ref": "#/$defs/range"},
+    "recommended_display_range": {"$ref": "#/$defs/range"},
+    "projections": {
+      "type": "object", "additionalProperties": false, "required": ["ap", "ml", "dv"],
+      "properties": {
+        "ap": {"$ref": "#/$defs/projection"},
+        "ml": {"$ref": "#/$defs/projection"},
+        "dv": {"$ref": "#/$defs/projection"}
+      }
+    },
+    "provenance": {"type": "object", "minProperties": 1, "additionalProperties": true}
+  },
+  "$defs": {
+    "range": {"type": "array", "prefixItems": [{"type": "integer", "minimum": 0, "maximum": 65535}, {"type": "integer", "minimum": 0, "maximum": 65535}], "items": false},
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "resource": {
+      "type": "object", "additionalProperties": false, "required": ["path", "bytes", "sha256"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "bytes": {"type": "integer", "minimum": 1}, "sha256": {"$ref": "#/$defs/digest"}}
+    },
+    "block": {
+      "type": "object", "additionalProperties": false,
+      "required": ["block_id", "first_section", "section_count", "offset", "bytes", "sha256", "decoded_bytes", "decoded_sha256"],
+      "properties": {
+        "block_id": {"type": "integer", "minimum": 0}, "first_section": {"type": "integer", "minimum": 0},
+        "section_count": {"type": "integer", "minimum": 1}, "offset": {"type": "integer", "minimum": 0},
+        "bytes": {"type": "integer", "minimum": 1}, "sha256": {"$ref": "#/$defs/digest"},
+        "decoded_bytes": {"type": "integer", "minimum": 2}, "decoded_sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "projection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["axis", "plane_axes", "sections_per_block", "resource", "blocks"],
+      "properties": {
+        "axis": {"enum": ["ap", "ml", "dv"]},
+        "plane_axes": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"enum": ["ap", "ml", "dv"]}, "uniqueItems": true},
+        "sections_per_block": {"type": "integer", "minimum": 1},
+        "resource": {"$ref": "#/$defs/resource"},
+        "blocks": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/block"}}
+      }
+    }
+  }
+}

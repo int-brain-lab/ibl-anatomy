@@ -1,0 +1,195 @@
+{
+  "array_axes": [
+    "ap",
+    "ml",
+    "dv"
+  ],
+  "byte_order": "little",
+  "data_type": "uint16",
+  "dataset_id": "synthetic-projection-intensity-v1",
+  "encoding": "gzip-members",
+  "format": "ibl-atlas-intensity-blocks-v1",
+  "grid_id": "synthetic-10um-grid-v1",
+  "index_to_world_um": [
+    0,
+    10,
+    0,
+    -35,
+    -10,
+    0,
+    0,
+    40,
+    0,
+    0,
+    -10,
+    20,
+    0,
+    0,
+    0,
+    1
+  ],
+  "projections": {
+    "ap": {
+      "axis": "ap",
+      "blocks": [
+        {
+          "block_id": 0,
+          "bytes": 346,
+          "decoded_bytes": 336,
+          "decoded_sha256": "19e5d5bac62097a24f606be01d2284748a89c368e59e6342e07aa0d2e94d16b8",
+          "first_section": 0,
+          "offset": 0,
+          "section_count": 3,
+          "sha256": "992160335aaad1a515d72354ccc7bb53831b9f09ccddd85c2dfdc394061939e5"
+        },
+        {
+          "block_id": 1,
+          "bytes": 345,
+          "decoded_bytes": 336,
+          "decoded_sha256": "28992f05413db41dd2db1092a0b58f3dd51631913377777c6d55cb463d170871",
+          "first_section": 3,
+          "offset": 346,
+          "section_count": 3,
+          "sha256": "941961f51f56177b52e546cb7ffecac37882b8eb914cafc1cdf393c7b72ab7a3"
+        },
+        {
+          "block_id": 2,
+          "bytes": 341,
+          "decoded_bytes": 336,
+          "decoded_sha256": "5ae092d5e2324044c28fb68c953f37df6d666f932e2e82eb410349766e76f15c",
+          "first_section": 6,
+          "offset": 691,
+          "section_count": 3,
+          "sha256": "d43cfe2860d4378207d138c5d5517d8c3d8efb78efa57f0962c3f56fce67a0e6"
+        }
+      ],
+      "plane_axes": [
+        "ml",
+        "dv"
+      ],
+      "resource": {
+        "bytes": 1032,
+        "path": "ap.u16.blocks",
+        "sha256": "cc0341fe454fdef7163a732194ff7bd5497ac4f00d5fccd133b7afda89efe8c8"
+      },
+      "sections_per_block": 3
+    },
+    "dv": {
+      "axis": "dv",
+      "blocks": [
+        {
+          "block_id": 0,
+          "bytes": 455,
+          "decoded_bytes": 432,
+          "decoded_sha256": "2da094eb13b24fedbfd93cddf8b31c08057bcc7b02182527141433867e33699d",
+          "first_section": 0,
+          "offset": 0,
+          "section_count": 3,
+          "sha256": "dd135f51a2caff7c8ff312c06f268b027c849469b8ce3bffffc6b22d753b9563"
+        },
+        {
+          "block_id": 1,
+          "bytes": 455,
+          "decoded_bytes": 432,
+          "decoded_sha256": "b4b8f3a1df3448365a2207dfc8ffac35460e6eb7c71638e0a448786073f86ef9",
+          "first_section": 3,
+          "offset": 455,
+          "section_count": 3,
+          "sha256": "9f8d0e040598128a55d1d4cad74d55e4551e4a07a3dd072f90f164f0136778ee"
+        },
+        {
+          "block_id": 2,
+          "bytes": 167,
+          "decoded_bytes": 144,
+          "decoded_sha256": "17d2470eb5ce6006f68db5ea2f656f09dcbf2a16b8e33596963549d0babccf02",
+          "first_section": 6,
+          "offset": 910,
+          "section_count": 1,
+          "sha256": "fdbb6be43963d3833c5138a5ef68acb14813359f1f4755b337a7e8de257794df"
+        }
+      ],
+      "plane_axes": [
+        "ap",
+        "ml"
+      ],
+      "resource": {
+        "bytes": 1077,
+        "path": "dv.u16.blocks",
+        "sha256": "23ffa84ef847d74342a8c0b531e2af13a48a68d10f4986539f974ac5bd303569"
+      },
+      "sections_per_block": 3
+    },
+    "ml": {
+      "axis": "ml",
+      "blocks": [
+        {
+          "block_id": 0,
+          "bytes": 401,
+          "decoded_bytes": 378,
+          "decoded_sha256": "fd56c477b0e1a80a84788f3069f755825cc4cb0e20f6d7ff4d479d0d8d335139",
+          "first_section": 0,
+          "offset": 0,
+          "section_count": 3,
+          "sha256": "b6ded9837314e0dd298bee9718783d9ec80404f187477d284d24fa0c075660cf"
+        },
+        {
+          "block_id": 1,
+          "bytes": 397,
+          "decoded_bytes": 378,
+          "decoded_sha256": "bfd849782cd6b846ea2513d306e497bbe43a8a34e53b5c22114ab3c5d9d4bb58",
+          "first_section": 3,
+          "offset": 401,
+          "section_count": 3,
+          "sha256": "7aefbfafc6196161cc7e76524aed1bc733dd054f23f55b08a739c0177d9789ec"
+        },
+        {
+          "block_id": 2,
+          "bytes": 264,
+          "decoded_bytes": 252,
+          "decoded_sha256": "fb586dbd0c95dfc015cb273ea3fedfd6d521dbf481fef250316cd2cc177bd141",
+          "first_section": 6,
+          "offset": 798,
+          "section_count": 2,
+          "sha256": "d68d773c65a2cfa80abc0087038df8590541b1a29e2e4c8fb4a9d3db443991cc"
+        }
+      ],
+      "plane_axes": [
+        "ap",
+        "dv"
+      ],
+      "resource": {
+        "bytes": 1062,
+        "path": "ml.u16.blocks",
+        "sha256": "07b3a68ef45ee8d8d830f6c1f26f06292d3f5952b911f57fa61bc42617333604"
+      },
+      "sections_per_block": 3
+    }
+  },
+  "provenance": {
+    "generator": "tools/build_intensity_fixture.py",
+    "kind": "deterministic axis-coded synthetic fixture",
+    "license": "MIT"
+  },
+  "recommended_display_range": [
+    1,
+    8706
+  ],
+  "reference_space_id": "allen-ccf-2017",
+  "schema_version": "1.0",
+  "shape": [
+    9,
+    8,
+    7
+  ],
+  "value_range": [
+    0,
+    8706
+  ],
+  "voxel_coordinates": "centers",
+  "world_axes": [
+    "ml",
+    "ap",
+    "dv"
+  ],
+  "world_units": "um"
+}

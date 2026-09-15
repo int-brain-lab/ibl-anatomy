@@ -10,6 +10,13 @@ from .asset_set import (
     parse_asset_set,
     verify_materialized_asset_set,
 )
+from .intensity_blocks import (
+    IntensityBlockPack,
+    IntensityCacheInfo,
+    IntensityGrid,
+    IntensitySection,
+    open_intensity_block_pack,
+)
 from .mesh_pack import MeshComponentRange, MeshGeometry, MeshPack, open_mesh_pack
 from .regions import (
     AtlasRegion,
@@ -41,6 +48,10 @@ __all__ = [
     "AtlasVolumeSlice",
     "AtlasVolumes",
     "IndexedSvgPack",
+    "IntensityBlockPack",
+    "IntensityCacheInfo",
+    "IntensityGrid",
+    "IntensitySection",
     "MaterializedAtlasAssets",
     "MeshComponentRange",
     "MeshGeometry",
@@ -52,6 +63,7 @@ __all__ = [
     "bundled_asset_set",
     "materialize_asset_set",
     "open_asset_set",
+    "open_intensity_block_pack",
     "open_mesh_pack",
     "open_region_catalog",
     "open_registered_projection",
