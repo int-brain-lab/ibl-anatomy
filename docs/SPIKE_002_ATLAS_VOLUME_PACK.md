@@ -30,7 +30,7 @@ off-grid case.
 ## Python surface
 
 ```python
-from ibl_atlas_assets import open_volume_pack
+from ibl_anatomy import open_volume_pack
 
 pack = open_volume_pack("path/to/volume-pack")
 pack.verify()

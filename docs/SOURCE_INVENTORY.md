@@ -9,7 +9,7 @@ does not transfer ownership of any source file or immutable asset.
 
 | Repository | Commit |
 | --- | --- |
-| `ibl-atlas-assets` | `895bca058801f9bc0c38429dceb262b815c12993` |
+| `ibl-anatomy` | `895bca058801f9bc0c38429dceb262b815c12993` |
 | `ibl-datoviz` | `4e07085a96f83519ef78a163f4f040a90ae250dd` |
 | `ephys-atlas-web-v2` | `58a9418b7408ed3760016173df3a34903280cf24` |
 | `iblatlas` | `52083adf44825d0622a503705e095699a5957587` |

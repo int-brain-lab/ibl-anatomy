@@ -13,7 +13,7 @@ from referencing import Registry, Resource
 
 
 def _load_schema(name: str) -> dict[str, Any]:
-    resource = files("ibl_atlas_assets.schemas").joinpath(name)
+    resource = files("ibl_anatomy.schemas").joinpath(name)
     return json.loads(resource.read_text(encoding="utf-8"))
 
 

@@ -10,13 +10,13 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from ibl_atlas_assets import (
+from ibl_anatomy import (
     RegisteredProjection,
     open_anatomy_pack,
     open_registered_projection,
 )
-from ibl_atlas_assets.registered_slices import _decode_indexed_svg_pack
-from ibl_atlas_assets.schema import validate_registered_projection_manifest
+from ibl_anatomy.registered_slices import _decode_indexed_svg_pack
+from ibl_anatomy.schema import validate_registered_projection_manifest
 
 
 def _projection(

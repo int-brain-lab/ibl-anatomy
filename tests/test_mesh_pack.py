@@ -12,8 +12,8 @@ import numpy as np
 import pytest
 from jsonschema import ValidationError
 
-from ibl_atlas_assets import open_mesh_pack
-from ibl_atlas_assets.binary import decode_raw_lod
+from ibl_anatomy import open_mesh_pack
+from ibl_anatomy.binary import decode_raw_lod
 
 FIXTURE = Path(__file__).parent / "fixtures" / "mesh-pack-v1" / "pack"
 

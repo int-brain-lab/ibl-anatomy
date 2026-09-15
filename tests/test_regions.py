@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 from jsonschema import ValidationError
 
-from ibl_atlas_assets import open_region_catalog, parse_region_catalog
+from ibl_anatomy import open_region_catalog, parse_region_catalog
 
 FIXTURE = Path(__file__).parent / "fixtures" / "atlas-regions-v1" / "regions.json"
 

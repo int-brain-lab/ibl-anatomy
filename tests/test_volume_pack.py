@@ -10,7 +10,7 @@ import numpy as np
 import pytest
 from jsonschema import ValidationError
 
-from ibl_atlas_assets import open_volume_pack
+from ibl_anatomy import open_volume_pack
 
 FIXTURE = Path(__file__).parent / "fixtures" / "volume-pack-v1" / "pack"
 

@@ -9,7 +9,7 @@ import statistics
 import time
 from pathlib import Path
 
-from ibl_atlas_assets import open_intensity_block_pack
+from ibl_anatomy import open_intensity_block_pack
 
 
 def _milliseconds(call) -> float:

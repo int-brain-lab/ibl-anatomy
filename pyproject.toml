@@ -3,10 +3,11 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ibl-atlas-assets"
-version = "0.0.0"
-description = "Renderer-neutral IBL atlas asset readers and validators"
+name = "ibl-anatomy"
+version = "0.1.0"
+description = "Portable contracts and immutable assets for IBL reference anatomy"
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.10"
 dependencies = [
     "jsonschema>=4.18",
@@ -17,8 +18,9 @@ dependencies = [
 test = ["pytest>=8"]
 
 [tool.setuptools.package-data]
-ibl_atlas_assets = ["schemas/*.json", "asset_sets/*.json"]
+ibl_anatomy = ["schemas/*.json", "asset_sets/*.json"]
 
 [tool.pytest.ini_options]
 addopts = "-ra"
 testpaths = ["tests"]
+pythonpath = ["."]

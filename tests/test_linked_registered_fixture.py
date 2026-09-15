@@ -5,7 +5,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from ibl_atlas_assets import open_anatomy_pack, open_registered_projection
+from ibl_anatomy import open_anatomy_pack, open_registered_projection
 
 FIXTURE = Path(__file__).parent / "fixtures" / "linked-registered-slices-v1" / "pack"
 

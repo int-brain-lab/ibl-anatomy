@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from ibl_atlas_assets import (
+from ibl_anatomy import (
     bundled_asset_set,
     materialize_asset_set,
     open_asset_set,

@@ -4,7 +4,7 @@ Status: active near-term work plan, captured on 2026-09-14.
 
 Current checkpoint:
 
-- `ibl-atlas-assets` Spike 001 is implemented on `main`; the raw EAM3 reader,
+- `ibl-anatomy` Spike 001 is implemented on `main`; the raw EAM3 reader,
   packaged fixture, validation tests, and completion decision are committed. Mesh semantic parity
   with the web-v2 v1 validator, immutable metadata, presentation-boundary helpers, and decoded-byte
   hash gates are now implemented; see `MESH_CONTRACT_PARITY.md`.
@@ -71,7 +71,7 @@ Branch policy for the current work:
 ```text
 Datoviz pre-final improvements ───────────────┐
                                               ├─> ibl-datoviz v0.4 vertical slice
-ibl-atlas-assets mesh reader ─────────────────┘
+ibl-anatomy mesh reader ─────────────────┘
 
 iblatlas correctness work ──────> later catalog/reference-space integration
 
@@ -164,7 +164,7 @@ remains as rationale and as a release checklist for any composable primitive tha
 - A stable general-purpose Python-to-WebGPU exporter.
 - Atlas-specific high-level objects in Datoviz itself.
 
-## `ibl-atlas-assets`: Spike 001
+## `ibl-anatomy`: Spike 001
 
 Implement the independent raw EAM3 mesh-pack reader described in
 `SPIKE_001_MESH_PACK_READER.md`:
@@ -191,7 +191,7 @@ This work follows a successful mesh-reader spike and starts the `ibl-datoviz`
    compatibility layer;
 3. implement explicit scene/app/view ownership and deterministic destruction;
 4. add a minimal mesh layer using dense NumPy attribute and index uploads;
-5. consume the miniature `ibl-atlas-assets` mesh pack;
+5. consume the miniature `ibl-anatomy` mesh pack;
 6. preserve signed presentation identity and switch Allen/Beryl/Cosmos display
    without geometry reload;
 7. add arcball, selection or picking where supported;
@@ -281,7 +281,7 @@ The next evidence-producing step is publication, not another format redesign:
 6. only then redirect either consumer, preserving the web application's current display resolution
    and defaults until its independent parity gate passes.
 
-`ibl-atlas-assets` owns immutable packs, validation, decoding, and renderer-neutral coordinate and
+`ibl-anatomy` owns immutable packs, validation, decoding, and renderer-neutral coordinate and
 lookup semantics. `ibl-datoviz` owns slice composition, 3-D rendering, crosshairs, selection, GUI
 state, workers, caches, and GPU lifetime. `ephys-atlas-web-v2` remains the authoritative producer
 for its current anatomy projection assets until published shared bytes pass byte/semantic parity;

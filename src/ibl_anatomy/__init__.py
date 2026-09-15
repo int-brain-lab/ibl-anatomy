@@ -1,4 +1,4 @@
-"""Renderer-neutral readers for versioned IBL atlas assets."""
+"""Portable contracts and readers for versioned IBL reference anatomy."""
 
 from .asset_set import (
     AtlasAssetSet,
@@ -77,4 +77,4 @@ __all__ = [
     "verify_materialized_asset_set",
 ]
 
-__version__ = "0.0.0"
+__version__ = "0.1.0"

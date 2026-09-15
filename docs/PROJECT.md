@@ -36,31 +36,28 @@ that sharing removes more complexity than it adds.
 - Work begins with a small consumer experiment rather than a comprehensive
   cross-repository platform.
 
-## Current repository hypothesis
+## Repository charter
 
-The mesh experiment confirms that this repository should own:
+The consumer experiments confirm that this repository owns:
 
-- renderer-neutral atlas mesh schemas, readers, and semantic validators;
-- immutable mesh metadata and presentation-boundary resolution; and
+- renderer-neutral reference-anatomy schemas, readers, builders, and semantic validators;
+- immutable asset identities and publication records;
+- coordinate, grid, and presentation semantics required to interpret the serialized assets; and
 - deterministic byte-level and decoded-array conformance fixtures.
 
-It may eventually also own a narrow subset of the following:
+It explicitly does not own:
 
-- renderer-neutral atlas asset schemas;
-- small readers and validators;
-- deterministic test and conformance fixtures;
-- mesh, annotation-volume, and projection-pack builders that prove generic;
-- Python and TypeScript consumers where both are demonstrably useful.
-
-Spike 001 tests only the first useful boundary: reading and validating an
-existing miniature mesh pack from independent Python code.
+- scientific atlas lookup, mapping, coordinate-transform, slicing, or trajectory algorithms owned by `iblatlas`;
+- experimental measurements, scientific feature volumes, or recording/session manifests;
+- browser or native application state, caching, rendering, or UI; or
+- a cross-runtime anatomy SDK. Language-native adapters remain consumer-owned unless multiple consumers in one runtime prove a stable shared-code boundary.
 
 ## Responsibility boundaries
 
 | Concern | Expected authority |
 | --- | --- |
 | Scientific ontology, mappings, labels, coordinates | `iblatlas` |
-| Renderer-neutral packaged anatomy, if extraction succeeds | `ibl-atlas-assets` |
+| Renderer-neutral packaged anatomy, if extraction succeeds | `ibl-anatomy` |
 | Ephys projects, datasets, releases, features, and browser workflows | `ephys-atlas-web-v2` |
 | Native Python viewer, ImGui/Qt/notebook integration, IBL layer API | `ibl-datoviz` |
 | GPU visuals, interaction, postprocessing, GUI primitives, WebGPU | Datoviz |
@@ -128,7 +125,7 @@ asset platform, shared reducer, or renderer abstraction.
 
 ## Real D070 checkpoint
 
-The first representative real asset set is the published D070 native Allen CCF 2017 surface plus the region catalog emitted by `ephys-atlas-web-v2` commit `e91f021ac7ca096db2b408a7d691a6c32cc336ad`. `ibl-atlas-assets` ships a small immutable lock rather than duplicating the 14 MB numeric geometry in Git. Materialization verifies the complete remote graph before exposing it locally.
+The first representative real asset set is the published D070 native Allen CCF 2017 surface plus the region catalog emitted by `ephys-atlas-web-v2` commit `e91f021ac7ca096db2b408a7d691a6c32cc336ad`. `ibl-anatomy` ships a small immutable lock rather than duplicating the 14 MB numeric geometry in Git. Materialization verifies the complete remote graph before exposing it locally.
 
 This checkpoint also exposes owned world-coordinate arrays and moves per-vertex/per-face presentation classification into the renderer-neutral reader. EAM3 positions are already compiled into declared ML/AP/DV micrometres; the manifest's source transform is provenance and is not applied twice. These operations define the asset's signed anatomical identity and are shared semantics; normalization, GPU upload, colors, interaction, and application state remain consumer responsibilities.
 
@@ -158,7 +155,7 @@ TypeScript currently has exactly one consumer, whose small language-native decod
 an npm/Wasm release dependency. Browser fetch and cache policy, application selection state,
 scientific feature derivation, GUI composition, and renderer upload remain consumer-owned.
 
-No new `iblatlas` API is required by these slices. No additional `ibl-atlas-assets` lookup or
+No new `iblatlas` API is required by these slices. No additional `ibl-anatomy` lookup or
 aggregation API is being added yet: mapping-aware weighted reduction is currently a presentation
 need in one consumer, not a demonstrated cross-consumer asset primitive.
 

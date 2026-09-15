@@ -165,13 +165,13 @@ def bundled_asset_set(name: str = "d070") -> AtlasAssetSet:
         character not in "abcdefghijklmnopqrstuvwxyz0123456789-_" for character in name
     ):
         raise ValueError("asset set name is invalid")
-    resource = files("ibl_atlas_assets.asset_sets").joinpath(f"{name}.json")
+    resource = files("ibl_anatomy.asset_sets").joinpath(f"{name}.json")
     return parse_asset_set(json.loads(resource.read_text(encoding="utf-8")))
 
 
 def _download(resource: PinnedResource, destination: Path, *, timeout: float) -> None:
     request = urllib.request.Request(
-        resource.url, headers={"User-Agent": "ibl-atlas-assets/0"}
+        resource.url, headers={"User-Agent": "ibl-anatomy/0.1"}
     )
     with urllib.request.urlopen(request, timeout=timeout) as response:  # noqa: S310
         payload = response.read(resource.bytes + 1)

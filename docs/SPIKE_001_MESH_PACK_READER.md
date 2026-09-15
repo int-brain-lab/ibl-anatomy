@@ -47,7 +47,7 @@ The spike may revise these names. The important boundary is validated,
 renderer-neutral output.
 
 ```python
-from ibl_atlas_assets import open_mesh_pack
+from ibl_anatomy import open_mesh_pack
 
 pack = open_mesh_pack("manifest.json")
 pack.verify()

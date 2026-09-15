@@ -7,7 +7,7 @@ from pathlib import Path
 
 import numpy as np
 
-from ibl_atlas_assets import open_region_catalog, open_volume_pack
+from ibl_anatomy import open_region_catalog, open_volume_pack
 
 FIXTURE = Path(__file__).parent / "fixtures" / "linked-atlas-v1" / "volume-pack"
 

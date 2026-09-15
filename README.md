@@ -1,17 +1,10 @@
-# IBL Atlas Assets
+# IBL Anatomy
 
-This repository is an experimental home for renderer-neutral Allen atlas
-assets used by IBL applications.
+`ibl-anatomy` publishes versioned, renderer-neutral contracts and immutable assets for shared IBL reference anatomy. It includes region catalogs, geometry, registered projections, anatomical volumes, readers, validators, builders, provenance records, and conformance fixtures.
 
-The immediate goal is deliberately narrow: determine whether the existing
-`atlas-mesh-pack-v1` work in `ephys-atlas-web-v2` can be consumed cleanly by an
-independent Python package and by the Datoviz-based native viewer. The result of
-that experiment will determine the repository's permanent scope.
+[`iblatlas`](https://github.com/int-brain-lab/iblatlas) remains the scientific authority for ontology, mappings, coordinates, labels, trajectories, and atlas computations. This repository records pinned `iblatlas` versions or commits and exact input hashes; it does not copy or replace that scientific logic.
 
-This is not currently a released package or the authority for scientific atlas
-semantics. [`iblatlas`](https://github.com/int-brain-lab/iblatlas) remains the
-scientific authority for ontology, mappings, coordinates, labels, trajectories,
-and atlas computations.
+Experimental measurements such as AGEA or MERFISH, BWM/session/unit data, scientific analysis, application state, rendering, and browser/native UI are outside this repository's scope. Consumers retain their own idiomatic runtime adapters and presentation code.
 
 ## Start here
 
@@ -22,6 +15,7 @@ and atlas computations.
 - [Spike 002: registered Allen atlas volumes](docs/SPIKE_002_ATLAS_VOLUME_PACK.md)
 - [Spike 003: 10-um intensity block transport](docs/SPIKE_003_INTENSITY_BLOCK_TRANSPORT.md)
 - [Deferred directions and gallery ideas](docs/FUTURE_DIRECTIONS.md)
+- [Contract and compatibility policy](docs/CONTRACTS.md)
 
 ## Current status
 
@@ -32,7 +26,7 @@ The project remains in an evidence-gathering phase. The reader currently rejects
 The package now ships an immutable lock for the published D070 Allen CCF 2017 surface and the exact matching region catalog. The lock contains URLs, sizes, SHA-256 identities, decoded inventory counts, and renderer-neutral vertex/face presentation fingerprints. The numeric mesh bytes remain in the established immutable atlas origin rather than being copied into this Git repository.
 
 ```python
-from ibl_atlas_assets import bundled_asset_set, materialize_asset_set
+from ibl_anatomy import bundled_asset_set, materialize_asset_set
 
 assets = materialize_asset_set(bundled_asset_set("d070"), "build/atlas-d070")
 print(assets.geometry.positions.shape, assets.regions.reference_space_id)
@@ -51,7 +45,7 @@ uv build
 ## Read a local mesh pack
 
 ```python
-from ibl_atlas_assets import open_mesh_pack
+from ibl_anatomy import open_mesh_pack
 
 pack = open_mesh_pack("path/to/pack/manifest.json")
 pack.verify()
@@ -77,7 +71,7 @@ is the canonical signed left tree (plus void), and `logical(mapping)` selects
 one hemisphere-independent/right row per absolute ID.
 
 ```python
-from ibl_atlas_assets import open_region_catalog
+from ibl_anatomy import open_region_catalog
 
 catalog = open_region_catalog("regions.json", sha256="...")
 for region in catalog.left("allen"):
@@ -98,7 +92,7 @@ annotation pair. Arrays use explicit AP/ML/DV storage and an ML/AP/DV micrometre
 annotation is cryptographically bound to its signed region catalog.
 
 ```python
-from ibl_atlas_assets import open_volume_pack
+from ibl_anatomy import open_volume_pack
 
 pack = open_volume_pack("path/to/volume-pack")
 pack.verify()
@@ -116,7 +110,7 @@ compressed block rather than loading a complete volume. It provides explicit gri
 world registration, bounded decoding, a byte-accounted in-memory LRU, and per-block integrity:
 
 ```python
-from ibl_atlas_assets import open_intensity_block_pack
+from ibl_anatomy import open_intensity_block_pack
 
 intensity = open_intensity_block_pack("path/to/intensity-blocks")
 section = intensity.read_section("ml", 570)
@@ -135,7 +129,7 @@ semantics without coupling the asset contract to a renderer. The reader supports
 and the exact gzip JSON slice packs currently produced by `ephys-atlas-web-v2`:
 
 ```python
-from ibl_atlas_assets import open_registered_projection
+from ibl_anatomy import open_registered_projection
 
 coronal = open_registered_projection("path/to/coronal.json")
 section = coronal.load_slice(540)
@@ -147,7 +141,7 @@ resources. Because that older manifest predates explicit reference-space and gri
 must supply the identities from their pinned asset record:
 
 ```python
-from ibl_atlas_assets import open_anatomy_pack
+from ibl_anatomy import open_anatomy_pack
 
 anatomy = open_anatomy_pack(
     "path/to/anatomy-pack-v2",

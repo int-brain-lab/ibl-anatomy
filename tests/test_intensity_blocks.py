@@ -12,7 +12,7 @@ import numpy as np
 import pytest
 from jsonschema import ValidationError
 
-from ibl_atlas_assets import open_intensity_block_pack
+from ibl_anatomy import open_intensity_block_pack
 
 FIXTURE = Path(__file__).parent / "fixtures" / "intensity-blocks-v1" / "pack"
 

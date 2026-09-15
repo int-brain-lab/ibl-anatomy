@@ -34,7 +34,7 @@ consumer can therefore initialize contrast without scanning the 10-um dataset.
 ## Reader
 
 ```python
-from ibl_atlas_assets import open_intensity_block_pack
+from ibl_anatomy import open_intensity_block_pack
 
 pack = open_intensity_block_pack(
     "path/to/intensity-blocks",
