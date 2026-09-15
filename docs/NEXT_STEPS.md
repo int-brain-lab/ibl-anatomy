@@ -24,7 +24,10 @@ Current checkpoint:
   updates, per-face signed query keys, probe path, arcball, and explicit destruction are green.
   A docked retained Allen ontology browser now consumes this package's region catalog, with
   Allen/Beryl/Cosmos switching, filtering, collapse/expand, official swatches, and linked
-  surface/tree selection.
+  surface/tree selection. Real Brain-Wide Map probe and regional-value examples now link the
+  surface, ontology, sites, and retained tables. Full Allen regional updates over 2,194 signed
+  regions and 486,674 vertices take about 6 ms on the recorded development host. A strict API
+  documentation site and reproducible five-entry gallery pipeline are committed at `fea777a`.
 - `ephys-atlas-web-v2` now has one deliberately narrow extraction seam: its authoritative region
   builder emits an explicit `allen-ccf-2017` reference-space identity and its browser decoder now
   exposes the same strict physical, left, and logical views as the Python reader. Real D070 parity
@@ -34,6 +37,11 @@ Current checkpoint:
   The Python materializer verifies the published mesh graph and exact region catalog together,
   including complete vertex/triangle presentation fingerprints, without copying numeric geometry
   into Git or adding a shared cross-language runtime.
+- a non-public Datoviz portability scenario is committed on
+  `feature/ibl-atlas-webgpu-spike` at `c56ca6c36`. One canonical C scene exercises the miniature
+  fixture's signed identities, opaque indexed mesh, probe sites, and arcball through native and
+  WASM packet runners. This is evidence for portable scene semantics, not a Python, ImGui, WBOIT,
+  or general browser-export contract.
 
 This document separates immediate, evidence-producing work from the broader
 possibilities in `FUTURE_DIRECTIONS.md`. Work should use small green commits.
@@ -244,3 +252,18 @@ The two-consumer checkpoint is now recorded in `PROJECT.md`. It supports shared 
 schemas, semantic validators, and parity vectors with small language-native adapters. The next
 asset-family spike should begin only from a concrete volume or projection use case with a pinned
 source artifact; it should not start by designing a generic cross-language runtime.
+
+## Selected next vertical slice
+
+The next evidence-producing slice is a registered Allen atlas-volume pack used by a native Linked
+Atlas Navigator. Start with a deterministic miniature fixture and one pinned, manageable-resolution
+real source. The contract must keep anatomical template intensities distinct from categorical
+annotation labels while making their common grid, voxel-center transform, axis order, units,
+reference-space identity, outside semantics, provenance, and byte integrity explicit.
+
+`ibl-atlas-assets` owns only the immutable pack, validation, decoding, and renderer-neutral
+coordinate/lookup semantics. `ibl-datoviz` owns slice composition, 3-D rendering, crosshairs,
+selection, GUI state, and GPU lifetime. `ephys-atlas-web-v2` should not change until the native
+consumer proves the contract; it may then validate or consume the same contract with a small
+language-native adapter. `iblatlas` remains the authoritative generation source and should change
+only if generation exposes a concrete correctness or metadata gap.

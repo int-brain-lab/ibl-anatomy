@@ -161,3 +161,13 @@ scientific feature derivation, GUI composition, and renderer upload remain consu
 No new `iblatlas` API is required by these slices. No additional `ibl-atlas-assets` lookup or
 aggregation API is being added yet: mapping-aware weighted reduction is currently a presentation
 need in one consumer, not a demonstrated cross-consumer asset primitive.
+
+The first cross-renderer portability probe also supports this boundary. Datoviz commit
+`c56ca6c36` compiles one atlas-like C scenario into both native and WASM runners and verifies mesh,
+probe-site, signed-color, and arcball packet semantics. It does not make the Python viewer or its
+retained ImGui interface portable, and it does not justify a shared application runtime.
+
+The next selected asset-family experiment is a registered Allen template-and-annotation volume
+pack serving a native linked slice/3-D navigator. It remains a separate spike: its exact source,
+grid, encoding, and real-asset lock must be evidenced before any projection or browser extraction
+is accepted.
