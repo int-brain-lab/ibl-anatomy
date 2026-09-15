@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.internationalbrainlab.org/schema/v1/registered-projection.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "reference_space_id", "grid_id", "world_slice_axis", "slice_count", "slice_shape", "view_box", "plane_index_to_world_um", "voxel_edge_extent_um", "display_slices", "resource_index"],
+  "properties": {
+    "id": {"enum": ["coronal", "sagittal", "horizontal"]},
+    "kind": {"const": "registered-slice-stack"},
+    "reference_space_id": {"$ref": "common.schema.json#/$defs/identifier"},
+    "grid_id": {"$ref": "common.schema.json#/$defs/identifier"},
+    "world_slice_axis": {"enum": ["ml", "ap", "dv"]},
+    "slice_count": {"type": "integer", "minimum": 1},
+    "slice_shape": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 1}},
+    "view_box": {"$ref": "common.schema.json#/$defs/viewBox"},
+    "plane_index_to_world_um": {"$ref": "common.schema.json#/$defs/matrix4"},
+    "world_to_plane_index": {"$ref": "common.schema.json#/$defs/matrix4"},
+    "voxel_edge_extent_um": {"type": "array", "minItems": 6, "maxItems": 6, "items": {"type": "number"}},
+    "display_slices": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "integer", "minimum": 0}},
+    "resource_index": {
+      "type": "object", "additionalProperties": false, "required": ["format", "resource"],
+      "properties": {"format": {"const": "atlas-registered-svg-resource-index-v1"}, "resource": {"$ref": "common.schema.json#/$defs/encodedResource"}}
+    }
+  }
+}

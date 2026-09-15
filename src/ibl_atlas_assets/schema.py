@@ -7,6 +7,7 @@ import math
 from importlib.resources import files
 from typing import Any
 
+import numpy as np
 from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
@@ -35,6 +36,84 @@ def validate_volume_pack_manifest(manifest: Any) -> dict[str, Any]:
     Draft202012Validator(_load_schema("volume-pack.schema.json")).validate(manifest)
     _validate_volume_semantics(manifest)
     return manifest
+
+
+def _registered_validator(name: str) -> Draft202012Validator:
+    common = _load_schema("common.schema.json")
+    registry = Registry().with_resource(common["$id"], Resource.from_contents(common))
+    return Draft202012Validator(_load_schema(name), registry=registry)
+
+
+def validate_registered_projection_manifest(manifest: Any) -> dict[str, Any]:
+    """Validate one 10-um registered coronal, sagittal, or horizontal stack."""
+
+    _registered_validator("registered-projection.schema.json").validate(manifest)
+    _validate_registered_projection_semantics(manifest)
+    return manifest
+
+
+def validate_registered_resource_index(document: Any) -> dict[str, Any]:
+    """Validate a registered indexed-SVG resource index."""
+
+    _registered_validator("registered-svg-resource-index.schema.json").validate(document)
+    _validate_registered_resource_index_semantics(document)
+    return document
+
+
+def _validate_registered_projection_semantics(document: dict[str, Any]) -> None:
+    expected_axis = {"coronal": "ap", "sagittal": "ml", "horizontal": "dv"}[document["id"]]
+    if document["world_slice_axis"] != expected_axis:
+        raise ValueError(f"{document['id']} must slice the {expected_axis} world axis")
+    matrix = document["plane_index_to_world_um"]
+    extent = document["voxel_edge_extent_um"]
+    _finite([*matrix, *extent], "registered projection affine and extent")
+    if matrix[12:] != [0, 0, 0, 1]:
+        raise ValueError("registered projection affine homogeneous row is invalid")
+    for column in range(3):
+        if sum(matrix[row * 4 + column] != 0 for row in range(3)) != 1:
+            raise ValueError("registered projection affine must be a signed permutation")
+    world_row = {"ml": 0, "ap": 1, "dv": 2}[expected_axis]
+    if matrix[world_row * 4] == 0:
+        raise ValueError("registered plane slice coordinate does not map to its declared world axis")
+    if document.get("world_to_plane_index") is not None:
+        inverse = document["world_to_plane_index"]
+        _finite(inverse, "registered projection inverse affine")
+        actual = np.asarray(matrix, dtype=float).reshape(4, 4)
+        expected = np.linalg.inv(actual).reshape(-1)
+        if not np.allclose(inverse, expected, rtol=1e-10, atol=1e-9):
+            raise ValueError("registered projection inverse does not match affine")
+    shape = [document["slice_count"], *document["slice_shape"]]
+    derived_extent: list[float] = []
+    for world in range(3):
+        column = next(column for column in range(3) if matrix[world * 4 + column] != 0)
+        scale = matrix[world * 4 + column]
+        offset = matrix[world * 4 + 3]
+        edges = [offset + scale * -0.5, offset + scale * (shape[column] - 0.5)]
+        derived_extent.extend([min(edges), max(edges)])
+    if not np.allclose(extent, derived_extent, rtol=1e-10, atol=1e-9):
+        raise ValueError("registered projection voxel-edge extent differs from affine")
+    slices = document["display_slices"]
+    if slices != sorted(slices) or any(index >= document["slice_count"] for index in slices):
+        raise ValueError("registered display slices must be increasing and inside the native domain")
+
+
+def _validate_registered_resource_index_semantics(document: dict[str, Any]) -> None:
+    resources = document["resources"]
+    _unique([entry["pack_id"] for entry in resources], "registered SVG pack id")
+    _unique([entry["resource"]["path"] for entry in resources], "registered SVG resource path")
+    slices: list[int] = []
+    for entry in resources:
+        indices = entry["slice_indices"]
+        if indices != sorted(indices):
+            raise ValueError("registered SVG resource slices must be increasing")
+        resource = entry["resource"]
+        if resource["media_type"] != "application/vnd.ibl.indexed-svg":
+            raise ValueError("registered SVG packs must use the indexed-SVG media type")
+        if resource["codec"]["name"] != "gzip":
+            raise ValueError("registered SVG packs must be gzip-compressed")
+        slices.extend(indices)
+    if slices != sorted(slices) or len(slices) != len(set(slices)):
+        raise ValueError("registered SVG resource index slices must be globally increasing and unique")
 
 
 def _finite(values: list[float], label: str) -> None:

@@ -17,6 +17,7 @@ from .regions import (
     open_region_catalog,
     parse_region_catalog,
 )
+from .registered_slices import RegisteredProjection, open_registered_projection
 from .volume_pack import (
     AtlasVolumeGrid,
     AtlasVolumePack,
@@ -38,11 +39,13 @@ __all__ = [
     "MeshGeometry",
     "MeshPack",
     "PinnedResource",
+    "RegisteredProjection",
     "bundled_asset_set",
     "materialize_asset_set",
     "open_asset_set",
     "open_mesh_pack",
     "open_region_catalog",
+    "open_registered_projection",
     "open_volume_pack",
     "parse_asset_set",
     "parse_region_catalog",
