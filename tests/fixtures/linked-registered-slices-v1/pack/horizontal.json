@@ -33,14 +33,14 @@
   "resource_index": {
     "format": "atlas-registered-svg-resource-index-v1",
     "resource": {
-      "bytes": 293,
+      "bytes": 431,
       "codec": {
-        "decoded_bytes": 407,
+        "decoded_bytes": 408,
         "name": "gzip"
       },
       "media_type": "application/json",
       "path": "horizontal-index.json.gz",
-      "sha256": "c2d61cc78a48d5c774c3fdb7d8e3a38299a51a643de5682e8efaaafbd85f7618"
+      "sha256": "75eeb7c3d3d6a7d754f5f6c76d89b6cc02856b34e49db69d75a357d7d63e734f"
     }
   },
   "slice_count": 7,

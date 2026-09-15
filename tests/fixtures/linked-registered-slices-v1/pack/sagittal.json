@@ -34,14 +34,14 @@
   "resource_index": {
     "format": "atlas-registered-svg-resource-index-v1",
     "resource": {
-      "bytes": 290,
+      "bytes": 429,
       "codec": {
-        "decoded_bytes": 405,
+        "decoded_bytes": 406,
         "name": "gzip"
       },
       "media_type": "application/json",
       "path": "sagittal-index.json.gz",
-      "sha256": "19fa201c9f8110d42c8bcbafbed45ccf302d522b64c170361aac88101414396a"
+      "sha256": "d3bd6337959604bbf2d4d585293fe1aaa967e3ec5bbf3edde3e449c962c55cab"
     }
   },
   "slice_count": 8,

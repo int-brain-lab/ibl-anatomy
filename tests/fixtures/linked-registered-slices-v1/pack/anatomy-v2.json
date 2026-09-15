@@ -23,13 +23,13 @@
           "pack_depth": 16,
           "packs": [
             {
-              "bytes": 333,
+              "bytes": 1729,
               "compression": "gzip",
               "first_slice_index": 0,
               "media_type": "application/json",
               "pack_index": 0,
               "path": "registered/coronal-0.json.gz",
-              "sha256": "b935e41c81afdf5d7eab7960715b6b8293fda30c5ac6148fa89d4a9624b44d6b",
+              "sha256": "287a34e934d7dfacdf41f61637fe596c8e8c79af5857d4c3088f5477d89f7541",
               "slice_count": 9,
               "uncompressed_bytes": 1706
             }
@@ -78,13 +78,13 @@
           "pack_depth": 16,
           "packs": [
             {
-              "bytes": 321,
+              "bytes": 1424,
               "compression": "gzip",
               "first_slice_index": 0,
               "media_type": "application/json",
               "pack_index": 0,
               "path": "registered/horizontal-0.json.gz",
-              "sha256": "6c1a6d8186f096207de6954e8d4e2baaa117fa9acabb827955c39334c05beacc",
+              "sha256": "fea299a62ae7463e326f26b8e3818ec55148217081e1f33e58766f986e3dbe9b",
               "slice_count": 7,
               "uncompressed_bytes": 1401
             }
@@ -133,13 +133,13 @@
           "pack_depth": 16,
           "packs": [
             {
-              "bytes": 326,
+              "bytes": 1575,
               "compression": "gzip",
               "first_slice_index": 0,
               "media_type": "application/json",
               "pack_index": 0,
               "path": "registered/sagittal-0.json.gz",
-              "sha256": "1d165cc70346e6077bc3ebbfc335dc4baa35f7988a0180eb4e133a51707033ea",
+              "sha256": "0285bf9852cbdb155546c0b85b20f261e6ae5b17716658a3ab93816beac1bd65",
               "slice_count": 8,
               "uncompressed_bytes": 1552
             }

@@ -27,6 +27,18 @@ PROJECTIONS = {
 }
 
 
+def _gzip(payload: bytes) -> bytes:
+    """Return byte-stable gzip across supported Python/zlib versions.
+
+    Compression level zero is intentional for this tiny conformance fixture:
+    stored DEFLATE blocks avoid version-dependent compressor choices while
+    preserving the real gzip transport contract.
+    """
+    result = bytearray(gzip.compress(payload, compresslevel=0, mtime=0))
+    result[9] = 255  # RFC 1952 OS=unknown; Python 3.12 otherwise leaks the host OS.
+    return bytes(result)
+
+
 def _resource(path: str, payload: bytes, media_type: str = "application/json") -> dict:
     return {
         "path": path,
@@ -77,9 +89,7 @@ def _pack(projection: str, count: int, matrix: list[int]) -> bytes:
         "slice_count": count,
         "slices": slices,
     }
-    return gzip.compress(
-        json.dumps(document, sort_keys=True, separators=(",", ":")).encode(), mtime=0
-    )
+    return _gzip(json.dumps(document, sort_keys=True, separators=(",", ":")).encode())
 
 
 def build(output: Path) -> None:
@@ -109,7 +119,7 @@ def build(output: Path) -> None:
         index_raw = json.dumps(
             index_document, sort_keys=True, separators=(",", ":")
         ).encode()
-        index_bytes = gzip.compress(index_raw, mtime=0)
+        index_bytes = _gzip(index_raw)
         (output / f"{projection}-index.json.gz").write_bytes(index_bytes)
         manifest = {
             "id": projection,
