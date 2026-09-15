@@ -144,3 +144,64 @@ def test_registered_projection_rejects_invalid_slice_arguments() -> None:
         projection.resource_for_slice("0")
     with pytest.raises(IndexError, match="outside"):
         projection.resource_for_slice(2)
+
+
+def test_registered_projection_decodes_anatomy_v2_json_pack(tmp_path: Path) -> None:
+    payload = {
+        "format": "anatomy-slice-pack-v2",
+        "schema_version": "2.0",
+        "anatomy_pack_id": "coronal-0",
+        "projection": "coronal",
+        "pack_depth": 16,
+        "pack_index": 0,
+        "first_slice_index": 0,
+        "slice_count": 1,
+        "slices": [{
+            "slice_index": 0,
+            "world_coordinate_um": -50,
+            "paths": [{
+                "atlas_ids": {"allen": -101, "beryl": -10, "cosmos": -1},
+                "fill_rule": "evenodd",
+                "d": "M0 0h4v4h-4zM1 1h2v2h-2z",
+            }],
+        }],
+    }
+    raw = json.dumps(payload, separators=(",", ":")).encode()
+    encoded = gzip.compress(raw, mtime=0)
+    document = copy.deepcopy(CASES[0])
+    document["resource_index"]["resource"].update({
+        "media_type": "application/json",
+        "bytes": len(encoded),
+        "sha256": hashlib.sha256(encoded).hexdigest(),
+        "codec": {"name": "gzip", "decoded_bytes": len(raw)},
+    })
+    index = {
+        "schema_version": "1.0",
+        "format": "atlas-registered-svg-resource-index-v1",
+        "projection_id": "coronal",
+        "resources": [{
+            "pack_id": "coronal-0",
+            "slice_indices": [0],
+            "resource": {
+                "path": "coronal-0.json.gz",
+                "media_type": "application/json",
+                "bytes": len(encoded),
+                "sha256": hashlib.sha256(encoded).hexdigest(),
+                "codec": {"name": "gzip", "decoded_bytes": len(raw)},
+            },
+        }],
+    }
+    index_raw = json.dumps(index, separators=(",", ":")).encode()
+    index_encoded = gzip.compress(index_raw, mtime=0)
+    document["resource_index"]["resource"].update({
+        "path": "index.json.gz",
+        "bytes": len(index_encoded),
+        "sha256": hashlib.sha256(index_encoded).hexdigest(),
+        "codec": {"name": "gzip", "decoded_bytes": len(index_raw)},
+    })
+    (tmp_path / "coronal-0.json.gz").write_bytes(encoded)
+    (tmp_path / "index.json.gz").write_bytes(index_encoded)
+    (tmp_path / "manifest.json").write_text(json.dumps(document), encoding="utf-8")
+    decoded = open_registered_projection(tmp_path).load_slice(0)
+    assert decoded.paths[0].atlas_ids["cosmos"] == -1
+    assert decoded.paths[0].ring_count == 2

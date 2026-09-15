@@ -107,8 +107,11 @@ def _validate_registered_resource_index_semantics(document: dict[str, Any]) -> N
         if indices != sorted(indices):
             raise ValueError("registered SVG resource slices must be increasing")
         resource = entry["resource"]
-        if resource["media_type"] != "application/vnd.ibl.indexed-svg":
-            raise ValueError("registered SVG packs must use the indexed-SVG media type")
+        if resource["media_type"] not in (
+            "application/vnd.ibl.indexed-svg",
+            "application/json",
+        ):
+            raise ValueError("registered packs must use indexed-SVG or JSON media type")
         if resource["codec"]["name"] != "gzip":
             raise ValueError("registered SVG packs must be gzip-compressed")
         slices.extend(indices)

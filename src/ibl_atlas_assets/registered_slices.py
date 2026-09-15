@@ -168,7 +168,10 @@ class RegisteredProjection:
             raise KeyError(f"registered slice has no resource: {slice_index}")
         descriptor = entry["resource"]
         decoded = _read_resource(self.root, descriptor, "registered SVG pack")
-        pack = _decode_indexed_svg_pack(decoded)
+        if descriptor["media_type"] == "application/json" or not decoded.startswith(b"ISVG"):
+            pack = _decode_json_slice_pack(decoded)
+        else:
+            pack = _decode_indexed_svg_pack(decoded)
         if pack.projection != self.projection_id or pack.pack_id != entry["pack_id"]:
             raise ValueError("registered SVG pack identity differs from resource index")
         inventory = tuple(item.slice_index for item in pack.slices)
@@ -301,6 +304,52 @@ def _decode_indexed_svg_pack(data: bytes) -> IndexedSvgPack:
             raise ValueError("indexed SVG slice contains no paths")
         slices.append(RegisteredSlice(slice_index, world_coordinate, tuple(paths)))
     return IndexedSvgPack(projection, pack_id, tuple(slices))
+
+
+def _decode_json_slice_pack(data: bytes) -> IndexedSvgPack:
+    """Decode the exact anatomy-slice-pack-v2 JSON authority."""
+
+    try:
+        document = json.loads(data.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise ValueError("anatomy JSON slice pack is invalid JSON") from error
+    required = {
+        "format", "schema_version", "anatomy_pack_id", "projection", "pack_depth",
+        "pack_index", "first_slice_index", "slice_count", "slices",
+    }
+    if not isinstance(document, dict) or set(document) != required:
+        raise ValueError("anatomy JSON slice pack fields are invalid")
+    if document["format"] != "anatomy-slice-pack-v2" or document["schema_version"] != "2.0":
+        raise ValueError("anatomy JSON slice pack version is unsupported")
+    projection = document["projection"]
+    slices = document["slices"]
+    if document["pack_depth"] not in (16, 32) or not isinstance(document["pack_index"], int):
+        raise ValueError("anatomy JSON slice pack metadata is invalid")
+    if document["slice_count"] != len(slices) or not 0 < len(slices) <= document["pack_depth"]:
+        raise ValueError("anatomy JSON slice pack slice count is invalid")
+    result: list[RegisteredSlice] = []
+    expected_index = document["first_slice_index"]
+    for item in slices:
+        if set(item) != {"slice_index", "world_coordinate_um", "paths"}:
+            raise ValueError("anatomy JSON slice fields are invalid")
+        if item["slice_index"] != expected_index or not np.isfinite(item["world_coordinate_um"]):
+            raise ValueError("anatomy JSON slice inventory is invalid")
+        expected_index += 1
+        paths: list[RegisteredSlicePath] = []
+        for path in item["paths"]:
+            if set(path) != {"atlas_ids", "fill_rule", "d"}:
+                raise ValueError("anatomy JSON path fields are invalid")
+            if path["fill_rule"] != "evenodd" or not isinstance(path["d"], str) or not path["d"].startswith(("M", "m")):
+                raise ValueError("anatomy JSON path geometry is invalid")
+            try:
+                atlas_ids = {name: int(path["atlas_ids"][name]) for name in ("allen", "beryl", "cosmos")}
+            except (KeyError, TypeError, ValueError) as error:
+                raise ValueError("anatomy JSON path mapping IDs are invalid") from error
+            if any(value == 0 for value in atlas_ids.values()) or len({value < 0 for value in atlas_ids.values()}) != 1:
+                raise ValueError("anatomy JSON path signed mappings are inconsistent")
+            paths.append(RegisteredSlicePath(MappingProxyType(atlas_ids), "evenodd", path["d"]))
+        result.append(RegisteredSlice(item["slice_index"], item["world_coordinate_um"], tuple(paths)))
+    return IndexedSvgPack(projection, document["anatomy_pack_id"], tuple(result))
 
 
 def _freeze(value: Any) -> Any:
