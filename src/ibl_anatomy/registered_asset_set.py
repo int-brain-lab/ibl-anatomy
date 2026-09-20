@@ -46,6 +46,12 @@ class RegisteredAssetSet:
     citation_url: str
     citation_policy_url: str
 
+@dataclass(frozen=True)
+class MaterializedRegisteredAssets:
+    root: Path
+    pack_id: str
+    projections: dict[str, RegisteredProjection]
+
 
 def _resource(value: Any, label: str) -> RegisteredResource:
     if not isinstance(value, dict) or set(value) != {"url", "bytes", "sha256"}:
@@ -119,8 +125,24 @@ def _inventory(root: Path, projection: dict[str, Any]) -> str:
         entries.append({"path": relative, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()})
     return hashlib.sha256(json.dumps(entries, separators=(",", ":"), sort_keys=True).encode()).hexdigest()
 
+def verify_materialized_registered_asset_set(lock: RegisteredAssetSet, root: str | Path) -> MaterializedRegisteredAssets:
+    root = Path(root).resolve()
+    document = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+    if document.get("pack_id") != lock.root_pack_id or document.get("format") != "atlas-projection-pack-v1":
+        raise ValueError("materialized root identity differs from lock")
+    entries = {item["id"]: item for item in document["projections"]}
+    projections = {}
+    for name, expected in lock.projections.items():
+        projection = entries[name]
+        reader = RegisteredProjection(root, MappingProxyType(projection))
+        reader.verify()
+        if _inventory(root, projection) != expected.inventory_sha256:
+            raise ValueError(f"{name} projection inventory differs from lock")
+        projections[name] = reader
+    return MaterializedRegisteredAssets(root, document["pack_id"], projections)
 
-def materialize_registered_asset_set(lock: RegisteredAssetSet, target: str | Path, *, timeout: float = 60) -> Path:
+
+def materialize_registered_asset_set(lock: RegisteredAssetSet, target: str | Path, *, timeout: float = 60) -> MaterializedRegisteredAssets:
     """Atomically download, validate, and materialize the complete root graph."""
     destination = Path(target).resolve()
     if destination.exists():
@@ -159,7 +181,7 @@ def materialize_registered_asset_set(lock: RegisteredAssetSet, target: str | Pat
         _download(RegisteredResource(urllib.parse.urljoin(lock.root_manifest.url, license_resource["path"]), license_resource["bytes"], license_resource["sha256"]), temporary / license_resource["path"], timeout)
         destination.parent.mkdir(parents=True, exist_ok=True)
         temporary.rename(destination)
-        return destination
+        return verify_materialized_registered_asset_set(lock, destination)
     except Exception:
         shutil.rmtree(temporary, ignore_errors=True)
         raise
