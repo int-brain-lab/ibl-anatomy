@@ -182,6 +182,27 @@ def test_indexed_svg_corruption_rejects_invalid_path_contract(svg: bytes) -> Non
         _decode_indexed_svg_pack(_binary_pack(svg))
 
 
+def test_indexed_svg_decodes_concatenated_path_fragments() -> None:
+    fragment = (
+        b'<path fill-rule="evenodd" data-allen-id="-1" data-beryl-id="-1" '
+        b'data-cosmos-id="-1" d="M0 0Z"/>'
+        b'<path fill-rule="evenodd" data-allen-id="1" data-beryl-id="1" '
+        b'data-cosmos-id="1" d="M1 1Z"/>'
+    )
+    decoded = _decode_indexed_svg_pack(_binary_pack(fragment))
+    assert len(decoded.slices) == 1
+    assert [path.d for path in decoded.slices[0].paths] == ["M0 0Z", "M1 1Z"]
+
+
+def test_indexed_svg_rejects_malformed_fragment_sequence() -> None:
+    fragment = (
+        b'<path fill-rule="evenodd" data-allen-id="-1" data-beryl-id="-1" '
+        b'data-cosmos-id="-1" d="M0 0Z"><path>'
+    )
+    with pytest.raises(ValueError, match="invalid XML"):
+        _decode_indexed_svg_pack(_binary_pack(fragment))
+
+
 def test_registered_projection_rejects_invalid_slice_arguments() -> None:
     projection = RegisteredProjection(Path("."), CASES[0])
     with pytest.raises(TypeError, match="integer"):

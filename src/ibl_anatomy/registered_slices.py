@@ -584,7 +584,12 @@ def _decode_indexed_svg_pack(data: bytes) -> IndexedSvgPack:
             payload_offset + payload_start : payload_offset + payload_start + length
         ]
         try:
-            root = ElementTree.fromstring(fragment)
+            # ``svg_pack.build_sampled`` stores a fragment sequence: each
+            # slice is concatenated ``<path/>`` siblings rather than wrapped
+            # in an outer SVG element.  XML requires one document root, so
+            # provide a synthetic local wrapper for strict parsing while
+            # retaining the fragment's path semantics.
+            root = ElementTree.fromstring(b"<svg>" + fragment + b"</svg>")
         except ElementTree.ParseError as error:
             raise ValueError("indexed SVG fragment is invalid XML") from error
         paths: list[RegisteredSlicePath] = []
