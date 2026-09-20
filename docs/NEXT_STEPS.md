@@ -270,21 +270,16 @@ separate dense 3-D volume. The synthetic contract test caught and fixed a real `
 convention mismatch: registered projection shapes are `[u, v]`, while image arrays are
 `[row=v, column=u]`.
 
-The next evidence-producing step is publication, not another format redesign:
+The registered projection graph is now locked and live-verified: root pack
+`ibl-atlas-projections-05b9f3f85db9`, root SHA-256
+`5c6ad6fb49b8ad9281c954c3fc7948300997b60b98097043dbe6d26ddc5b8a46`, 59 files and 5,700,497
+encoded bytes. The strict lock records Allen source URL/hash, derived LUT provenance, terms, and
+citation without treating Allen terms as MIT or CC. The next steps are consumer release order:
 
-The exact existing parent, sparse display derivative, projection root, source hashes, and builder
-revisions are now selected in `REGISTERED_10UM_PUBLICATION.md`. Public lock implementation remains
-blocked on authoritative Allen source/terms/citation records, the shared-publication scope, and an
-approved immutable origin; none may be guessed from local filenames.
-
-1. record the exact licensed 10-um Allen template and annotation inputs and their immutable hashes;
-2. build registered projections and the scalar block transport from those same inputs;
-3. verify grid/reference/affine identity and representative signed-region parity against the web
-   producer;
-4. measure compressed size, cold/warm section latency, and desktop memory on the real bytes;
-5. publish at an immutable origin with terms and citation metadata; and
-6. only then redirect either consumer, preserving the web application's current display resolution
-   and defaults until its independent parity gate passes.
+1. merge/release `ibl-anatomy` with the bundled lock;
+2. pin and cut over `ibl-datoviz`;
+3. enable CORS or a controlled browser proxy;
+4. run browser parity and only then switch browser consumers, preserving current display defaults.
 
 `ibl-anatomy` owns immutable packs, validation, decoding, and renderer-neutral coordinate and
 lookup semantics. `ibl-datoviz` owns slice composition, 3-D rendering, crosshairs, selection, GUI
