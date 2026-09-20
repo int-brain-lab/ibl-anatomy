@@ -24,7 +24,7 @@
       "required": ["annotation_source", "lut_recipe", "terms_url", "citation_url"],
       "properties": {
         "annotation_source": {"$ref": "#/$defs/resource"},
-        "lut_recipe": {"type": "string", "minLength": 1},
+        "lut_recipe": {"type": "object", "additionalProperties": false, "required": ["path", "bytes", "sha256", "producer", "iblatlas_commit"], "properties": {"path": {"type": "string", "minLength": 1}, "bytes": {"type": "integer", "minimum": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "producer": {"type": "string", "minLength": 1}, "iblatlas_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}}},
         "terms_url": {"type": "string", "format": "uri"},
         "citation_url": {"type": "string", "format": "uri"}
       }

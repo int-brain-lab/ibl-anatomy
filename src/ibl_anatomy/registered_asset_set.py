@@ -1,7 +1,7 @@
-"""Pinned, renderer-neutral registered anatomy projection asset graphs."""
-
+"""Pinned atlas-projection-pack graphs for registered anatomy consumers."""
 from __future__ import annotations
 
+import gzip
 import hashlib
 import json
 import shutil
@@ -9,17 +9,17 @@ import tempfile
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
+from importlib.resources import files
 from pathlib import Path
+from types import MappingProxyType
 from typing import Any
 
-from .registered_slices import RegisteredProjection, open_registered_projection
-from .schema import validate_registered_projection_manifest
+from .registered_slices import RegisteredProjection
+from .schema import validate_registered_projection_manifest, validate_registered_resource_index
 
 
 @dataclass(frozen=True)
 class RegisteredResource:
-    """One immutable manifest or resource in a registered graph."""
-
     url: str
     bytes: int
     sha256: str
@@ -27,9 +27,6 @@ class RegisteredResource:
 
 @dataclass(frozen=True)
 class RegisteredProjectionExpectation:
-    """Expected identity for one registered projection."""
-
-    manifest: RegisteredResource
     slice_count: int
     slice_shape: tuple[int, int]
     inventory_sha256: str
@@ -37,14 +34,13 @@ class RegisteredProjectionExpectation:
 
 @dataclass(frozen=True)
 class RegisteredAssetSet:
-    """Strict lock for three registered projections and their provenance."""
-
     asset_set_id: str
     reference_space_id: str
     grid_id: str
+    root_manifest: RegisteredResource
     projections: dict[str, RegisteredProjectionExpectation]
     annotation_source: RegisteredResource
-    lut_recipe: str
+    lut_recipe: dict[str, Any]
     terms_url: str
     citation_url: str
 
@@ -63,43 +59,43 @@ def _resource(value: Any, label: str) -> RegisteredResource:
 
 
 def parse_registered_asset_set(value: Any) -> RegisteredAssetSet:
-    """Parse a strict ``ibl-atlas-registered-asset-set-v1`` lock."""
-    required = {"format", "schema_version", "asset_set_id", "reference_space_id", "grid_id", "projections", "provenance"}
+    required = {"format", "schema_version", "asset_set_id", "reference_space_id", "grid_id", "root_manifest", "projections", "provenance"}
     if not isinstance(value, dict) or set(value) != required:
         raise ValueError("registered asset-set fields differ")
     if value["format"] != "ibl-atlas-registered-asset-set-v1" or value["schema_version"] != "1.0":
         raise ValueError("unsupported registered asset-set format")
-    if any(not isinstance(value[key], str) or not value[key] for key in ("asset_set_id", "reference_space_id", "grid_id")):
-        raise ValueError("registered asset-set identity is invalid")
     projections = value["projections"]
     if not isinstance(projections, dict) or set(projections) != {"coronal", "sagittal", "horizontal"}:
         raise ValueError("registered asset-set projections differ")
-    parsed: dict[str, RegisteredProjectionExpectation] = {}
+    parsed = {}
     for name, item in projections.items():
-        fields = {"manifest", "slice_count", "slice_shape", "inventory_sha256"}
-        if not isinstance(item, dict) or set(item) != fields:
+        if not isinstance(item, dict) or set(item) != {"slice_count", "slice_shape", "inventory_sha256"}:
             raise ValueError(f"{name} projection expectation fields differ")
-        shape = item["slice_shape"]
+        shape, digest = item["slice_shape"], item["inventory_sha256"]
         if not isinstance(item["slice_count"], int) or item["slice_count"] < 1 or not isinstance(shape, list) or len(shape) != 2 or any(not isinstance(v, int) or v < 1 for v in shape):
             raise ValueError(f"{name} projection dimensions are invalid")
-        digest = item["inventory_sha256"]
         if not isinstance(digest, str) or len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):
             raise ValueError(f"{name} inventory SHA-256 is invalid")
-        parsed[name] = RegisteredProjectionExpectation(_resource(item["manifest"], f"{name} manifest"), item["slice_count"], tuple(shape), digest)
+        parsed[name] = RegisteredProjectionExpectation(item["slice_count"], tuple(shape), digest)
     provenance = value["provenance"]
     fields = {"annotation_source", "lut_recipe", "terms_url", "citation_url"}
-    if not isinstance(provenance, dict) or set(provenance) != fields:
-        raise ValueError("registered asset-set provenance fields differ")
-    if not isinstance(provenance["lut_recipe"], str) or not provenance["lut_recipe"]:
-        raise ValueError("LUT recipe is invalid")
+    if not isinstance(provenance, dict) or set(provenance) != fields or not isinstance(provenance["lut_recipe"], dict) or set(provenance["lut_recipe"]) != {"path", "bytes", "sha256", "producer", "iblatlas_commit"}:
+        raise ValueError("registered asset-set provenance differs")
     for key in ("terms_url", "citation_url"):
         if not isinstance(provenance[key], str) or urllib.parse.urlparse(provenance[key]).scheme not in {"http", "https"}:
             raise ValueError(f"{key} is invalid")
-    return RegisteredAssetSet(value["asset_set_id"], value["reference_space_id"], value["grid_id"], parsed, _resource(provenance["annotation_source"], "annotation source"), provenance["lut_recipe"], provenance["terms_url"], provenance["citation_url"])
+    return RegisteredAssetSet(value["asset_set_id"], value["reference_space_id"], value["grid_id"], _resource(value["root_manifest"], "root manifest"), parsed, _resource(provenance["annotation_source"], "annotation source"), provenance["lut_recipe"], provenance["terms_url"], provenance["citation_url"])
 
 
 def open_registered_asset_set(path: str | Path) -> RegisteredAssetSet:
     return parse_registered_asset_set(json.loads(Path(path).read_text(encoding="utf-8")))
+
+
+def bundled_registered_asset_set(name: str = "allen-ccf-2017-10um") -> RegisteredAssetSet:
+    if not name or any(c not in "abcdefghijklmnopqrstuvwxyz0123456789-_" for c in name):
+        raise ValueError("asset set name is invalid")
+    resource = files("ibl_anatomy.asset_sets").joinpath(f"{name}.json")
+    return parse_registered_asset_set(json.loads(resource.read_text(encoding="utf-8")))
 
 
 def _download(resource: RegisteredResource, destination: Path, timeout: float) -> None:
@@ -111,43 +107,54 @@ def _download(resource: RegisteredResource, destination: Path, timeout: float) -
     destination.write_bytes(payload)
 
 
-def _inventory(root: Path, projection: RegisteredProjection) -> str:
+def _inventory(root: Path, projection: dict[str, Any]) -> str:
+    paths = [projection["resource_index"]["resource"]["path"]]
+    index = json.loads(gzip.decompress((root / paths[0]).read_bytes()))
+    paths.extend(entry["resource"]["path"] for entry in index["resources"])
     entries = []
-    for path in sorted(root.rglob("*")):
-        if path.is_file() and path.name != "manifest.json":
-            data = path.read_bytes()
-            entries.append({"path": path.relative_to(root).as_posix(), "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()})
+    for relative in sorted(paths):
+        data = (root / relative).read_bytes()
+        entries.append({"path": relative, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()})
     return hashlib.sha256(json.dumps(entries, separators=(",", ":"), sort_keys=True).encode()).hexdigest()
 
 
 def materialize_registered_asset_set(lock: RegisteredAssetSet, target: str | Path, *, timeout: float = 60) -> Path:
-    """Download and verify the complete graph atomically."""
+    """Atomically download, validate, and materialize the complete root graph."""
     destination = Path(target).resolve()
     if destination.exists():
         raise FileExistsError(f"registered asset destination already exists: {destination}")
     temporary = Path(tempfile.mkdtemp(prefix=f".{destination.name}-", dir=destination.parent))
     try:
+        root_manifest = temporary / "manifest.json"
+        _download(lock.root_manifest, root_manifest, timeout)
+        root = json.loads(root_manifest.read_text(encoding="utf-8"))
+        if root.get("format") != "atlas-projection-pack-v1" or root.get("reference_space_id") != lock.reference_space_id or set(root.get("mappings", [])) != {"allen", "beryl", "cosmos"}:
+            raise ValueError("projection root identity differs from lock")
+        entries = {item["id"]: item for item in root.get("projections", [])}
+        if set(entries) != {"coronal", "sagittal", "horizontal", "top", "swanson"}:
+            raise ValueError("projection root entries differ")
         for name, expected in lock.projections.items():
-            root = temporary / name
-            manifest_path = root / "manifest.json"
-            _download(expected.manifest, manifest_path, timeout)
-            document = json.loads(manifest_path.read_text(encoding="utf-8"))
-            validate_registered_projection_manifest(document)
-            if document["id"] != name or document["reference_space_id"] != lock.reference_space_id or document["grid_id"] != lock.grid_id:
+            projection = entries[name]
+            validate_registered_projection_manifest(projection)
+            if projection["reference_space_id"] != lock.reference_space_id or projection["grid_id"] != lock.grid_id or projection["slice_count"] != expected.slice_count or tuple(projection["slice_shape"]) != expected.slice_shape:
                 raise ValueError(f"{name} projection identity differs from lock")
-            if document["slice_count"] != expected.slice_count or tuple(document["slice_shape"]) != expected.slice_shape:
-                raise ValueError(f"{name} projection dimensions differ from lock")
-            index = document["resource_index"]["resource"]
-            index_path = root / index["path"]
-            _download(RegisteredResource(urllib.parse.urljoin(expected.manifest.url, index["path"]), index["bytes"], index["sha256"]), index_path, timeout)
-            index_doc = json.loads(__import__("gzip").decompress(index_path.read_bytes()))
-            for entry in index_doc["resources"]:
-                resource = entry["resource"]
-                _download(RegisteredResource(urllib.parse.urljoin(expected.manifest.url, resource["path"]), resource["bytes"], resource["sha256"]), root / resource["path"], timeout)
-            projection = open_registered_projection(root)
-            projection.verify()
-            if _inventory(root, projection) != expected.inventory_sha256:
+            index = projection["resource_index"]["resource"]
+            _download(RegisteredResource(urllib.parse.urljoin(lock.root_manifest.url, index["path"]), index["bytes"], index["sha256"]), temporary / index["path"], timeout)
+            index_doc = json.loads(gzip.decompress((temporary / index["path"]).read_bytes()))
+            validate_registered_resource_index(index_doc)
+            for item in index_doc["resources"]:
+                resource = item["resource"]
+                _download(RegisteredResource(urllib.parse.urljoin(lock.root_manifest.url, resource["path"]), resource["bytes"], resource["sha256"]), temporary / resource["path"], timeout)
+            reader = RegisteredProjection(temporary, MappingProxyType(projection))
+            reader.verify()
+            if _inventory(temporary, projection) != expected.inventory_sha256:
                 raise ValueError(f"{name} projection inventory differs from lock")
+        for name in ("top", "swanson"):
+            resource = entries[name]["fragment"]["resource"]
+            _download(RegisteredResource(urllib.parse.urljoin(lock.root_manifest.url, resource["path"]), resource["bytes"], resource["sha256"]), temporary / resource["path"], timeout)
+        license_resource = root["provenance"]["recipe"]["license_notice"]["resource"]
+        _download(RegisteredResource(urllib.parse.urljoin(lock.root_manifest.url, license_resource["path"]), license_resource["bytes"], license_resource["sha256"]), temporary / license_resource["path"], timeout)
+        destination.parent.mkdir(parents=True, exist_ok=True)
         temporary.rename(destination)
         return destination
     except Exception:

@@ -1,0 +1,19 @@
+{
+  "format": "ibl-atlas-registered-asset-set-v1",
+  "schema_version": "1.0",
+  "asset_set_id": "allen-ccf-2017-10um-registered-20260908",
+  "reference_space_id": "allen-ccf-2017",
+  "grid_id": "allen-ccf-2017-10um",
+  "root_manifest": {"url": "https://ephys-atlas.iblcore.org/atlas/projections/ibl-atlas-projections-05b9f3f85db9/manifest.json", "bytes": 7432, "sha256": "5c6ad6fb49b8ad9281c954c3fc7948300997b60b98097043dbe6d26ddc5b8a46"},
+  "projections": {
+    "coronal": {"slice_count": 1320, "slice_shape": [1140, 800], "inventory_sha256": "55f73d9b792835062e0fca0892cad638ab85f0d04e736ee0ec0950c1452999d7"},
+    "sagittal": {"slice_count": 1140, "slice_shape": [1320, 800], "inventory_sha256": "3aa8bc82e8a7abf3e91b44255f84b015c4231fc003c52f4ea9c19accdbb39213"},
+    "horizontal": {"slice_count": 800, "slice_shape": [1140, 1320], "inventory_sha256": "5350ababf0cb5834efbab90fd17c73601f1425b8b97b495f7742892635c513f1"}
+  },
+  "provenance": {
+    "annotation_source": {"url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/annotation_10.nrrd", "bytes": 32802468, "sha256": "a9e9654ef491f0af107dc0a61bd720dabe7f36e8f3e9239532bf3dbdc94ef24c"},
+    "lut_recipe": {"path": "lut.npy", "bytes": 2407680128, "sha256": "f8c26e2eb972cbff5caa2101fda8b7c5c2a2bdb985e3faad6bf0e57defcc27cb", "producer": "ephys-atlas-web-v2 build_v2.py commit fcdb82d144d3104dc1ee76f6582ed537bfc211be", "iblatlas_commit": "52083adf44825d0622a503705e095699a5957587"},
+    "terms_url": "https://alleninstitute.org/terms-of-use/",
+    "citation_url": "https://doi.org/10.1038/s41586-025-08742-2; https://alleninstitute.org/legal/citation-policy"
+  }
+}

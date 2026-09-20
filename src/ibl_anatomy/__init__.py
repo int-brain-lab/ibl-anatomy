@@ -38,6 +38,7 @@ from .registered_asset_set import (
     RegisteredProjectionExpectation,
     RegisteredResource,
     materialize_registered_asset_set,
+    bundled_registered_asset_set,
     open_registered_asset_set,
     parse_registered_asset_set,
 )
@@ -72,6 +73,7 @@ __all__ = [
     "RegisteredAssetSet",
     "RegisteredProjectionExpectation",
     "RegisteredResource",
+    "bundled_registered_asset_set",
     "RegisteredSlice",
     "RegisteredSlicePath",
     "bundled_asset_set",

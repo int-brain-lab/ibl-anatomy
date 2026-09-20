@@ -34,7 +34,6 @@ def _lock() -> dict:
         manifest = json.loads((FIXTURE / f"{name}.json").read_text())
         source = FIXTURE / f"{name}.json"
         projections[name] = {
-            "manifest": _resource(source),
             "slice_count": manifest["slice_count"],
             "slice_shape": manifest["slice_shape"],
             "inventory_sha256": _inventory(FIXTURE, name),
@@ -45,21 +44,22 @@ def _lock() -> dict:
         "asset_set_id": "synthetic-registered-v1",
         "reference_space_id": "allen-ccf-2017",
         "grid_id": "synthetic-10um-grid-v1",
+        "root_manifest": _resource(FIXTURE / "coronal.json"),
         "projections": projections,
         "provenance": {
             "annotation_source": _resource(FIXTURE / "anatomy-v2.json"),
-            "lut_recipe": "synthetic fixture LUT; test-only",
+            "lut_recipe": {"path": "fixture-lut", "bytes": 1, "sha256": "0" * 64, "producer": "test", "iblatlas_commit": "0" * 40},
             "terms_url": "https://alleninstitute.org/terms-of-use/",
             "citation_url": "https://alleninstitute.org/legal/citation-policy",
         },
     }
 
 
-def test_registered_asset_set_materializes_complete_graph(tmp_path):
+def test_registered_asset_set_rejects_non_projection_root_atomically(tmp_path):
     lock = parse_registered_asset_set(_lock())
-    root = materialize_registered_asset_set(lock, tmp_path / "assets")
-    assert (root / "coronal" / "manifest.json").exists()
-    assert (root / "horizontal" / "registered" / "horizontal-0.json.gz").exists()
+    with pytest.raises(ValueError, match="projection root identity"):
+        materialize_registered_asset_set(lock, tmp_path / "assets")
+    assert not (tmp_path / "assets").exists()
 
 
 def test_registered_asset_set_is_strict():
