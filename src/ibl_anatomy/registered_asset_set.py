@@ -44,6 +44,7 @@ class RegisteredAssetSet:
     lut_recipe: dict[str, Any]
     terms_url: str
     citation_url: str
+    citation_policy_url: str
 
 
 def _resource(value: Any, label: str) -> RegisteredResource:
@@ -79,13 +80,13 @@ def parse_registered_asset_set(value: Any) -> RegisteredAssetSet:
             raise ValueError(f"{name} inventory SHA-256 is invalid")
         parsed[name] = RegisteredProjectionExpectation(item["slice_count"], tuple(shape), digest)
     provenance = value["provenance"]
-    fields = {"annotation_source", "lut_recipe", "terms_url", "citation_url"}
+    fields = {"annotation_source", "lut_recipe", "terms_url", "citation_url", "citation_policy_url"}
     if not isinstance(provenance, dict) or set(provenance) != fields or not isinstance(provenance["lut_recipe"], dict) or set(provenance["lut_recipe"]) != {"path", "bytes", "sha256", "producer", "iblatlas_commit"}:
         raise ValueError("registered asset-set provenance differs")
-    for key in ("terms_url", "citation_url"):
+    for key in ("terms_url", "citation_url", "citation_policy_url"):
         if not isinstance(provenance[key], str) or urllib.parse.urlparse(provenance[key]).scheme not in {"http", "https"}:
             raise ValueError(f"{key} is invalid")
-    return RegisteredAssetSet(value["asset_set_id"], value["reference_space_id"], value["grid_id"], value["root_pack_id"], _resource(value["root_manifest"], "root manifest"), parsed, _resource(provenance["annotation_source"], "annotation source"), provenance["lut_recipe"], provenance["terms_url"], provenance["citation_url"])
+    return RegisteredAssetSet(value["asset_set_id"], value["reference_space_id"], value["grid_id"], value["root_pack_id"], _resource(value["root_manifest"], "root manifest"), parsed, _resource(provenance["annotation_source"], "annotation source"), provenance["lut_recipe"], provenance["terms_url"], provenance["citation_url"], provenance["citation_policy_url"])
 
 
 def open_registered_asset_set(path: str | Path) -> RegisteredAssetSet:
@@ -124,6 +125,7 @@ def materialize_registered_asset_set(lock: RegisteredAssetSet, target: str | Pat
     destination = Path(target).resolve()
     if destination.exists():
         raise FileExistsError(f"registered asset destination already exists: {destination}")
+    destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = Path(tempfile.mkdtemp(prefix=f".{destination.name}-", dir=destination.parent))
     try:
         root_manifest = temporary / "manifest.json"

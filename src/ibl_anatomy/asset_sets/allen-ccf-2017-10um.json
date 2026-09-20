@@ -13,8 +13,9 @@
   },
   "provenance": {
     "annotation_source": {"url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/annotation_10.nrrd", "bytes": 32802468, "sha256": "a9e9654ef491f0af107dc0a61bd720dabe7f36e8f3e9239532bf3dbdc94ef24c"},
-    "lut_recipe": {"path": "lut.npy", "bytes": 2407680128, "sha256": "f8c26e2eb972cbff5caa2101fda8b7c5c2a2bdb985e3faad6bf0e57defcc27cb", "producer": "ephys-atlas-web-v2 build_v2.py commit fcdb82d144d3104dc1ee76f6582ed537bfc211be", "iblatlas_commit": "52083adf44825d0622a503705e095699a5957587"},
-    "terms_url": "https://alleninstitute.org/terms-of-use/",
-    "citation_url": "https://doi.org/10.1038/s41586-025-08742-2; https://alleninstitute.org/legal/citation-policy"
+    "lut_recipe": {"path": "annotation_10_lut_bilateral_v02.npy", "bytes": 2407680128, "sha256": "f8c26e2eb972cbff5caa2101fda8b7c5c2a2bdb985e3faad6bf0e57defcc27cb", "producer": "ephys-atlas-web-v2 build_v2.py commit fcdb82d144d3104dc1ee76f6582ed537bfc211be", "iblatlas_commit": "52083adf44825d0622a503705e095699a5957587"},
+    "terms_url": "https://alleninstitute.org/legal/terms-of-use",
+    "citation_url": "https://doi.org/10.1016/j.cell.2020.04.007",
+    "citation_policy_url": "https://alleninstitute.org/legal/citation-policy"
   }
 }

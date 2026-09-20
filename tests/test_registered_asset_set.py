@@ -51,7 +51,8 @@ def _lock() -> dict:
             "annotation_source": _resource(FIXTURE / "anatomy-v2.json"),
             "lut_recipe": {"path": "fixture-lut", "bytes": 1, "sha256": "0" * 64, "producer": "test", "iblatlas_commit": "0" * 40},
             "terms_url": "https://alleninstitute.org/terms-of-use/",
-            "citation_url": "https://alleninstitute.org/legal/citation-policy",
+            "citation_url": "https://doi.org/10.1016/j.cell.2020.04.007",
+            "citation_policy_url": "https://alleninstitute.org/legal/citation-policy",
         },
     }
 
