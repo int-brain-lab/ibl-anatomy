@@ -10,6 +10,7 @@ Experimental measurements such as AGEA or MERFISH, BWM/session/unit data, scient
 
 - [Project hypothesis and boundaries](docs/PROJECT.md)
 - [Immediate cross-repository steps](docs/NEXT_STEPS.md)
+- [Registered 10 um publication](docs/REGISTERED_10UM_PUBLICATION.md)
 - [Audited source inventory](docs/SOURCE_INVENTORY.md)
 - [Spike 001: independent mesh-pack reader](docs/SPIKE_001_MESH_PACK_READER.md)
 - [Spike 002: registered Allen atlas volumes](docs/SPIKE_002_ATLAS_VOLUME_PACK.md)

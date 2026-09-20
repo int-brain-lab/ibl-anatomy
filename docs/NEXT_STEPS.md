@@ -272,6 +272,11 @@ convention mismatch: registered projection shapes are `[u, v]`, while image arra
 
 The next evidence-producing step is publication, not another format redesign:
 
+The exact existing parent, sparse display derivative, projection root, source hashes, and builder
+revisions are now selected in `REGISTERED_10UM_PUBLICATION.md`. Public lock implementation remains
+blocked on authoritative Allen source/terms/citation records, the shared-publication scope, and an
+approved immutable origin; none may be guessed from local filenames.
+
 1. record the exact licensed 10-um Allen template and annotation inputs and their immutable hashes;
 2. build registered projections and the scalar block transport from those same inputs;
 3. verify grid/reference/affine identity and representative signed-region parity against the web
