@@ -33,6 +33,14 @@ from .registered_slices import (
     open_anatomy_pack,
     open_registered_projection,
 )
+from .registered_asset_set import (
+    RegisteredAssetSet,
+    RegisteredProjectionExpectation,
+    RegisteredResource,
+    materialize_registered_asset_set,
+    open_registered_asset_set,
+    parse_registered_asset_set,
+)
 from .volume_pack import (
     AtlasVolumeGrid,
     AtlasVolumePack,
@@ -61,6 +69,9 @@ __all__ = [
     "MeshPack",
     "PinnedResource",
     "RegisteredProjection",
+    "RegisteredAssetSet",
+    "RegisteredProjectionExpectation",
+    "RegisteredResource",
     "RegisteredSlice",
     "RegisteredSlicePath",
     "bundled_asset_set",
@@ -71,9 +82,12 @@ __all__ = [
     "open_mesh_pack",
     "open_region_catalog",
     "open_registered_projection",
+    "open_registered_asset_set",
     "open_volume_pack",
     "parse_asset_set",
     "parse_region_catalog",
+    "parse_registered_asset_set",
+    "materialize_registered_asset_set",
     "verify_materialized_asset_set",
 ]
 

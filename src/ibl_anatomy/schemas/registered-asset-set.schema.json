@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.internationalbrainlab.org/schema/v1/registered-asset-set.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "schema_version", "asset_set_id", "reference_space_id", "grid_id", "projections", "provenance"],
+  "properties": {
+    "format": {"const": "ibl-atlas-registered-asset-set-v1"},
+    "schema_version": {"const": "1.0"},
+    "asset_set_id": {"type": "string", "minLength": 1},
+    "reference_space_id": {"type": "string", "minLength": 1},
+    "grid_id": {"type": "string", "minLength": 1},
+    "projections": {
+      "type": "object", "additionalProperties": false,
+      "required": ["coronal", "sagittal", "horizontal"],
+      "properties": {
+        "coronal": {"$ref": "#/$defs/projection"},
+        "sagittal": {"$ref": "#/$defs/projection"},
+        "horizontal": {"$ref": "#/$defs/projection"}
+      }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["annotation_source", "lut_recipe", "terms_url", "citation_url"],
+      "properties": {
+        "annotation_source": {"$ref": "#/$defs/resource"},
+        "lut_recipe": {"type": "string", "minLength": 1},
+        "terms_url": {"type": "string", "format": "uri"},
+        "citation_url": {"type": "string", "format": "uri"}
+      }
+    }
+  },
+  "$defs": {
+    "resource": {
+      "type": "object", "additionalProperties": false,
+      "required": ["url", "bytes", "sha256"],
+      "properties": {"url": {"type": "string", "format": "uri"}, "bytes": {"type": "integer", "minimum": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+    },
+    "projection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["manifest", "slice_count", "slice_shape", "inventory_sha256"],
+      "properties": {"manifest": {"$ref": "#/$defs/resource"}, "slice_count": {"type": "integer", "minimum": 1}, "slice_shape": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 1}}, "inventory_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+    }
+  }
+}
