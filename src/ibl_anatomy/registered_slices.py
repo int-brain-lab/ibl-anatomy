@@ -615,7 +615,7 @@ def _decode_indexed_svg_pack(data: bytes) -> IndexedSvgPack:
             ):
                 raise ValueError("indexed SVG path signed mappings are inconsistent")
             paths.append(RegisteredSlicePath(MappingProxyType(atlas_ids), fill_rule, d))
-        if not paths:
+        if not paths and fragment.strip():
             raise ValueError("indexed SVG slice contains no paths")
         slices.append(RegisteredSlice(slice_index, world_coordinate, tuple(paths)))
     return IndexedSvgPack(projection, pack_id, tuple(slices))

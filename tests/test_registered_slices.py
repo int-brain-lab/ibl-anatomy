@@ -194,6 +194,11 @@ def test_indexed_svg_decodes_concatenated_path_fragments() -> None:
     assert [path.d for path in decoded.slices[0].paths] == ["M0 0Z", "M1 1Z"]
 
 
+def test_indexed_svg_decodes_empty_fragment() -> None:
+    decoded = _decode_indexed_svg_pack(_binary_pack(b""))
+    assert decoded.slices[0].paths == ()
+
+
 def test_indexed_svg_rejects_malformed_fragment_sequence() -> None:
     fragment = (
         b'<path fill-rule="evenodd" data-allen-id="-1" data-beryl-id="-1" '
