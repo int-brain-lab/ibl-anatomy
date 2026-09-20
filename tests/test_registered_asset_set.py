@@ -44,6 +44,7 @@ def _lock() -> dict:
         "asset_set_id": "synthetic-registered-v1",
         "reference_space_id": "allen-ccf-2017",
         "grid_id": "synthetic-10um-grid-v1",
+        "root_pack_id": "synthetic-root",
         "root_manifest": _resource(FIXTURE / "coronal.json"),
         "projections": projections,
         "provenance": {

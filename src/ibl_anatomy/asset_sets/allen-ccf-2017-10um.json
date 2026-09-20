@@ -4,6 +4,7 @@
   "asset_set_id": "allen-ccf-2017-10um-registered-20260908",
   "reference_space_id": "allen-ccf-2017",
   "grid_id": "allen-ccf-2017-10um",
+  "root_pack_id": "ibl-atlas-projections-05b9f3f85db9",
   "root_manifest": {"url": "https://ephys-atlas.iblcore.org/atlas/projections/ibl-atlas-projections-05b9f3f85db9/manifest.json", "bytes": 7432, "sha256": "5c6ad6fb49b8ad9281c954c3fc7948300997b60b98097043dbe6d26ddc5b8a46"},
   "projections": {
     "coronal": {"slice_count": 1320, "slice_shape": [1140, 800], "inventory_sha256": "55f73d9b792835062e0fca0892cad638ab85f0d04e736ee0ec0950c1452999d7"},

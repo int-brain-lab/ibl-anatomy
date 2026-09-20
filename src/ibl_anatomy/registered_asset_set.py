@@ -37,6 +37,7 @@ class RegisteredAssetSet:
     asset_set_id: str
     reference_space_id: str
     grid_id: str
+    root_pack_id: str
     root_manifest: RegisteredResource
     projections: dict[str, RegisteredProjectionExpectation]
     annotation_source: RegisteredResource
@@ -59,7 +60,7 @@ def _resource(value: Any, label: str) -> RegisteredResource:
 
 
 def parse_registered_asset_set(value: Any) -> RegisteredAssetSet:
-    required = {"format", "schema_version", "asset_set_id", "reference_space_id", "grid_id", "root_manifest", "projections", "provenance"}
+    required = {"format", "schema_version", "asset_set_id", "reference_space_id", "grid_id", "root_pack_id", "root_manifest", "projections", "provenance"}
     if not isinstance(value, dict) or set(value) != required:
         raise ValueError("registered asset-set fields differ")
     if value["format"] != "ibl-atlas-registered-asset-set-v1" or value["schema_version"] != "1.0":
@@ -84,7 +85,7 @@ def parse_registered_asset_set(value: Any) -> RegisteredAssetSet:
     for key in ("terms_url", "citation_url"):
         if not isinstance(provenance[key], str) or urllib.parse.urlparse(provenance[key]).scheme not in {"http", "https"}:
             raise ValueError(f"{key} is invalid")
-    return RegisteredAssetSet(value["asset_set_id"], value["reference_space_id"], value["grid_id"], _resource(value["root_manifest"], "root manifest"), parsed, _resource(provenance["annotation_source"], "annotation source"), provenance["lut_recipe"], provenance["terms_url"], provenance["citation_url"])
+    return RegisteredAssetSet(value["asset_set_id"], value["reference_space_id"], value["grid_id"], value["root_pack_id"], _resource(value["root_manifest"], "root manifest"), parsed, _resource(provenance["annotation_source"], "annotation source"), provenance["lut_recipe"], provenance["terms_url"], provenance["citation_url"])
 
 
 def open_registered_asset_set(path: str | Path) -> RegisteredAssetSet:
@@ -128,7 +129,7 @@ def materialize_registered_asset_set(lock: RegisteredAssetSet, target: str | Pat
         root_manifest = temporary / "manifest.json"
         _download(lock.root_manifest, root_manifest, timeout)
         root = json.loads(root_manifest.read_text(encoding="utf-8"))
-        if root.get("format") != "atlas-projection-pack-v1" or root.get("reference_space_id") != lock.reference_space_id or set(root.get("mappings", [])) != {"allen", "beryl", "cosmos"}:
+        if root.get("format") != "atlas-projection-pack-v1" or root.get("pack_id") != lock.root_pack_id or root.get("reference_space_id") != lock.reference_space_id or set(root.get("mappings", [])) != {"allen", "beryl", "cosmos"}:
             raise ValueError("projection root identity differs from lock")
         entries = {item["id"]: item for item in root.get("projections", [])}
         if set(entries) != {"coronal", "sagittal", "horizontal", "top", "swanson"}:

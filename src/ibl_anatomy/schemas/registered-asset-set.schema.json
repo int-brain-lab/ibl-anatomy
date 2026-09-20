@@ -3,13 +3,14 @@
   "$id": "https://atlas.internationalbrainlab.org/schema/v1/registered-asset-set.schema.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["format", "schema_version", "asset_set_id", "reference_space_id", "grid_id", "projections", "provenance"],
+  "required": ["format", "schema_version", "asset_set_id", "reference_space_id", "grid_id", "root_pack_id", "root_manifest", "projections", "provenance"],
   "properties": {
     "format": {"const": "ibl-atlas-registered-asset-set-v1"},
     "schema_version": {"const": "1.0"},
     "asset_set_id": {"type": "string", "minLength": 1},
     "reference_space_id": {"type": "string", "minLength": 1},
     "grid_id": {"type": "string", "minLength": 1},
+    "root_pack_id": {"type": "string", "minLength": 1},
     "projections": {
       "type": "object", "additionalProperties": false,
       "required": ["coronal", "sagittal", "horizontal"],
