@@ -1,0 +1,36 @@
+{
+  "format": "ibl-reference-surface-v1",
+  "schema_version": "1.0",
+  "asset_id": "allen-ccf-2017-root-400100fd2e162f86",
+  "reference_space_id": "allen-ccf-2017",
+  "role": "brain-envelope",
+  "variant": "source-native",
+  "source_allen_id": 997,
+  "source": {
+    "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/997.obj",
+    "bytes": 6825611,
+    "sha256": "400100fd2e162f864b928a01fbcfbdcf34aa1a47bdde11f042be2442c77951eb"
+  },
+  "coordinate_system": {
+    "units": "um",
+    "world_axes": ["ml", "ap", "dv"],
+    "source_axes": ["ap", "dv", "ml"],
+    "source_to_world_um": [
+      [0, 0, 1, -5739],
+      [-1, 0, 0, 5400],
+      [0, -1, 0, 332],
+      [0, 0, 0, 1]
+    ]
+  },
+  "preparation": {
+    "geometry": "source positions and triangles unchanged",
+    "normals": "source vertex normals, normalized after world transform",
+    "smoothing": false,
+    "decimation": false
+  },
+  "expectations": {
+    "vertices": 49324,
+    "triangles": 98638,
+    "boundary_edges": 6
+  }
+}

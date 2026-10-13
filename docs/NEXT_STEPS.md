@@ -1,5 +1,25 @@
 # Immediate cross-repository steps
 
+## Allen reference envelope — October 13 2026
+
+Branch `feature/allen-reference-envelope` adds the companion Allen root-997
+surface lock and offline loader. This is the shared default for whole-brain
+display; D070 remains the reference regional inventory, without changed bytes
+or identities. No post-smoothing, decimation or hole repair is applied.
+
+The explicit materializer downloads the hash-pinned original OBJ or verifies
+a supplied local copy. Source size, SHA256, counts, triangle topology and
+rigid world transform are checked before owned ML/AP/DV µm arrays are returned.
+The reference surface has 49,324 vertices, 98,638 triangles and six open
+boundary edges; it must not silently replace scientific voxel computations.
+Annotation-boundary variants remain explicit, with their own grid/recipe
+provenance. Runtime consumers never download or generate a fallback.
+
+Validation: 136 tests pass with zero skips, including the pinned real root
+source. Source and wheel builds pass; the wheel includes the companion lock.
+The source OBJ and derived numeric artifacts remain outside Git. The paper
+media and `ibl-datoviz` adapter are the first envelope consumers.
+
 Status: active near-term work plan, captured on 2026-09-14.
 
 Current checkpoint:

@@ -18,6 +18,14 @@ from .intensity_blocks import (
     open_intensity_block_pack,
 )
 from .mesh_pack import MeshComponentRange, MeshGeometry, MeshPack, open_mesh_pack
+from .surface_asset import (
+    SurfaceAsset,
+    SurfaceGeometry,
+    bundled_surface_asset,
+    load_surface_asset,
+    materialize_surface_asset,
+    parse_surface_asset,
+)
 from .regions import (
     AtlasRegion,
     AtlasRegionCatalog,
@@ -53,6 +61,12 @@ from .volume_pack import (
 )
 
 __all__ = [
+    "SurfaceAsset",
+    "SurfaceGeometry",
+    "bundled_surface_asset",
+    "load_surface_asset",
+    "materialize_surface_asset",
+    "parse_surface_asset",
     "AtlasAssetSet",
     "AnatomyPack",
     "AtlasRegion",

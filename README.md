@@ -52,6 +52,37 @@ uv run pytest -q
 uv build
 ```
 
+## Whole-brain display envelope
+
+The shared default for anatomical display is the original Allen reference
+surface, with no additional geometry smoothing. The companion root-997 lock
+is separate from the D070 regional inventory. Numeric data stays outside Git.
+
+```python
+from ibl_anatomy import materialize_surface_asset, load_surface_asset
+
+# Explicit preparation downloads and verifies the pinned 6.8 MB Allen OBJ.
+surface = materialize_surface_asset("build/allen-root")
+# Later reads are offline and verify the same source identity.
+surface = load_surface_asset("build/allen-root")
+```
+
+Use `source_path=` when materializing an existing local copy of `997.obj`.
+The destination must be new; preparation never overwrites or repairs an asset.
+The loader returns owned `positions_um`, `normals` and flattened uint32
+`indices`, plus its asset identity. Positions are already ML/AP/DV µm; do not
+apply the source-to-world affine again. Source normals are transformed and
+normalized, while positions and triangles receive no smoothing or decimation.
+
+The reference root has 49,324 vertices, 98,638 triangles and six open boundary
+edges. It is a display reference, not a watertight solid for containment or
+distance calculations. Scientific voxel labels and trajectory operations remain
+in `iblatlas`. Annotation-derived surfaces are explicit diagnostic alternatives,
+identified by their grid, mask and reconstruction recipe; they are not a silent
+fallback when the default asset is missing. Existing regional D070 geometry
+and selection identities are unchanged. The source is the
+[Allen CCF 2017 structure-mesh archive](https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/).
+
 ## Read a local mesh pack
 
 ```python
