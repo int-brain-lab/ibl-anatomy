@@ -26,7 +26,7 @@ Status: active near-term work plan, captured on 2026-09-14.
 
 Branch `feature/region-selector-contract` adds the language-neutral v1 behavior
 contract shared by the Allen, Beryl, and Cosmos region selectors. The packaged
-schema and 11 reviewed scenarios (51 transitions) cover Unicode search and
+schema and 12 reviewed scenarios (51 transitions) cover Unicode search and
 ECMAScript trimming, retained hierarchy and collapse restoration, ranked values,
 signed identities, mapping eligibility, ordered selection, range selection,
 keyboard focus, and hover. The Python package exposes the resources through
@@ -37,7 +37,7 @@ command; it does not add a selector runtime or dependency. See
 Validation: 138 tests passed, with one existing skip because no real surface
 source is configured. The wheel build included all three contract JSON resources;
 a clean target install loaded the traces through `importlib.resources`. Web and
-Python model conformance passed all 12 scenarios. No commit was pushed.
+Python model conformance passed all 12 scenarios. The contract branch is ready for the authorized coordinated push; consumer publication and platform validation remain separate.
 
 Current checkpoint:
 
