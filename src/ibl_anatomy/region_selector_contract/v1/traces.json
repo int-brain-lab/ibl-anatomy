@@ -1,0 +1,1881 @@
+{
+  "contract": "ibl-region-selector",
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "search-and-collapse-restoration",
+      "regions": [
+        {
+          "id": "root",
+          "parentId": null,
+          "atlasId": 1,
+          "acronym": "R",
+          "name": "Specimen",
+          "mappingMember": true
+        },
+        {
+          "id": "alpha",
+          "parentId": "root",
+          "atlasId": 2,
+          "acronym": "AL",
+          "name": "Alpha group",
+          "mappingMember": true
+        },
+        {
+          "id": "a1",
+          "parentId": "alpha",
+          "atlasId": 3,
+          "acronym": "A1",
+          "name": "Alpha nucleus",
+          "mappingMember": true
+        },
+        {
+          "id": "a2",
+          "parentId": "alpha",
+          "atlasId": 4,
+          "acronym": "A2",
+          "name": "Other nucleus",
+          "mappingMember": true
+        },
+        {
+          "id": "beta",
+          "parentId": "root",
+          "atlasId": 5,
+          "acronym": "B",
+          "name": "Beta group",
+          "mappingMember": true
+        },
+        {
+          "id": "b1",
+          "parentId": "beta",
+          "atlasId": 6,
+          "acronym": "B1",
+          "name": "Beta nucleus",
+          "mappingMember": true
+        }
+      ],
+      "initial": {
+        "query": "",
+        "collapsed": [
+          "beta"
+        ],
+        "selected": [],
+        "order": "anatomy",
+        "multiple": false,
+        "focus": null,
+        "anchor": null,
+        "values": {}
+      },
+      "actions": [
+        {
+          "op": "query",
+          "value": "  alpha  "
+        },
+        {
+          "op": "query",
+          "value": ""
+        },
+        {
+          "op": "collapse",
+          "id": "alpha"
+        },
+        {
+          "op": "collapseAll"
+        },
+        {
+          "op": "expandAll"
+        }
+      ],
+      "expected": [
+        {
+          "matches": [
+            "alpha",
+            "a1"
+          ],
+          "retained": [
+            "root",
+            "alpha",
+            "a1",
+            "a2"
+          ],
+          "visible": [
+            "root",
+            "alpha",
+            "a1",
+            "a2"
+          ],
+          "expanded": [
+            "root",
+            "alpha"
+          ],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "retained": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "visible": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta"
+          ],
+          "expanded": [
+            "root",
+            "alpha"
+          ],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "retained": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "visible": [
+            "root",
+            "alpha",
+            "beta"
+          ],
+          "expanded": [
+            "root"
+          ],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "retained": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "visible": [
+            "root"
+          ],
+          "expanded": [],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "retained": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "visible": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "expanded": [
+            "root",
+            "alpha",
+            "beta"
+          ],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        }
+      ]
+    },
+    {
+      "id": "ranked-range-and-host-selection-order",
+      "regions": [
+        {
+          "id": "root",
+          "parentId": null,
+          "atlasId": 1,
+          "acronym": "R",
+          "name": "Specimen",
+          "mappingMember": true
+        },
+        {
+          "id": "alpha",
+          "parentId": "root",
+          "atlasId": 2,
+          "acronym": "AL",
+          "name": "Alpha group",
+          "mappingMember": true
+        },
+        {
+          "id": "a1",
+          "parentId": "alpha",
+          "atlasId": 3,
+          "acronym": "A1",
+          "name": "Alpha low",
+          "mappingMember": true
+        },
+        {
+          "id": "a2",
+          "parentId": "alpha",
+          "atlasId": 4,
+          "acronym": "A2",
+          "name": "Alpha high",
+          "mappingMember": true
+        },
+        {
+          "id": "beta",
+          "parentId": "root",
+          "atlasId": 5,
+          "acronym": "B",
+          "name": "Beta group",
+          "mappingMember": true
+        },
+        {
+          "id": "b1",
+          "parentId": "beta",
+          "atlasId": 6,
+          "acronym": "B1",
+          "name": "Beta value",
+          "mappingMember": true
+        }
+      ],
+      "initial": {
+        "query": "",
+        "collapsed": [],
+        "selected": [
+          "a2"
+        ],
+        "order": "anatomy",
+        "multiple": true,
+        "focus": "a2",
+        "anchor": "a2",
+        "values": {
+          "a1": 2,
+          "a2": 9,
+          "b1": 5
+        }
+      },
+      "actions": [
+        {
+          "op": "order",
+          "value": "value-desc"
+        },
+        {
+          "op": "activate",
+          "id": "a1",
+          "ctrl": true
+        },
+        {
+          "op": "activate",
+          "id": "a2",
+          "shift": true,
+          "ctrl": true
+        },
+        {
+          "op": "selection",
+          "selected": [
+            "b1",
+            "a2"
+          ]
+        },
+        {
+          "op": "query",
+          "value": "Alpha"
+        },
+        {
+          "op": "query",
+          "value": ""
+        }
+      ],
+      "expected": [
+        {
+          "matches": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "retained": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "visible": [
+            "a2",
+            "b1",
+            "a1"
+          ],
+          "expanded": [],
+          "selected": [
+            "a2"
+          ],
+          "focus": "a2",
+          "anchor": "a2",
+          "requestedOrder": "value-desc",
+          "order": "value-desc",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "retained": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "visible": [
+            "a2",
+            "b1",
+            "a1"
+          ],
+          "expanded": [],
+          "selected": [
+            "a2",
+            "a1"
+          ],
+          "focus": "a2",
+          "anchor": "a1",
+          "requestedOrder": "value-desc",
+          "order": "value-desc",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "retained": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "visible": [
+            "a2",
+            "b1",
+            "a1"
+          ],
+          "expanded": [],
+          "selected": [
+            "a2",
+            "a1"
+          ],
+          "focus": "a2",
+          "anchor": "a1",
+          "requestedOrder": "value-desc",
+          "order": "value-desc",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "retained": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "visible": [
+            "a2",
+            "b1",
+            "a1"
+          ],
+          "expanded": [],
+          "selected": [
+            "b1",
+            "a2"
+          ],
+          "focus": "a2",
+          "anchor": "b1",
+          "requestedOrder": "value-desc",
+          "order": "value-desc",
+          "hover": null
+        },
+        {
+          "matches": [
+            "alpha",
+            "a1",
+            "a2"
+          ],
+          "retained": [
+            "root",
+            "alpha",
+            "a1",
+            "a2"
+          ],
+          "visible": [
+            "root",
+            "alpha",
+            "a1",
+            "a2"
+          ],
+          "expanded": [
+            "root",
+            "alpha"
+          ],
+          "selected": [
+            "b1",
+            "a2"
+          ],
+          "focus": "a2",
+          "anchor": "b1",
+          "requestedOrder": "value-desc",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "retained": [
+            "root",
+            "alpha",
+            "a1",
+            "a2",
+            "beta",
+            "b1"
+          ],
+          "visible": [
+            "a2",
+            "b1",
+            "a1"
+          ],
+          "expanded": [],
+          "selected": [
+            "b1",
+            "a2"
+          ],
+          "focus": "a2",
+          "anchor": "b1",
+          "requestedOrder": "value-desc",
+          "order": "value-desc",
+          "hover": null
+        }
+      ]
+    },
+    {
+      "id": "unicode-default-lowercase-and-trim",
+      "regions": [
+        {
+          "id": "root",
+          "parentId": null,
+          "atlasId": 1,
+          "acronym": "R",
+          "name": "Specimen",
+          "mappingMember": true
+        },
+        {
+          "id": "insula",
+          "parentId": "root",
+          "atlasId": 2,
+          "acronym": "INS",
+          "name": "İnsula",
+          "mappingMember": true
+        }
+      ],
+      "initial": {
+        "query": "",
+        "collapsed": [
+          "root"
+        ],
+        "selected": [],
+        "order": "anatomy",
+        "multiple": false,
+        "focus": null,
+        "anchor": null,
+        "values": {}
+      },
+      "actions": [
+        {
+          "op": "query",
+          "value": "  i̇n  "
+        },
+        {
+          "op": "query",
+          "value": "﻿İNS﻿"
+        },
+        {
+          "op": "query",
+          "value": ""
+        }
+      ],
+      "expected": [
+        {
+          "matches": [
+            "insula"
+          ],
+          "retained": [
+            "root",
+            "insula"
+          ],
+          "visible": [
+            "root",
+            "insula"
+          ],
+          "expanded": [
+            "root"
+          ],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "insula"
+          ],
+          "retained": [
+            "root",
+            "insula"
+          ],
+          "visible": [
+            "root",
+            "insula"
+          ],
+          "expanded": [
+            "root"
+          ],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "insula"
+          ],
+          "retained": [
+            "root",
+            "insula"
+          ],
+          "visible": [
+            "root"
+          ],
+          "expanded": [],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        }
+      ]
+    },
+    {
+      "id": "keyboard-navigation-and-activation",
+      "regions": [
+        {
+          "id": "root",
+          "parentId": null,
+          "atlasId": 1,
+          "acronym": "R",
+          "name": "Root",
+          "mappingMember": true
+        },
+        {
+          "id": "branch",
+          "parentId": "root",
+          "atlasId": 2,
+          "acronym": "BR",
+          "name": "Branch",
+          "mappingMember": true
+        },
+        {
+          "id": "leaf1",
+          "parentId": "branch",
+          "atlasId": 3,
+          "acronym": "L1",
+          "name": "Leaf one",
+          "mappingMember": true
+        },
+        {
+          "id": "leaf2",
+          "parentId": "branch",
+          "atlasId": 4,
+          "acronym": "L2",
+          "name": "Leaf two",
+          "mappingMember": true
+        },
+        {
+          "id": "other",
+          "parentId": "root",
+          "atlasId": 5,
+          "acronym": "OT",
+          "name": "Other",
+          "mappingMember": true
+        }
+      ],
+      "initial": {
+        "query": "",
+        "collapsed": [
+          "branch"
+        ],
+        "selected": [],
+        "order": "anatomy",
+        "multiple": false,
+        "focus": "root",
+        "anchor": null,
+        "values": {}
+      },
+      "actions": [
+        {
+          "op": "key",
+          "key": "ArrowRight"
+        },
+        {
+          "op": "key",
+          "key": "ArrowRight"
+        },
+        {
+          "op": "key",
+          "key": "ArrowDown"
+        },
+        {
+          "op": "key",
+          "key": "Enter"
+        },
+        {
+          "op": "key",
+          "key": "End"
+        },
+        {
+          "op": "key",
+          "key": "Home"
+        }
+      ],
+      "expected": [
+        {
+          "matches": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "visible": [
+            "root",
+            "branch",
+            "other"
+          ],
+          "expanded": [
+            "root"
+          ],
+          "selected": [],
+          "focus": "branch",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "visible": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "expanded": [
+            "root",
+            "branch"
+          ],
+          "selected": [],
+          "focus": "branch",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "visible": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "expanded": [
+            "root",
+            "branch"
+          ],
+          "selected": [],
+          "focus": "leaf1",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "visible": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "expanded": [
+            "root",
+            "branch"
+          ],
+          "selected": [
+            "leaf1"
+          ],
+          "focus": "leaf1",
+          "anchor": "leaf1",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "visible": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "expanded": [
+            "root",
+            "branch"
+          ],
+          "selected": [
+            "leaf1"
+          ],
+          "focus": "other",
+          "anchor": "leaf1",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "visible": [
+            "root",
+            "branch",
+            "leaf1",
+            "leaf2",
+            "other"
+          ],
+          "expanded": [
+            "root",
+            "branch"
+          ],
+          "selected": [
+            "leaf1"
+          ],
+          "focus": "root",
+          "anchor": "leaf1",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        }
+      ]
+    },
+    {
+      "id": "mapping-membership-and-branch-hover",
+      "regions": [
+        {
+          "id": "root",
+          "parentId": null,
+          "atlasId": 1,
+          "acronym": "R",
+          "name": "Root",
+          "mappingMember": true
+        },
+        {
+          "id": "branch",
+          "parentId": "root",
+          "atlasId": 2,
+          "acronym": "BR",
+          "name": "Branch",
+          "mappingMember": true
+        },
+        {
+          "id": "mapped",
+          "parentId": "branch",
+          "atlasId": 3,
+          "acronym": "M",
+          "name": "Mapped leaf",
+          "mappingMember": true
+        },
+        {
+          "id": "auxiliary",
+          "parentId": "branch",
+          "atlasId": 4,
+          "acronym": "AUX",
+          "name": "Visible auxiliary",
+          "mappingMember": false
+        }
+      ],
+      "initial": {
+        "query": "",
+        "collapsed": [],
+        "selected": [],
+        "order": "anatomy",
+        "multiple": true,
+        "focus": "root",
+        "anchor": null,
+        "values": {}
+      },
+      "actions": [
+        {
+          "op": "hover",
+          "id": "branch"
+        },
+        {
+          "op": "activate",
+          "id": "auxiliary"
+        },
+        {
+          "op": "activate",
+          "id": "mapped"
+        },
+        {
+          "op": "hover",
+          "id": null
+        }
+      ],
+      "expected": [
+        {
+          "matches": [
+            "root",
+            "branch",
+            "mapped",
+            "auxiliary"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "mapped",
+            "auxiliary"
+          ],
+          "visible": [
+            "root",
+            "branch",
+            "mapped",
+            "auxiliary"
+          ],
+          "expanded": [
+            "root",
+            "branch"
+          ],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": "branch"
+        },
+        {
+          "matches": [
+            "root",
+            "branch",
+            "mapped",
+            "auxiliary"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "mapped",
+            "auxiliary"
+          ],
+          "visible": [
+            "root",
+            "branch",
+            "mapped",
+            "auxiliary"
+          ],
+          "expanded": [
+            "root",
+            "branch"
+          ],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": "branch"
+        },
+        {
+          "matches": [
+            "root",
+            "branch",
+            "mapped",
+            "auxiliary"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "mapped",
+            "auxiliary"
+          ],
+          "visible": [
+            "root",
+            "branch",
+            "mapped",
+            "auxiliary"
+          ],
+          "expanded": [
+            "root",
+            "branch"
+          ],
+          "selected": [
+            "mapped"
+          ],
+          "focus": "root",
+          "anchor": "mapped",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": "branch"
+        },
+        {
+          "matches": [
+            "root",
+            "branch",
+            "mapped",
+            "auxiliary"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "mapped",
+            "auxiliary"
+          ],
+          "visible": [
+            "root",
+            "branch",
+            "mapped",
+            "auxiliary"
+          ],
+          "expanded": [
+            "root",
+            "branch"
+          ],
+          "selected": [
+            "mapped"
+          ],
+          "focus": "root",
+          "anchor": "mapped",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        }
+      ]
+    },
+    {
+      "id": "single-selection-selected-click-toggles",
+      "regions": [
+        {
+          "id": "root",
+          "parentId": null,
+          "atlasId": 1,
+          "acronym": "R",
+          "name": "Root",
+          "mappingMember": true
+        },
+        {
+          "id": "leaf",
+          "parentId": "root",
+          "atlasId": -17,
+          "acronym": "L",
+          "name": "Leaf",
+          "mappingMember": true
+        }
+      ],
+      "initial": {
+        "query": "",
+        "collapsed": [],
+        "selected": [],
+        "order": "anatomy",
+        "multiple": false,
+        "focus": "leaf",
+        "anchor": null,
+        "values": {}
+      },
+      "actions": [
+        {
+          "op": "activate",
+          "id": "leaf"
+        },
+        {
+          "op": "activate",
+          "id": "leaf"
+        }
+      ],
+      "expected": [
+        {
+          "matches": [
+            "root",
+            "leaf"
+          ],
+          "retained": [
+            "root",
+            "leaf"
+          ],
+          "visible": [
+            "root",
+            "leaf"
+          ],
+          "expanded": [
+            "root"
+          ],
+          "selected": [
+            "leaf"
+          ],
+          "focus": "leaf",
+          "anchor": "leaf",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "leaf"
+          ],
+          "retained": [
+            "root",
+            "leaf"
+          ],
+          "visible": [
+            "root",
+            "leaf"
+          ],
+          "expanded": [
+            "root"
+          ],
+          "selected": [],
+          "focus": "leaf",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        }
+      ]
+    },
+    {
+      "id": "search-required-ancestor-and-branch-activation",
+      "regions": [
+        {
+          "id": "root",
+          "parentId": null,
+          "atlasId": 1,
+          "acronym": "R",
+          "name": "Root",
+          "mappingMember": true
+        },
+        {
+          "id": "branch",
+          "parentId": "root",
+          "atlasId": 2,
+          "acronym": "BR",
+          "name": "Match branch",
+          "mappingMember": true
+        },
+        {
+          "id": "leaf",
+          "parentId": "branch",
+          "atlasId": 3,
+          "acronym": "L",
+          "name": "Leaf",
+          "mappingMember": true
+        }
+      ],
+      "initial": {
+        "query": "",
+        "collapsed": [
+          "root",
+          "branch"
+        ],
+        "selected": [],
+        "order": "anatomy",
+        "multiple": false,
+        "focus": null,
+        "anchor": null,
+        "values": {}
+      },
+      "actions": [
+        {
+          "op": "query",
+          "value": "match"
+        },
+        {
+          "op": "collapse",
+          "id": "root"
+        },
+        {
+          "op": "activate",
+          "id": "branch"
+        },
+        {
+          "op": "activate",
+          "id": "branch"
+        },
+        {
+          "op": "query",
+          "value": ""
+        }
+      ],
+      "expected": [
+        {
+          "matches": [
+            "branch"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "leaf"
+          ],
+          "visible": [
+            "root",
+            "branch",
+            "leaf"
+          ],
+          "expanded": [
+            "root",
+            "branch"
+          ],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "branch"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "leaf"
+          ],
+          "visible": [
+            "root",
+            "branch",
+            "leaf"
+          ],
+          "expanded": [
+            "root",
+            "branch"
+          ],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "branch"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "leaf"
+          ],
+          "visible": [
+            "root",
+            "branch"
+          ],
+          "expanded": [
+            "root"
+          ],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "branch"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "leaf"
+          ],
+          "visible": [
+            "root",
+            "branch",
+            "leaf"
+          ],
+          "expanded": [
+            "root",
+            "branch"
+          ],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "branch",
+            "leaf"
+          ],
+          "retained": [
+            "root",
+            "branch",
+            "leaf"
+          ],
+          "visible": [
+            "root"
+          ],
+          "expanded": [],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        }
+      ]
+    },
+    {
+      "id": "ranked-zero-null-and-catalog-ties",
+      "regions": [
+        {
+          "id": "root",
+          "parentId": null,
+          "atlasId": 1,
+          "acronym": "R",
+          "name": "Root",
+          "mappingMember": true
+        },
+        {
+          "id": "p",
+          "parentId": "root",
+          "atlasId": 2,
+          "acronym": "P",
+          "name": "Parent",
+          "mappingMember": true
+        },
+        {
+          "id": "z1",
+          "parentId": "p",
+          "atlasId": 3,
+          "acronym": "Z1",
+          "name": "Zero one",
+          "mappingMember": true
+        },
+        {
+          "id": "nil",
+          "parentId": "p",
+          "atlasId": 4,
+          "acronym": "N",
+          "name": "No value",
+          "mappingMember": true
+        },
+        {
+          "id": "z2",
+          "parentId": "p",
+          "atlasId": 5,
+          "acronym": "Z2",
+          "name": "Zero two",
+          "mappingMember": true
+        }
+      ],
+      "initial": {
+        "query": "",
+        "collapsed": [],
+        "selected": [],
+        "order": "value-asc",
+        "multiple": false,
+        "focus": "z1",
+        "anchor": null,
+        "values": {
+          "z1": 0,
+          "nil": null,
+          "z2": 0
+        }
+      },
+      "actions": [
+        {
+          "op": "order",
+          "value": "value-desc"
+        }
+      ],
+      "expected": [
+        {
+          "matches": [
+            "root",
+            "p",
+            "z1",
+            "nil",
+            "z2"
+          ],
+          "retained": [
+            "root",
+            "p",
+            "z1",
+            "nil",
+            "z2"
+          ],
+          "visible": [
+            "z1",
+            "z2",
+            "nil"
+          ],
+          "expanded": [],
+          "selected": [],
+          "focus": "z1",
+          "anchor": null,
+          "requestedOrder": "value-desc",
+          "order": "value-desc",
+          "hover": null
+        }
+      ]
+    },
+    {
+      "id": "range-target-hidden-by-search-is-inert",
+      "regions": [
+        {
+          "id": "root",
+          "parentId": null,
+          "atlasId": 1,
+          "acronym": "R",
+          "name": "Root",
+          "mappingMember": true
+        },
+        {
+          "id": "p",
+          "parentId": "root",
+          "atlasId": 2,
+          "acronym": "P",
+          "name": "Parent",
+          "mappingMember": true
+        },
+        {
+          "id": "a",
+          "parentId": "p",
+          "atlasId": 3,
+          "acronym": "A",
+          "name": "Apple",
+          "mappingMember": true
+        },
+        {
+          "id": "b",
+          "parentId": "p",
+          "atlasId": 4,
+          "acronym": "B",
+          "name": "Berry",
+          "mappingMember": true
+        },
+        {
+          "id": "c",
+          "parentId": "p",
+          "atlasId": 5,
+          "acronym": "C",
+          "name": "Cherry",
+          "mappingMember": true
+        }
+      ],
+      "initial": {
+        "query": "",
+        "collapsed": [],
+        "selected": [
+          "c"
+        ],
+        "order": "anatomy",
+        "multiple": true,
+        "focus": "c",
+        "anchor": "c",
+        "values": {}
+      },
+      "actions": [
+        {
+          "op": "query",
+          "value": "Cherry"
+        },
+        {
+          "op": "activate",
+          "id": "a",
+          "shift": true
+        }
+      ],
+      "expected": [
+        {
+          "matches": [
+            "c"
+          ],
+          "retained": [
+            "root",
+            "p",
+            "c"
+          ],
+          "visible": [
+            "root",
+            "p",
+            "c"
+          ],
+          "expanded": [
+            "root",
+            "p"
+          ],
+          "selected": [
+            "c"
+          ],
+          "focus": "c",
+          "anchor": "c",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "c"
+          ],
+          "retained": [
+            "root",
+            "p",
+            "c"
+          ],
+          "visible": [
+            "root",
+            "p",
+            "c"
+          ],
+          "expanded": [
+            "root",
+            "p"
+          ],
+          "selected": [
+            "c"
+          ],
+          "focus": "c",
+          "anchor": "c",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        }
+      ]
+    },
+    {
+      "id": "grey-root-projection-and-signed-region-ids",
+      "regions": [
+        {
+          "id": "8",
+          "parentId": null,
+          "atlasId": 8,
+          "acronym": "grey",
+          "name": "Grey matter root",
+          "mappingMember": true
+        },
+        {
+          "id": "10",
+          "parentId": "8",
+          "atlasId": 10,
+          "acronym": "CH",
+          "name": "Cortex right",
+          "mappingMember": true
+        },
+        {
+          "id": "-10",
+          "parentId": "8",
+          "atlasId": -10,
+          "acronym": "CH",
+          "name": "Cortex left",
+          "mappingMember": true
+        }
+      ],
+      "initial": {
+        "query": "",
+        "collapsed": [],
+        "selected": [],
+        "order": "anatomy",
+        "multiple": false,
+        "focus": null,
+        "anchor": null,
+        "values": {}
+      },
+      "actions": [
+        {
+          "op": "query",
+          "value": "cortex"
+        },
+        {
+          "op": "selection",
+          "selected": [
+            "-10",
+            "10"
+          ]
+        }
+      ],
+      "expected": [
+        {
+          "matches": [
+            "10",
+            "-10"
+          ],
+          "retained": [
+            "8",
+            "10",
+            "-10"
+          ],
+          "visible": [
+            "10",
+            "-10"
+          ],
+          "expanded": [],
+          "selected": [],
+          "focus": "10",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "10",
+            "-10"
+          ],
+          "retained": [
+            "8",
+            "10",
+            "-10"
+          ],
+          "visible": [
+            "10",
+            "-10"
+          ],
+          "expanded": [],
+          "selected": [
+            "-10",
+            "10"
+          ],
+          "focus": "10",
+          "anchor": "10",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        }
+      ]
+    },
+    {
+      "id": "external-selection-order-and-unmapped-hover",
+      "regions": [
+        {
+          "id": "root",
+          "parentId": null,
+          "atlasId": 1,
+          "acronym": "R",
+          "name": "Root",
+          "mappingMember": true
+        },
+        {
+          "id": "leaf",
+          "parentId": "root",
+          "atlasId": 2,
+          "acronym": "L",
+          "name": "Leaf",
+          "mappingMember": true
+        },
+        {
+          "id": "aux",
+          "parentId": "root",
+          "atlasId": -2,
+          "acronym": "A",
+          "name": "Auxiliary",
+          "mappingMember": false
+        }
+      ],
+      "initial": {
+        "query": "",
+        "collapsed": [],
+        "selected": [],
+        "order": "anatomy",
+        "multiple": false,
+        "focus": "root",
+        "anchor": null,
+        "values": {}
+      },
+      "actions": [
+        {
+          "op": "hover",
+          "id": "aux"
+        },
+        {
+          "op": "selection",
+          "selected": [
+            "aux",
+            "leaf"
+          ]
+        },
+        {
+          "op": "hover",
+          "id": null
+        }
+      ],
+      "expected": [
+        {
+          "matches": [
+            "root",
+            "leaf",
+            "aux"
+          ],
+          "retained": [
+            "root",
+            "leaf",
+            "aux"
+          ],
+          "visible": [
+            "root",
+            "leaf",
+            "aux"
+          ],
+          "expanded": [
+            "root"
+          ],
+          "selected": [],
+          "focus": "root",
+          "anchor": null,
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "leaf",
+            "aux"
+          ],
+          "retained": [
+            "root",
+            "leaf",
+            "aux"
+          ],
+          "visible": [
+            "root",
+            "leaf",
+            "aux"
+          ],
+          "expanded": [
+            "root"
+          ],
+          "selected": [
+            "aux",
+            "leaf"
+          ],
+          "focus": "root",
+          "anchor": "leaf",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "root",
+            "leaf",
+            "aux"
+          ],
+          "retained": [
+            "root",
+            "leaf",
+            "aux"
+          ],
+          "visible": [
+            "root",
+            "leaf",
+            "aux"
+          ],
+          "expanded": [
+            "root"
+          ],
+          "selected": [
+            "aux",
+            "leaf"
+          ],
+          "focus": "root",
+          "anchor": "leaf",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        }
+      ]
+    }
+  ]
+}

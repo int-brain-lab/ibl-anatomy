@@ -1,0 +1,8 @@
+{
+  "contract": "ibl-region-selector",
+  "version": 1,
+  "files": {
+    "schema.json": "47c9452083d3b16092cc5a016fd709f9ad6a1db40f7fd66b19b41b0cdb5f8fed",
+    "traces.json": "740922bb6e8ae38f7ca90fb0a7105883bcf36ab5faf2027ceb404cc013d510ca"
+  }
+}

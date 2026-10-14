@@ -22,6 +22,23 @@ media and `ibl-datoviz` adapter are the first envelope consumers.
 
 Status: active near-term work plan, captured on 2026-09-14.
 
+## Region selector behavior contract — October 14 2026
+
+Branch `feature/region-selector-contract` adds the language-neutral v1 behavior
+contract shared by the Allen, Beryl, and Cosmos region selectors. The packaged
+schema and 11 reviewed scenarios (39 transitions) cover Unicode search and
+ECMAScript trimming, retained hierarchy and collapse restoration, ranked values,
+signed identities, mapping eligibility, ordered selection, range selection,
+keyboard focus, and hover. The Python package exposes the resources through
+`importlib.resources` and includes an explicit source/destination sync and check
+command; it does not add a selector runtime or dependency. See
+`REGION_SELECTOR_CONTRACT.md`.
+
+Validation: 138 tests passed, with one existing skip because no real surface
+source is configured. The wheel build included all three contract JSON resources;
+a clean target install loaded the traces through `importlib.resources`. Web and
+Python model conformance passed all 11 scenarios. No commit was pushed.
+
 Current checkpoint:
 
 - `ibl-anatomy` Spike 001 is implemented on `main`; the raw EAM3 reader,

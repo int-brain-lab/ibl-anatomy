@@ -30,6 +30,6 @@ Reference-space identity, grid identity, ontology and mapping provenance, geomet
 
 ## Supported contracts
 
-The package currently validates `ibl-atlas-regions-v1`, `atlas-mesh-pack-v1`, `ibl-atlas-volume-pack-v1`, `ibl-atlas-intensity-blocks-v1`, registered projection/index documents, and the legacy `anatomy-slice-pack-v2` integration surface. Each supported family has deterministic fixtures under `tests/fixtures/` and focused tests under `tests/`.
+The package currently validates `ibl-atlas-regions-v1`, `atlas-mesh-pack-v1`, `ibl-atlas-volume-pack-v1`, `ibl-atlas-intensity-blocks-v1`, registered projection/index documents, and the legacy `anatomy-slice-pack-v2` integration surface. The renderer-independent `ibl-region-selector` v1 behavior contract is packaged at `ibl_anatomy/region_selector_contract/v1/`; its schema, 11 reviewed scenarios, and use are documented in [`REGION_SELECTOR_CONTRACT.md`](REGION_SELECTOR_CONTRACT.md). Each contract family has deterministic fixtures under `tests/fixtures/` or its package-resource directory and focused tests under `tests/`.
 
 The Python reader is shared by Python consumers. Browser consumers use language-native adapters against the same schemas, immutable bytes, hashes, and parity vectors; this repository does not impose a cross-language runtime.
