@@ -1876,6 +1876,402 @@
           "hover": null
         }
       ]
+    },
+    {
+      "id": "keyboard-modifiers-and-hidden-input-lifecycle",
+      "regions": [
+        {
+          "id": "p",
+          "parentId": null,
+          "atlasId": -10,
+          "acronym": "P",
+          "name": "Parent",
+          "mappingMember": true
+        },
+        {
+          "id": "a",
+          "parentId": "p",
+          "atlasId": -11,
+          "acronym": "A",
+          "name": "First leaf",
+          "mappingMember": true
+        },
+        {
+          "id": "b",
+          "parentId": "p",
+          "atlasId": -12,
+          "acronym": "B",
+          "name": "Second leaf",
+          "mappingMember": true
+        }
+      ],
+      "initial": {
+        "query": "",
+        "collapsed": [],
+        "selected": [
+          "a"
+        ],
+        "order": "anatomy",
+        "multiple": false,
+        "focus": "a",
+        "anchor": "a",
+        "values": {}
+      },
+      "actions": [
+        {
+          "op": "activate",
+          "id": "b",
+          "shift": true,
+          "keyboard": true
+        },
+        {
+          "op": "hover",
+          "id": "b"
+        },
+        {
+          "op": "collapse",
+          "id": "p"
+        },
+        {
+          "op": "hover",
+          "id": "b"
+        },
+        {
+          "op": "activate",
+          "id": "a"
+        },
+        {
+          "op": "focus",
+          "id": null
+        },
+        {
+          "op": "key",
+          "key": "ArrowDown"
+        },
+        {
+          "op": "multiple",
+          "enabled": true
+        },
+        {
+          "op": "expand",
+          "id": "p"
+        },
+        {
+          "op": "activate",
+          "id": "a"
+        },
+        {
+          "op": "query",
+          "value": "absent"
+        },
+        {
+          "op": "query",
+          "value": ""
+        }
+      ],
+      "expected": [
+        {
+          "matches": [
+            "p",
+            "a",
+            "b"
+          ],
+          "retained": [
+            "p",
+            "a",
+            "b"
+          ],
+          "visible": [
+            "p",
+            "a",
+            "b"
+          ],
+          "expanded": [
+            "p"
+          ],
+          "selected": [
+            "b"
+          ],
+          "focus": "a",
+          "anchor": "b",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "p",
+            "a",
+            "b"
+          ],
+          "retained": [
+            "p",
+            "a",
+            "b"
+          ],
+          "visible": [
+            "p",
+            "a",
+            "b"
+          ],
+          "expanded": [
+            "p"
+          ],
+          "selected": [
+            "b"
+          ],
+          "focus": "a",
+          "anchor": "b",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": "b"
+        },
+        {
+          "matches": [
+            "p",
+            "a",
+            "b"
+          ],
+          "retained": [
+            "p",
+            "a",
+            "b"
+          ],
+          "visible": [
+            "p"
+          ],
+          "expanded": [],
+          "selected": [
+            "b"
+          ],
+          "focus": "p",
+          "anchor": "b",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "p",
+            "a",
+            "b"
+          ],
+          "retained": [
+            "p",
+            "a",
+            "b"
+          ],
+          "visible": [
+            "p"
+          ],
+          "expanded": [],
+          "selected": [
+            "b"
+          ],
+          "focus": "p",
+          "anchor": "b",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "p",
+            "a",
+            "b"
+          ],
+          "retained": [
+            "p",
+            "a",
+            "b"
+          ],
+          "visible": [
+            "p"
+          ],
+          "expanded": [],
+          "selected": [
+            "b"
+          ],
+          "focus": "p",
+          "anchor": "b",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "p",
+            "a",
+            "b"
+          ],
+          "retained": [
+            "p",
+            "a",
+            "b"
+          ],
+          "visible": [
+            "p"
+          ],
+          "expanded": [],
+          "selected": [
+            "b"
+          ],
+          "focus": null,
+          "anchor": "b",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "p",
+            "a",
+            "b"
+          ],
+          "retained": [
+            "p",
+            "a",
+            "b"
+          ],
+          "visible": [
+            "p"
+          ],
+          "expanded": [],
+          "selected": [
+            "b"
+          ],
+          "focus": null,
+          "anchor": "b",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "p",
+            "a",
+            "b"
+          ],
+          "retained": [
+            "p",
+            "a",
+            "b"
+          ],
+          "visible": [
+            "p"
+          ],
+          "expanded": [],
+          "selected": [
+            "b"
+          ],
+          "focus": null,
+          "anchor": "b",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "p",
+            "a",
+            "b"
+          ],
+          "retained": [
+            "p",
+            "a",
+            "b"
+          ],
+          "visible": [
+            "p",
+            "a",
+            "b"
+          ],
+          "expanded": [
+            "p"
+          ],
+          "selected": [
+            "b"
+          ],
+          "focus": "p",
+          "anchor": "b",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "p",
+            "a",
+            "b"
+          ],
+          "retained": [
+            "p",
+            "a",
+            "b"
+          ],
+          "visible": [
+            "p",
+            "a",
+            "b"
+          ],
+          "expanded": [
+            "p"
+          ],
+          "selected": [
+            "b",
+            "a"
+          ],
+          "focus": "p",
+          "anchor": "a",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [],
+          "retained": [],
+          "visible": [],
+          "expanded": [],
+          "selected": [
+            "b",
+            "a"
+          ],
+          "focus": "p",
+          "anchor": "a",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        },
+        {
+          "matches": [
+            "p",
+            "a",
+            "b"
+          ],
+          "retained": [
+            "p",
+            "a",
+            "b"
+          ],
+          "visible": [
+            "p",
+            "a",
+            "b"
+          ],
+          "expanded": [
+            "p"
+          ],
+          "selected": [
+            "b",
+            "a"
+          ],
+          "focus": "p",
+          "anchor": "a",
+          "requestedOrder": "anatomy",
+          "order": "anatomy",
+          "hover": null
+        }
+      ]
     }
   ]
 }

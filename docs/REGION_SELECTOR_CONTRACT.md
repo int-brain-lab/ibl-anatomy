@@ -79,12 +79,12 @@ Focus is the region row receiving tree keyboard focus. Arrow Up/Down and Home/
 End move through visible rows. In anatomical order, Right expands a collapsed
 branch or focuses its first visible child; Left collapses an expanded branch or
 focuses its parent. In value order, horizontal arrows do not change focus.
-Enter and Space activate the focused row. When query, collapse, or order changes
+Enter and Space activate the focused row. Shift with keyboard activation follows ordinary activation rather than pointer range selection. Activation of a hidden row is ignored, including stale input from a previous projection. When query, collapse, or order changes
 hide the focused row, focus moves to the first visible row. If there is no visible row, the previous focus is retained.
 A direct focus action sets focus explicitly; activation alone does not move it.
 
 Hover is nullable and may refer to a branch or leaf. It describes pointer/focus
-hover supplied by the UI and is cleared explicitly with a null hover action.
+hover supplied by the UI. Only visible mapping-member rows can receive hover. Hiding a hovered row through search, folding or projection clears hover; a null hover action clears it explicitly. A null focus target ignores navigation until focus returns to a visible row.
 
 ## Conformance
 
