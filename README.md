@@ -52,6 +52,15 @@ uv run pytest -q
 uv build
 ```
 
+## Major-structure display context
+
+A shared [source-native major-structure catalog](docs/MAJOR_CONTEXT_SURFACES.md)
+provides twelve hash-pinned, explicitly bilateral Allen meshes with official
+identities, names and colors. Its ontology cut contains no ancestor/descendant
+pairs and does not claim complete anatomical coverage. Use
+`materialize_surface_catalog()` for explicit preparation and
+`load_surface_catalog()` for verified offline geometry.
+
 ## Whole-brain display envelope
 
 The shared default for anatomical display is the original Allen reference

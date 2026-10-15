@@ -1,5 +1,27 @@
 # Immediate cross-repository steps
 
+## Major-structure context — October 15 2026
+
+Implemented on `main` under the explicitly authorized first visual-gate scope:
+a narrow source-native, hash-pinned twelve-member Allen context catalog, with
+validated ontology membership and no ancestor/descendant pairs. The existing
+root-997 descriptor and loader remain compatible. The new catalog retains the
+same world affine and returns typed owned geometry through explicit atomic
+preparation and strict offline loading. No OBJ bytes are tracked.
+
+See `MAJOR_CONTEXT_SURFACES.md` for the inspected source inventory, exact open
+boundaries, bilateral identity policy and deliberately incomplete coverage.
+Cerebellum 512 failed source-normal validation; valid Cerebellar cortex 528 is
+used with its exact official label, without normal repair or inferred geometry.
+Native rendering and scientific acceptance are separate consumer gates.
+
+Validation: 153 tests pass with zero skips when the real root, twelve regional
+OBJs and pinned ontology source are configured. Source and wheel builds pass;
+the built wheel loads the packaged twelve-member catalog through
+`importlib.resources`. Focused Ruff and `git diff --check` pass. Without the
+optional real-source environment variables, the three real-asset checks skip.
+
+
 ## Allen reference envelope — October 13 2026
 
 Branch `feature/allen-reference-envelope` adds the companion Allen root-997

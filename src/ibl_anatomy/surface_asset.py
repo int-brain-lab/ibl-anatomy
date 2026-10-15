@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 import hashlib
-from importlib.resources import files
 import json
-from pathlib import Path
 import shutil
 import tempfile
+from dataclasses import dataclass
+from importlib.resources import files
+from pathlib import Path
 
 import numpy as np
 
@@ -66,10 +66,17 @@ def parse_surface_asset(value: dict) -> SurfaceAsset:
     for name in ("asset_id", "reference_space_id"):
         if not isinstance(value[name], str) or not value[name]:
             raise ValueError(f"invalid surface {name}")
-    if value["role"] != "brain-envelope" or value["variant"] != "source-native":
+    if (
+        value["role"] not in {"brain-envelope", "regional-context"}
+        or value["variant"] != "source-native"
+    ):
         raise ValueError("unsupported surface role or variant")
-    if value["source_allen_id"] != 997:
+    if type(value["source_allen_id"]) is not int or value["source_allen_id"] <= 0:
+        raise ValueError("surface must identify a positive Allen ID")
+    if value["role"] == "brain-envelope" and value["source_allen_id"] != 997:
         raise ValueError("brain envelope must identify Allen root 997")
+    if value["role"] == "regional-context" and value["source_allen_id"] == 997:
+        raise ValueError("regional context cannot identify Allen root 997")
     coordinate = value["coordinate_system"]
     if (
         not isinstance(coordinate, dict)

@@ -26,6 +26,14 @@ from .surface_asset import (
     materialize_surface_asset,
     parse_surface_asset,
 )
+from .surface_catalog import (
+    RegionalSurfaceMember,
+    SurfaceCatalog,
+    bundled_surface_catalog,
+    load_surface_catalog,
+    materialize_surface_catalog,
+    parse_surface_catalog,
+)
 from .regions import (
     AtlasRegion,
     AtlasRegionCatalog,
@@ -61,6 +69,12 @@ from .volume_pack import (
 )
 
 __all__ = [
+    "RegionalSurfaceMember",
+    "SurfaceCatalog",
+    "bundled_surface_catalog",
+    "load_surface_catalog",
+    "materialize_surface_catalog",
+    "parse_surface_catalog",
     "SurfaceAsset",
     "SurfaceGeometry",
     "bundled_surface_asset",
