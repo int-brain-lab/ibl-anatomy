@@ -1,6 +1,65 @@
 # Immediate cross-repository steps
 
+## Major-structure context — October 15 2026
+
+Implemented on `main` under the explicitly authorized first visual-gate scope:
+a narrow source-native, hash-pinned twelve-member Allen context catalog, with
+validated ontology membership and no ancestor/descendant pairs. The existing
+root-997 descriptor and loader remain compatible. The new catalog retains the
+same world affine and returns typed owned geometry through explicit atomic
+preparation and strict offline loading. No OBJ bytes are tracked.
+
+See `MAJOR_CONTEXT_SURFACES.md` for the inspected source inventory, exact open
+boundaries, bilateral identity policy and deliberately incomplete coverage.
+Cerebellum 512 failed source-normal validation; valid Cerebellar cortex 528 is
+used with its exact official label, without normal repair or inferred geometry.
+Native rendering and scientific acceptance are separate consumer gates.
+
+Validation: 153 tests pass with zero skips when the real root, twelve regional
+OBJs and pinned ontology source are configured. Source and wheel builds pass;
+the built wheel loads the packaged twelve-member catalog through
+`importlib.resources`. Focused Ruff and `git diff --check` pass. Without the
+optional real-source environment variables, the three real-asset checks skip.
+
+
+## Allen reference envelope — October 13 2026
+
+Branch `feature/allen-reference-envelope` adds the companion Allen root-997
+surface lock and offline loader. This is the shared default for whole-brain
+display; D070 remains the reference regional inventory, without changed bytes
+or identities. No post-smoothing, decimation or hole repair is applied.
+
+The explicit materializer downloads the hash-pinned original OBJ or verifies
+a supplied local copy. Source size, SHA256, counts, triangle topology and
+rigid world transform are checked before owned ML/AP/DV µm arrays are returned.
+The reference surface has 49,324 vertices, 98,638 triangles and six open
+boundary edges; it must not silently replace scientific voxel computations.
+Annotation-boundary variants remain explicit, with their own grid/recipe
+provenance. Runtime consumers never download or generate a fallback.
+
+Validation: 136 tests pass with zero skips, including the pinned real root
+source. Source and wheel builds pass; the wheel includes the companion lock.
+The source OBJ and derived numeric artifacts remain outside Git. The paper
+media and `ibl-datoviz` adapter are the first envelope consumers.
+
 Status: active near-term work plan, captured on 2026-09-14.
+
+## Region selector behavior contract — October 14 2026
+
+Branch `feature/region-selector-contract` adds the language-neutral v1 behavior
+contract shared by the Allen, Beryl, and Cosmos region selectors. The packaged
+schema and 12 reviewed scenarios (51 transitions) cover Unicode search and
+ECMAScript trimming, retained hierarchy and collapse restoration, ranked values,
+signed identities, mapping eligibility, ordered selection, range selection,
+keyboard focus, and hover. The Python package exposes the resources through
+`importlib.resources` and includes an explicit source/destination sync and check
+command; it does not add a selector runtime or dependency. See
+`REGION_SELECTOR_CONTRACT.md`.
+
+Validation: 138 tests passed, with one existing skip because no real surface
+source is configured. The wheel build included all three contract JSON resources;
+a clean target install loaded the traces through `importlib.resources`. Web and
+Python model conformance passed all 12 scenarios. The contract branch is ready for the authorized coordinated push; consumer publication and platform validation remain separate.
 
 Current checkpoint:
 

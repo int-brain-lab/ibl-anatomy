@@ -1,0 +1,940 @@
+{
+  "format": "ibl-surface-catalog-v1",
+  "schema_version": "1.0",
+  "catalog_id": "allen-ccf-2017-major-context-v1",
+  "reference_space_id": "allen-ccf-2017",
+  "hemisphere_policy": "bilateral source meshes; unsigned Allen IDs",
+  "region_catalog": {
+    "url": "https://raw.githubusercontent.com/int-brain-lab/ephys-atlas-web-v2/e91f021ac7ca096db2b408a7d691a6c32cc336ad/web/public/atlas/allen-ccf-2017/regions.json",
+    "bytes": 657555,
+    "sha256": "0b4e18949950ddd99ed98ea06c80bc469c5e1c0fb2379dcf1afa02cc66ebd8a4"
+  },
+  "terms_url": "https://alleninstitute.org/legal/terms-of-use",
+  "citation_url": "https://doi.org/10.1016/j.cell.2020.04.007",
+  "ontology": [
+    {
+      "allen_id": 8,
+      "parent_allen_id": 997,
+      "acronym": "grey",
+      "name": "Basic cell groups and regions",
+      "color_hex": "#bfdae3"
+    },
+    {
+      "allen_id": 313,
+      "parent_allen_id": 343,
+      "acronym": "MB",
+      "name": "Midbrain",
+      "color_hex": "#ff64ff"
+    },
+    {
+      "allen_id": 315,
+      "parent_allen_id": 695,
+      "acronym": "Isocortex",
+      "name": "Isocortex",
+      "color_hex": "#70ff71"
+    },
+    {
+      "allen_id": 343,
+      "parent_allen_id": 8,
+      "acronym": "BS",
+      "name": "Brain stem",
+      "color_hex": "#ff7080"
+    },
+    {
+      "allen_id": 354,
+      "parent_allen_id": 1065,
+      "acronym": "MY",
+      "name": "Medulla",
+      "color_hex": "#ff9bcd"
+    },
+    {
+      "allen_id": 477,
+      "parent_allen_id": 623,
+      "acronym": "STR",
+      "name": "Striatum",
+      "color_hex": "#98d6f9"
+    },
+    {
+      "allen_id": 512,
+      "parent_allen_id": 8,
+      "acronym": "CB",
+      "name": "Cerebellum",
+      "color_hex": "#f0f080"
+    },
+    {
+      "allen_id": 528,
+      "parent_allen_id": 512,
+      "acronym": "CBX",
+      "name": "Cerebellar cortex",
+      "color_hex": "#f0f080"
+    },
+    {
+      "allen_id": 549,
+      "parent_allen_id": 1129,
+      "acronym": "TH",
+      "name": "Thalamus",
+      "color_hex": "#ff7080"
+    },
+    {
+      "allen_id": 567,
+      "parent_allen_id": 8,
+      "acronym": "CH",
+      "name": "Cerebrum",
+      "color_hex": "#b0f0ff"
+    },
+    {
+      "allen_id": 623,
+      "parent_allen_id": 567,
+      "acronym": "CNU",
+      "name": "Cerebral nuclei",
+      "color_hex": "#98d6f9"
+    },
+    {
+      "allen_id": 688,
+      "parent_allen_id": 567,
+      "acronym": "CTX",
+      "name": "Cerebral cortex",
+      "color_hex": "#b0ffb8"
+    },
+    {
+      "allen_id": 695,
+      "parent_allen_id": 688,
+      "acronym": "CTXpl",
+      "name": "Cortical plate",
+      "color_hex": "#70ff70"
+    },
+    {
+      "allen_id": 698,
+      "parent_allen_id": 695,
+      "acronym": "OLF",
+      "name": "Olfactory areas",
+      "color_hex": "#9ad2bd"
+    },
+    {
+      "allen_id": 703,
+      "parent_allen_id": 688,
+      "acronym": "CTXsp",
+      "name": "Cortical subplate",
+      "color_hex": "#8ada87"
+    },
+    {
+      "allen_id": 771,
+      "parent_allen_id": 1065,
+      "acronym": "P",
+      "name": "Pons",
+      "color_hex": "#ff9b88"
+    },
+    {
+      "allen_id": 803,
+      "parent_allen_id": 623,
+      "acronym": "PAL",
+      "name": "Pallidum",
+      "color_hex": "#8599cc"
+    },
+    {
+      "allen_id": 997,
+      "parent_allen_id": null,
+      "acronym": "root",
+      "name": "root",
+      "color_hex": "#ffffff"
+    },
+    {
+      "allen_id": 1065,
+      "parent_allen_id": 343,
+      "acronym": "HB",
+      "name": "Hindbrain",
+      "color_hex": "#ff9b88"
+    },
+    {
+      "allen_id": 1089,
+      "parent_allen_id": 695,
+      "acronym": "HPF",
+      "name": "Hippocampal formation",
+      "color_hex": "#7ed04b"
+    },
+    {
+      "allen_id": 1097,
+      "parent_allen_id": 1129,
+      "acronym": "HY",
+      "name": "Hypothalamus",
+      "color_hex": "#e64438"
+    },
+    {
+      "allen_id": 1129,
+      "parent_allen_id": 343,
+      "acronym": "IB",
+      "name": "Interbrain",
+      "color_hex": "#ff7080"
+    }
+  ],
+  "members": [
+    {
+      "format": "ibl-reference-surface-v1",
+      "schema_version": "1.0",
+      "asset_id": "allen-ccf-2017-region-315-f2abc66a4222fb8c",
+      "reference_space_id": "allen-ccf-2017",
+      "role": "regional-context",
+      "variant": "source-native",
+      "source_allen_id": 315,
+      "source": {
+        "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/315.obj",
+        "bytes": 4319423,
+        "sha256": "f2abc66a4222fb8c1973b6d470386b000eed3f7810555e592ebdf32822c15df7"
+      },
+      "coordinate_system": {
+        "units": "um",
+        "world_axes": [
+          "ml",
+          "ap",
+          "dv"
+        ],
+        "source_axes": [
+          "ap",
+          "dv",
+          "ml"
+        ],
+        "source_to_world_um": [
+          [
+            0,
+            0,
+            1,
+            -5739
+          ],
+          [
+            -1,
+            0,
+            0,
+            5400
+          ],
+          [
+            0,
+            -1,
+            0,
+            332
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "preparation": {
+        "geometry": "source positions and triangles unchanged",
+        "normals": "source vertex normals, normalized after world transform",
+        "smoothing": false,
+        "decimation": false
+      },
+      "expectations": {
+        "vertices": 31592,
+        "triangles": 63176,
+        "boundary_edges": 0
+      }
+    },
+    {
+      "format": "ibl-reference-surface-v1",
+      "schema_version": "1.0",
+      "asset_id": "allen-ccf-2017-region-698-81321f44a22a0834",
+      "reference_space_id": "allen-ccf-2017",
+      "role": "regional-context",
+      "variant": "source-native",
+      "source_allen_id": 698,
+      "source": {
+        "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/698.obj",
+        "bytes": 2592383,
+        "sha256": "81321f44a22a0834e90773c1874bb074c0df1a34fbeb1de877f5f3958152579e"
+      },
+      "coordinate_system": {
+        "units": "um",
+        "world_axes": [
+          "ml",
+          "ap",
+          "dv"
+        ],
+        "source_axes": [
+          "ap",
+          "dv",
+          "ml"
+        ],
+        "source_to_world_um": [
+          [
+            0,
+            0,
+            1,
+            -5739
+          ],
+          [
+            -1,
+            0,
+            0,
+            5400
+          ],
+          [
+            0,
+            -1,
+            0,
+            332
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "preparation": {
+        "geometry": "source positions and triangles unchanged",
+        "normals": "source vertex normals, normalized after world transform",
+        "smoothing": false,
+        "decimation": false
+      },
+      "expectations": {
+        "vertices": 19330,
+        "triangles": 38596,
+        "boundary_edges": 102
+      }
+    },
+    {
+      "format": "ibl-reference-surface-v1",
+      "schema_version": "1.0",
+      "asset_id": "allen-ccf-2017-region-1089-2168fbfc561777e4",
+      "reference_space_id": "allen-ccf-2017",
+      "role": "regional-context",
+      "variant": "source-native",
+      "source_allen_id": 1089,
+      "source": {
+        "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/1089.obj",
+        "bytes": 1950698,
+        "sha256": "2168fbfc561777e49aad6cac04e8c9b0ad155465b2026315c26b490f2e6c47ef"
+      },
+      "coordinate_system": {
+        "units": "um",
+        "world_axes": [
+          "ml",
+          "ap",
+          "dv"
+        ],
+        "source_axes": [
+          "ap",
+          "dv",
+          "ml"
+        ],
+        "source_to_world_um": [
+          [
+            0,
+            0,
+            1,
+            -5739
+          ],
+          [
+            -1,
+            0,
+            0,
+            5400
+          ],
+          [
+            0,
+            -1,
+            0,
+            332
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "preparation": {
+        "geometry": "source positions and triangles unchanged",
+        "normals": "source vertex normals, normalized after world transform",
+        "smoothing": false,
+        "decimation": false
+      },
+      "expectations": {
+        "vertices": 14773,
+        "triangles": 29530,
+        "boundary_edges": 0
+      }
+    },
+    {
+      "format": "ibl-reference-surface-v1",
+      "schema_version": "1.0",
+      "asset_id": "allen-ccf-2017-region-703-e10914a2d51553b8",
+      "reference_space_id": "allen-ccf-2017",
+      "role": "regional-context",
+      "variant": "source-native",
+      "source_allen_id": 703,
+      "source": {
+        "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/703.obj",
+        "bytes": 928232,
+        "sha256": "e10914a2d51553b8986a3ed25c7b4be583af401c9e37010d2673798575c494c1"
+      },
+      "coordinate_system": {
+        "units": "um",
+        "world_axes": [
+          "ml",
+          "ap",
+          "dv"
+        ],
+        "source_axes": [
+          "ap",
+          "dv",
+          "ml"
+        ],
+        "source_to_world_um": [
+          [
+            0,
+            0,
+            1,
+            -5739
+          ],
+          [
+            -1,
+            0,
+            0,
+            5400
+          ],
+          [
+            0,
+            -1,
+            0,
+            332
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "preparation": {
+        "geometry": "source positions and triangles unchanged",
+        "normals": "source vertex normals, normalized after world transform",
+        "smoothing": false,
+        "decimation": false
+      },
+      "expectations": {
+        "vertices": 7292,
+        "triangles": 14584,
+        "boundary_edges": 0
+      }
+    },
+    {
+      "format": "ibl-reference-surface-v1",
+      "schema_version": "1.0",
+      "asset_id": "allen-ccf-2017-region-477-cbc4e17b571683c2",
+      "reference_space_id": "allen-ccf-2017",
+      "role": "regional-context",
+      "variant": "source-native",
+      "source_allen_id": 477,
+      "source": {
+        "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/477.obj",
+        "bytes": 2287080,
+        "sha256": "cbc4e17b571683c2d0770dba6b4adcd9539f463c3610aab6ea48343081855a11"
+      },
+      "coordinate_system": {
+        "units": "um",
+        "world_axes": [
+          "ml",
+          "ap",
+          "dv"
+        ],
+        "source_axes": [
+          "ap",
+          "dv",
+          "ml"
+        ],
+        "source_to_world_um": [
+          [
+            0,
+            0,
+            1,
+            -5739
+          ],
+          [
+            -1,
+            0,
+            0,
+            5400
+          ],
+          [
+            0,
+            -1,
+            0,
+            332
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "preparation": {
+        "geometry": "source positions and triangles unchanged",
+        "normals": "source vertex normals, normalized after world transform",
+        "smoothing": false,
+        "decimation": false
+      },
+      "expectations": {
+        "vertices": 17162,
+        "triangles": 34330,
+        "boundary_edges": 12
+      }
+    },
+    {
+      "format": "ibl-reference-surface-v1",
+      "schema_version": "1.0",
+      "asset_id": "allen-ccf-2017-region-803-0409a939e0606bd2",
+      "reference_space_id": "allen-ccf-2017",
+      "role": "regional-context",
+      "variant": "source-native",
+      "source_allen_id": 803,
+      "source": {
+        "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/803.obj",
+        "bytes": 1086846,
+        "sha256": "0409a939e0606bd2880d120b2c77b86bacb32c0d1b72745cdfad143278a3eda4"
+      },
+      "coordinate_system": {
+        "units": "um",
+        "world_axes": [
+          "ml",
+          "ap",
+          "dv"
+        ],
+        "source_axes": [
+          "ap",
+          "dv",
+          "ml"
+        ],
+        "source_to_world_um": [
+          [
+            0,
+            0,
+            1,
+            -5739
+          ],
+          [
+            -1,
+            0,
+            0,
+            5400
+          ],
+          [
+            0,
+            -1,
+            0,
+            332
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "preparation": {
+        "geometry": "source positions and triangles unchanged",
+        "normals": "source vertex normals, normalized after world transform",
+        "smoothing": false,
+        "decimation": false
+      },
+      "expectations": {
+        "vertices": 8516,
+        "triangles": 17038,
+        "boundary_edges": 20
+      }
+    },
+    {
+      "format": "ibl-reference-surface-v1",
+      "schema_version": "1.0",
+      "asset_id": "allen-ccf-2017-region-549-b1de845a59dffbe3",
+      "reference_space_id": "allen-ccf-2017",
+      "role": "regional-context",
+      "variant": "source-native",
+      "source_allen_id": 549,
+      "source": {
+        "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/549.obj",
+        "bytes": 837878,
+        "sha256": "b1de845a59dffbe342ea47a26b1b21863c5d9cdd45030391067ff244c2e23f42"
+      },
+      "coordinate_system": {
+        "units": "um",
+        "world_axes": [
+          "ml",
+          "ap",
+          "dv"
+        ],
+        "source_axes": [
+          "ap",
+          "dv",
+          "ml"
+        ],
+        "source_to_world_um": [
+          [
+            0,
+            0,
+            1,
+            -5739
+          ],
+          [
+            -1,
+            0,
+            0,
+            5400
+          ],
+          [
+            0,
+            -1,
+            0,
+            332
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "preparation": {
+        "geometry": "source positions and triangles unchanged",
+        "normals": "source vertex normals, normalized after world transform",
+        "smoothing": false,
+        "decimation": false
+      },
+      "expectations": {
+        "vertices": 6593,
+        "triangles": 13170,
+        "boundary_edges": 0
+      }
+    },
+    {
+      "format": "ibl-reference-surface-v1",
+      "schema_version": "1.0",
+      "asset_id": "allen-ccf-2017-region-1097-01495089f504298f",
+      "reference_space_id": "allen-ccf-2017",
+      "role": "regional-context",
+      "variant": "source-native",
+      "source_allen_id": 1097,
+      "source": {
+        "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/1097.obj",
+        "bytes": 786356,
+        "sha256": "01495089f504298f857c46b865439c94d0281f0b5ebf0e584cba583ddadd7c77"
+      },
+      "coordinate_system": {
+        "units": "um",
+        "world_axes": [
+          "ml",
+          "ap",
+          "dv"
+        ],
+        "source_axes": [
+          "ap",
+          "dv",
+          "ml"
+        ],
+        "source_to_world_um": [
+          [
+            0,
+            0,
+            1,
+            -5739
+          ],
+          [
+            -1,
+            0,
+            0,
+            5400
+          ],
+          [
+            0,
+            -1,
+            0,
+            332
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "preparation": {
+        "geometry": "source positions and triangles unchanged",
+        "normals": "source vertex normals, normalized after world transform",
+        "smoothing": false,
+        "decimation": false
+      },
+      "expectations": {
+        "vertices": 6217,
+        "triangles": 12329,
+        "boundary_edges": 89
+      }
+    },
+    {
+      "format": "ibl-reference-surface-v1",
+      "schema_version": "1.0",
+      "asset_id": "allen-ccf-2017-region-313-7a4505e4fe1bfe6a",
+      "reference_space_id": "allen-ccf-2017",
+      "role": "regional-context",
+      "variant": "source-native",
+      "source_allen_id": 313,
+      "source": {
+        "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/313.obj",
+        "bytes": 1350456,
+        "sha256": "7a4505e4fe1bfe6a9ce74b341654c9a75ed998035d9c8dfdc4c8fe3a65bf7cac"
+      },
+      "coordinate_system": {
+        "units": "um",
+        "world_axes": [
+          "ml",
+          "ap",
+          "dv"
+        ],
+        "source_axes": [
+          "ap",
+          "dv",
+          "ml"
+        ],
+        "source_to_world_um": [
+          [
+            0,
+            0,
+            1,
+            -5739
+          ],
+          [
+            -1,
+            0,
+            0,
+            5400
+          ],
+          [
+            0,
+            -1,
+            0,
+            332
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "preparation": {
+        "geometry": "source positions and triangles unchanged",
+        "normals": "source vertex normals, normalized after world transform",
+        "smoothing": false,
+        "decimation": false
+      },
+      "expectations": {
+        "vertices": 10518,
+        "triangles": 21040,
+        "boundary_edges": 28
+      }
+    },
+    {
+      "format": "ibl-reference-surface-v1",
+      "schema_version": "1.0",
+      "asset_id": "allen-ccf-2017-region-771-298e8b8b49cb7ed1",
+      "reference_space_id": "allen-ccf-2017",
+      "role": "regional-context",
+      "variant": "source-native",
+      "source_allen_id": 771,
+      "source": {
+        "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/771.obj",
+        "bytes": 916133,
+        "sha256": "298e8b8b49cb7ed1514718feec33146ee180f78a37ee87e7600315b25e401aa8"
+      },
+      "coordinate_system": {
+        "units": "um",
+        "world_axes": [
+          "ml",
+          "ap",
+          "dv"
+        ],
+        "source_axes": [
+          "ap",
+          "dv",
+          "ml"
+        ],
+        "source_to_world_um": [
+          [
+            0,
+            0,
+            1,
+            -5739
+          ],
+          [
+            -1,
+            0,
+            0,
+            5400
+          ],
+          [
+            0,
+            -1,
+            0,
+            332
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "preparation": {
+        "geometry": "source positions and triangles unchanged",
+        "normals": "source vertex normals, normalized after world transform",
+        "smoothing": false,
+        "decimation": false
+      },
+      "expectations": {
+        "vertices": 7243,
+        "triangles": 14298,
+        "boundary_edges": 202
+      }
+    },
+    {
+      "format": "ibl-reference-surface-v1",
+      "schema_version": "1.0",
+      "asset_id": "allen-ccf-2017-region-354-8523189a932e1e91",
+      "reference_space_id": "allen-ccf-2017",
+      "role": "regional-context",
+      "variant": "source-native",
+      "source_allen_id": 354,
+      "source": {
+        "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/354.obj",
+        "bytes": 1369688,
+        "sha256": "8523189a932e1e9123afe9348e11348094e9c2e21265d7a2887f84f34d33782c"
+      },
+      "coordinate_system": {
+        "units": "um",
+        "world_axes": [
+          "ml",
+          "ap",
+          "dv"
+        ],
+        "source_axes": [
+          "ap",
+          "dv",
+          "ml"
+        ],
+        "source_to_world_um": [
+          [
+            0,
+            0,
+            1,
+            -5739
+          ],
+          [
+            -1,
+            0,
+            0,
+            5400
+          ],
+          [
+            0,
+            -1,
+            0,
+            332
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "preparation": {
+        "geometry": "source positions and triangles unchanged",
+        "normals": "source vertex normals, normalized after world transform",
+        "smoothing": false,
+        "decimation": false
+      },
+      "expectations": {
+        "vertices": 10707,
+        "triangles": 21180,
+        "boundary_edges": 364
+      }
+    },
+    {
+      "format": "ibl-reference-surface-v1",
+      "schema_version": "1.0",
+      "asset_id": "allen-ccf-2017-region-528-c02edff0582affc1",
+      "reference_space_id": "allen-ccf-2017",
+      "role": "regional-context",
+      "variant": "source-native",
+      "source_allen_id": 528,
+      "source": {
+        "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/528.obj",
+        "bytes": 2220995,
+        "sha256": "c02edff0582affc1c9adaa563cbc53d9e6c63d735f4554269874b7c01849fe10"
+      },
+      "coordinate_system": {
+        "units": "um",
+        "world_axes": [
+          "ml",
+          "ap",
+          "dv"
+        ],
+        "source_axes": [
+          "ap",
+          "dv",
+          "ml"
+        ],
+        "source_to_world_um": [
+          [
+            0,
+            0,
+            1,
+            -5739
+          ],
+          [
+            -1,
+            0,
+            0,
+            5400
+          ],
+          [
+            0,
+            -1,
+            0,
+            332
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "preparation": {
+        "geometry": "source positions and triangles unchanged",
+        "normals": "source vertex normals, normalized after world transform",
+        "smoothing": false,
+        "decimation": false
+      },
+      "expectations": {
+        "vertices": 16703,
+        "triangles": 33362,
+        "boundary_edges": 88
+      }
+    }
+  ]
+}

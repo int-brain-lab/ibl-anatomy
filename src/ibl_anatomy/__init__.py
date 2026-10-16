@@ -23,6 +23,22 @@ from .intensity_blocks import (
     open_intensity_block_pack,
 )
 from .mesh_pack import MeshComponentRange, MeshGeometry, MeshPack, open_mesh_pack
+from .surface_asset import (
+    SurfaceAsset,
+    SurfaceGeometry,
+    bundled_surface_asset,
+    load_surface_asset,
+    materialize_surface_asset,
+    parse_surface_asset,
+)
+from .surface_catalog import (
+    RegionalSurfaceMember,
+    SurfaceCatalog,
+    bundled_surface_catalog,
+    load_surface_catalog,
+    materialize_surface_catalog,
+    parse_surface_catalog,
+)
 from .regions import (
     AtlasRegion,
     AtlasRegionCatalog,
@@ -61,6 +77,18 @@ __all__ = [
     "ContourComponent",
     "RegisteredContourPath",
     "decode_registered_contours",
+    "RegionalSurfaceMember",
+    "SurfaceCatalog",
+    "bundled_surface_catalog",
+    "load_surface_catalog",
+    "materialize_surface_catalog",
+    "parse_surface_catalog",
+    "SurfaceAsset",
+    "SurfaceGeometry",
+    "bundled_surface_asset",
+    "load_surface_asset",
+    "materialize_surface_asset",
+    "parse_surface_asset",
     "AtlasAssetSet",
     "AnatomyPack",
     "AtlasRegion",

@@ -1,0 +1,509 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ibl:region-selector:v1:schema",
+  "title": "IBL region selector conformance scenarios v1",
+  "type": "object",
+  "required": [
+    "contract",
+    "version",
+    "scenarios"
+  ],
+  "properties": {
+    "contract": {
+      "const": "ibl-region-selector"
+    },
+    "version": {
+      "const": 1
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/scenario"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "region": {
+      "type": "object",
+      "required": [
+        "id",
+        "parentId",
+        "atlasId",
+        "acronym",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "parentId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "atlasId": {
+          "type": "integer"
+        },
+        "acronym": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "mappingMember": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "order": {
+      "enum": [
+        "anatomy",
+        "value-asc",
+        "value-desc"
+      ]
+    },
+    "initial": {
+      "type": "object",
+      "required": [
+        "query",
+        "collapsed",
+        "selected",
+        "order",
+        "multiple",
+        "focus",
+        "anchor",
+        "values"
+      ],
+      "properties": {
+        "query": {
+          "type": "string"
+        },
+        "collapsed": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "selected": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "order": {
+          "$ref": "#/$defs/order"
+        },
+        "multiple": {
+          "type": "boolean"
+        },
+        "focus": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "action": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "value"
+          ],
+          "properties": {
+            "op": {
+              "const": "query"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "values"
+          ],
+          "properties": {
+            "op": {
+              "const": "values"
+            },
+            "values": {
+              "type": "object",
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "selected"
+          ],
+          "properties": {
+            "op": {
+              "const": "selection"
+            },
+            "selected": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/id"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "enabled"
+          ],
+          "properties": {
+            "op": {
+              "const": "multiple"
+            },
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "value"
+          ],
+          "properties": {
+            "op": {
+              "const": "order"
+            },
+            "value": {
+              "$ref": "#/$defs/order"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "id"
+          ],
+          "properties": {
+            "op": {
+              "enum": [
+                "collapse",
+                "expand"
+              ]
+            },
+            "id": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "op"
+          ],
+          "properties": {
+            "op": {
+              "enum": [
+                "collapseAll",
+                "expandAll"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "id"
+          ],
+          "properties": {
+            "op": {
+              "const": "hover"
+            },
+            "id": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/id"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "id"
+          ],
+          "properties": {
+            "op": {
+              "const": "activate"
+            },
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "ctrl": {
+              "type": "boolean"
+            },
+            "meta": {
+              "type": "boolean"
+            },
+            "shift": {
+              "type": "boolean"
+            },
+            "keyboard": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "key"
+          ],
+          "properties": {
+            "op": {
+              "const": "key"
+            },
+            "key": {
+              "enum": [
+                "ArrowDown",
+                "ArrowUp",
+                "ArrowLeft",
+                "ArrowRight",
+                "Home",
+                "End",
+                "Enter",
+                " "
+              ]
+            },
+            "ctrl": {
+              "type": "boolean"
+            },
+            "meta": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "id"
+          ],
+          "properties": {
+            "op": {
+              "const": "focus"
+            },
+            "id": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/id"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "snapshot": {
+      "type": "object",
+      "required": [
+        "matches",
+        "retained",
+        "visible",
+        "expanded",
+        "selected",
+        "focus",
+        "anchor",
+        "requestedOrder",
+        "order",
+        "hover"
+      ],
+      "properties": {
+        "matches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "retained": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "visible": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "expanded": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "selected": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "focus": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requestedOrder": {
+          "$ref": "#/$defs/order"
+        },
+        "order": {
+          "$ref": "#/$defs/order"
+        },
+        "hover": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "scenario": {
+      "type": "object",
+      "required": [
+        "id",
+        "regions",
+        "initial",
+        "actions",
+        "expected"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "regions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/region"
+          }
+        },
+        "initial": {
+          "$ref": "#/$defs/initial"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/action"
+          }
+        },
+        "expected": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/snapshot"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
