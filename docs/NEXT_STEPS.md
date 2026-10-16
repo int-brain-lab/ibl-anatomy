@@ -287,3 +287,38 @@ state, workers, caches, and GPU lifetime. `ephys-atlas-web-v2` remains the autho
 for its current anatomy projection assets until published shared bytes pass byte/semantic parity;
 its current display resolution must not change as a side effect. `iblatlas` remains the scientific
 authority and should change only if real generation exposes a concrete correctness or metadata gap.
+
+## Numerical registered contours (local consumer checkpoint, 2026-10-17)
+
+An additive `decode_registered_contours(RegisteredSlice)` API now exposes renderer-neutral
+`RegisteredContourPath` values with immutable signed mappings and `ContourComponent` exteriors /
+immediate holes. Ring arrays own their read-only float64 storage, retain plane coordinates and
+explicit closure, and require the existing projection affine for world coordinates. Original
+registered-slice APIs and immutable asset bytes are unchanged.
+
+The selected source profile is exact axis-aligned half-grid SVG M/L/H/V/Z, including relative
+commands, implicit repeated operands and scientific notation. All subpaths must explicitly close;
+unsupported geometry is rejected rather than silently repaired. Even-odd nesting handles shuffled
+rings, disconnected components, holes, islands, and isolated point contacts. Repeated-vertex walks
+split into simple loops; shared edge intervals, crossings and degenerate geometry are rejected.
+Numerical limits and the optional external real-corpus test are documented in README.md.
+
+Local real-source evidence: exact source manifest
+`allen-ccfv3-10um-bilateral-exact-599b5e0bbab1`, coronal 660, sagittal 566 and horizontal 393 all
+decode successfully. The first measurements were respectively 0.51, 0.38 and 0.72 seconds on the
+development host (load-time Python parsing/validation, not frame-time guarantees), yielding
+649/434/1086 components and 22/15/36 holes. Synthetic tests cover ownership, signed identities,
+SVG grammar, ring order, nested islands, isolated contacts, malformed geometry and resource limits.
+The full suite including the optional three-orientation corpus test passed (159 tests).
+This checkpoint does not establish every-section corpus coverage, native rendering quality,
+triangulation quality, or a published release. Source assets, engine, pins, and web production
+behavior remain unchanged.
+
+Contour audit hardening: exact bounded decimal lexeme normalization now rejects underflow and
+rounding onto the half grid before float construction. Relative operands retain the full
+`2**31` coordinate span. A deterministic ten-million-unit per-slice topology budget rejects
+excessive ring comparisons, sweep visits and point-in-ring edge work; component grouping and
+repeated-vertex prefix retention no longer introduce avoidable quadratic copying. Regression
+tests cover exactness and budget exhaustion, including budget sharing across paths. The full
+suite including the external real three-orientation corpus passes (159 tests); Ruff and
+`git diff --check` also pass. Real component/hole counts remain unchanged.

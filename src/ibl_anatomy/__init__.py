@@ -10,6 +10,11 @@ from .asset_set import (
     parse_asset_set,
     verify_materialized_asset_set,
 )
+from .contours import (
+    ContourComponent,
+    RegisteredContourPath,
+    decode_registered_contours,
+)
 from .intensity_blocks import (
     IntensityBlockPack,
     IntensityCacheInfo,
@@ -53,6 +58,9 @@ from .volume_pack import (
 )
 
 __all__ = [
+    "ContourComponent",
+    "RegisteredContourPath",
+    "decode_registered_contours",
     "AtlasAssetSet",
     "AnatomyPack",
     "AtlasRegion",

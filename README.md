@@ -163,3 +163,38 @@ coronal = anatomy.projections["coronal"]
 
 The committed linked fixture shares one synthetic 10-um grid with the intensity-block fixture and
 covers every AP, ML, and DV section. It is a contract and integration test, not scientific data.
+
+`decode_registered_contours(section)` adds numerical topology for the registered voxel-edge
+profile without altering the original SVG reader:
+
+```python
+from ibl_anatomy import decode_registered_contours
+
+for path in decode_registered_contours(coronal.load_slice(540)):
+    allen_id = path.atlas_ids["allen"]
+    for component in path.components:
+        outer_uv = component.outer
+        hole_rings_uv = component.holes
+```
+
+Each ring is an owned, read-only `float64[N, 2]` array with an explicit repeated closure point.
+Components retain signed Allen/Beryl/Cosmos IDs, disconnected exteriors, holes, and nested islands;
+classification uses even-odd containment independently of winding and serialized ring order.
+Coordinates remain in the source `(u, v)` index plane; use the projection's existing affine for
+world coordinates. No renderer, triangulator, native dependency, or new asset format is involved.
+
+This decoder accepts only exact rectilinear half-grid contours with SVG `M/m`, `L/l`, `H/h`,
+`V/v`, and `Z/z`, including repeated operands and scientific notation. Every subpath must close
+explicitly. Repeated-vertex walks split into loops, and rings may touch at isolated points.
+Crossings, retraced/shared edge intervals, degenerate rings, unsupported commands, nonfinite or
+non-half-grid coordinates are rejected. Limits are 16 MB of text per path, one million vertices
+and 20,000 loops per slice, coordinate magnitudes at most `2**30`, numeric operands at most
+`2**31`, and 128 characters per numeric lexeme. Exact decimal validation rejects operands that
+binary float conversion would round or underflow onto the half grid. A deterministic ten-million-unit
+work budget per slice bounds ring comparisons, sweep-level/edge-pair visits, and point-in-ring edge
+tests; geometrically valid but excessively expensive inputs are rejected. This is a bounded registered
+asset profile, not general SVG support or polygon repair. Decoding and topology validation are
+intended for loading sections, not per-frame work; caching remains consumer-owned.
+
+Set `IBL_ANATOMY_CONTOUR_MANIFEST` to an external exact anatomy-v2 manifest to run the optional
+three-orientation real-corpus contour test. No external corpus is downloaded by the tests.
