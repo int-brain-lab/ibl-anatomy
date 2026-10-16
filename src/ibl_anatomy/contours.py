@@ -42,6 +42,11 @@ def _number(token):
     # rejects lexemes that float() would round or underflow onto the half grid.
     if len(token) > _MAX_NUMBER_TEXT:
         raise ValueError("SVG contour number exceeds text limit")
+    if "." not in token and "e" not in token and "E" not in token:
+        integer = int(token)
+        if abs(integer) > 2**31:
+            raise ValueError("SVG contour numeric operand exceeds coordinate limit")
+        return float(integer)
     mantissa, _, exponent = token.lower().partition("e")
     sign = -1 if mantissa.startswith("-") else 1
     mantissa = mantissa.lstrip("+-")
@@ -143,24 +148,25 @@ def _parse(d: str) -> list[np.ndarray]:
     end = 0
     previous = None
     for match in _TOKEN.finditer(d):
+        token = match.group()
         separator = d[end : match.start()]
         if (
             separator.strip(" \t\r\n,")
             or separator.count(",") > 1
             or (
                 "," in separator
-                and (previous is None or previous.isalpha() or match.group().isalpha())
+                and (previous is None or previous.isalpha() or token.isalpha())
             )
         ):
             raise ValueError("unsupported or invalid SVG contour token")
-        tokens.append(match.group())
+        tokens.append(token)
         end = match.end()
-        previous = match.group()
+        previous = token
         if len(tokens) > 3 * _MAX_VERTICES:
             raise ValueError("registered contour path exceeds token limit")
     if d[end:].strip() or not tokens:
         raise ValueError("invalid or empty SVG contour path")
-    current = np.zeros(2, dtype=np.float64)
+    current = (0.0, 0.0)
     walk = None
     rings = []
     command = None
@@ -173,7 +179,7 @@ def _parse(d: str) -> list[np.ndarray]:
             if command in "Zz":
                 if walk is None:
                     raise ValueError("SVG close without an open subpath")
-                current = np.array(walk[0], dtype=np.float64)
+                current = walk[0]
                 if walk[-1] != walk[0]:
                     walk.append(walk[0])
                 rings.extend(_split_walk(walk))
@@ -185,25 +191,34 @@ def _parse(d: str) -> list[np.ndarray]:
         if command is None or i >= len(tokens):
             raise ValueError("missing SVG contour command or operands")
         count = 1 if command in "HhVv" else 2
-        if i + count > len(tokens) or any(t.isalpha() for t in tokens[i : i + count]):
+        if (
+            i + count > len(tokens)
+            or tokens[i].isalpha()
+            or (count == 2 and tokens[i + 1].isalpha())
+        ):
             raise ValueError("missing SVG contour operands")
-        values = np.array([_number(t) for t in tokens[i : i + count]])
+        values = (
+            (_number(tokens[i]),)
+            if count == 1
+            else (_number(tokens[i]), _number(tokens[i + 1]))
+        )
         i += count
-        if not np.all(np.isfinite(values)):
-            raise ValueError("nonfinite SVG contour coordinates")
-        target = current.copy()
         if command in "Hh":
-            target[0] = values[0] + (current[0] if command == "h" else 0)
+            point = (values[0] + (current[0] if command == "h" else 0), current[1])
         elif command in "Vv":
-            target[1] = values[0] + (current[1] if command == "v" else 0)
+            point = (current[0], values[0] + (current[1] if command == "v" else 0))
+        elif command.islower():
+            point = (values[0] + current[0], values[1] + current[1])
         else:
-            target = values + (current if command.islower() else 0)
-        if np.any(np.abs(target) > 2**30) or np.any(target * 2 != np.round(target * 2)):
+            point = values
+        # _number validates exact finite half-grid operands within +/-2**31.
+        # Their bounded scalar sums are exactly representable binary halves;
+        # allocating NumPy arrays for each vertex adds no further validation.
+        if abs(point[0]) > 2**30 or abs(point[1]) > 2**30:
             raise ValueError("contours require bounded half-grid coordinates")
         vertex_count += 1
         if vertex_count > _MAX_VERTICES:
             raise ValueError("registered contour path exceeds vertex limit")
-        point = tuple(target)
         if command in "Mm":
             if walk is not None:
                 raise ValueError("every SVG contour subpath must explicitly close")
@@ -215,7 +230,7 @@ def _parse(d: str) -> list[np.ndarray]:
             if point == walk[-1]:
                 raise ValueError("degenerate zero-length contour edge")
             walk.append(point)
-        current = target
+        current = point
     if walk is not None:
         raise ValueError("every SVG contour subpath must explicitly close")
     if not rings:
@@ -254,8 +269,15 @@ def _split_walk(walk):
 def _area(ring):
     # Exact signed eight-times-area: integer products avoid cancellation even
     # near the coordinate limit. Only sign and relative area are used internally.
-    p = ((ring - ring[0]) * 2).astype(np.int64).tolist()
-    return sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(p[:-1], p[1:]))
+    p = ((ring - ring[0]) * 2).astype(np.int64)
+    extent = np.max(np.abs(p), axis=0)
+    bound = 2 * (len(p) - 1) * int(extent[0]) * int(extent[1])
+    if bound <= np.iinfo(np.int64).max:
+        return int(np.sum(p[:-1, 0] * p[1:, 1] - p[1:, 0] * p[:-1, 1], dtype=np.int64))
+    # Extreme legal coordinates can overflow fixed-width products or sums.
+    # Preserve arbitrary-precision arithmetic for those uncommon rings.
+    points = p.tolist()
+    return sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(points[:-1], points[1:]))
 
 
 def _inside(points, ring, budget):
@@ -279,13 +301,18 @@ def _validate_intersections(rings, budget):
     vertical = {}
     edges = []
     for ri, ring in enumerate(rings):
-        for a, b in zip(ring[:-1], ring[1:]):
+        # Plain scalar edge records avoid constructing NumPy row views in this
+        # Python sweep. The numerical rings remain unchanged and independently owned.
+        points = ring.tolist()
+        for a, b in zip(points[:-1], points[1:]):
             axis = 0 if a[1] == b[1] else 1
             level = a[1 - axis]
-            lo, hi = sorted((a[axis], b[axis]))
+            lo, hi = a[axis], b[axis]
+            if lo > hi:
+                lo, hi = hi, lo
             record = (lo, hi, ri, len(edges))
             (horizontal if axis == 0 else vertical).setdefault(level, []).append(record)
-            edges.append((a, b, ri))
+            edges.append((lo, hi, ri))
     for groups in (horizontal, vertical):
         for records in groups.values():
             records.sort()
@@ -321,13 +348,11 @@ def _validate_intersections(rings, budget):
             for y in levels[first:last]:
                 budget.consume(len(active.get(y, ())))
                 for other in active.get(y, ()):
-                    a, b, ri = edges[other]
+                    horizontal_lo, horizontal_hi, ri = edges[other]
                     rj = edges[ei][2]
-                    if min(a[0], b[0]) < x < max(a[0], b[0]) and lo < y < hi:
+                    if horizontal_lo < x < horizontal_hi and lo < y < hi:
                         raise ValueError("contour edges cross")
-                    if ri == rj and (
-                        min(a[0], b[0]) < x < max(a[0], b[0]) or lo < y < hi
-                    ):
+                    if ri == rj and (horizontal_lo < x < horizontal_hi or lo < y < hi):
                         raise ValueError("contour ring touches itself along an edge")
                     if ri != rj:
                         contacts.add((min(ri, rj), max(ri, rj), x, y))
@@ -343,14 +368,15 @@ def _validate_intersections(rings, budget):
 def _classify(rings, budget):
     # Charge before the all-ring vector comparisons, even if bboxes are disjoint.
     budget.consume(len(rings) ** 2)
-    areas = np.array([abs(_area(ring)) for ring in rings], dtype=object)
+    signed_areas = [_area(ring) for ring in rings]
+    areas = np.array([abs(area) for area in signed_areas], dtype=object)
     bounds = np.array([(ring.min(axis=0), ring.max(axis=0)) for ring in rings])
     parents = np.full(len(rings), -1, dtype=int)
     for i, ring in enumerate(rings):
         a, b = ring[:2]
         delta = b - a
         normal = np.array([-delta[1], delta[0]]) / np.max(np.abs(delta))
-        sample = (a + b) / 2 + (1 if _area(ring) > 0 else -1) * 0.125 * normal
+        sample = (a + b) / 2 + (1 if signed_areas[i] > 0 else -1) * 0.125 * normal
         candidates = np.flatnonzero(
             (areas > areas[i])
             & np.all(bounds[:, 0] <= sample, axis=1)

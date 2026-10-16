@@ -210,3 +210,48 @@ def test_topology_work_budget_is_shared_across_paths(monkeypatch):
     decode_registered_contours(RegisteredSlice(0, 0, (path,)))
     with pytest.raises(ValueError, match="topology work limit"):
         decode_registered_contours(RegisteredSlice(0, 0, (path, path, path)))
+
+
+@pytest.mark.parametrize("size", [0.5, 1, 1000, 2**20, 2**30, 2**31])
+def test_exact_area_across_small_and_overflow_sized_legal_rings(size):
+    import ibl_anatomy.contours as contours
+
+    # At the largest size, fixed-width shoelace products would overflow int64.
+    origin = -(2**30)
+    path = decode(square(origin, origin, size))
+    ring = path.components[0].outer
+    assert contours._area(ring) == 8 * size * size
+    assert contours._area(ring[::-1]) == -8 * size * size
+
+
+def test_scalar_half_grid_relative_operations_preserve_limit_endpoints():
+    path = decode("M1073741823 0h.5 .5v.5h-1z")
+    np.testing.assert_array_equal(
+        path.components[0].outer,
+        [
+            [1073741823, 0],
+            [1073741823.5, 0],
+            [1073741824, 0],
+            [1073741824, 0.5],
+            [1073741823, 0.5],
+            [1073741823, 0],
+        ],
+    )
+    with pytest.raises(ValueError, match="bounded half-grid"):
+        decode("M1073741824 0h.5v1h-.5z")
+    with pytest.raises(ValueError, match="bounded half-grid"):
+        decode("M-1073741824 0h-.5v1h.5z")
+
+
+@pytest.mark.parametrize("token", ["2147483649", "-2147483649", "0000002147483649"])
+def test_plain_integer_fast_path_keeps_operand_limit(token):
+    with pytest.raises(ValueError, match="coordinate limit"):
+        decode(f"M0 0h{token}v1h-1z")
+
+
+def test_plain_integer_leading_zeros_and_signs_match_exact_decimal_operands():
+    integer = decode("M+0001 -0001h0002v+0002h-0002z")
+    decimal = decode("M1e0 -1.000h2.0v2e0h-2.000z")
+    np.testing.assert_array_equal(
+        integer.components[0].outer, decimal.components[0].outer
+    )

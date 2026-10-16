@@ -381,3 +381,41 @@ repeated-vertex prefix retention no longer introduce avoidable quadratic copying
 tests cover exactness and budget exhaustion, including budget sharing across paths. The full
 suite including the external real three-orientation corpus passes (159 tests); Ruff and
 `git diff --check` also pass. Real component/hole counts remain unchanged.
+
+## Exact contour decoder CPU optimization — October 17 2026
+
+The supported surface-catalog and numerical-reader histories were reconciled in
+`2e190e0`, preserving both public APIs. The subsequent decoder optimization keeps
+its exact half-grid grammar, numerical bounds, topology checks, shared work budget,
+component order and independent read-only ring storage. Per-vertex validation now
+uses bounded exact scalar halves instead of allocating and reducing tiny NumPy
+arrays. Common integer operands avoid decimal normalization; sweep records retain
+scalar intervals; area signs are reused. Shoelace sums use int64 only when a
+conservative product-and-sum bound proves safety, retaining arbitrary-precision
+Python arithmetic for extreme legal coordinates.
+
+On Linux, median numeric decoding of coronal 660 / sagittal 566 / horizontal 393
+improved from 503 / 367 / 698 ms to 137 / 99 / 196 ms, respectively, approximately
+3.6–3.7 times faster. These are CPU preparation timings, not GUI frame guarantees.
+Horizontal decode temporary allocation measured by tracemalloc decreased from
+2.39 MB to 2.04 MB; current reader-process RSS remained approximately 63 MiB.
+Gzip/JSON loading remains 9–22 ms per section; its approximately 14.24 MB temporary
+allocation is measured separately. Public constructor copies remain intact.
+
+An exhaustive four-process comparison decoded all 3,260 sections of the exact
+`allen-ccfv3-10um-bilateral-exact-599b5e0bbab1` corpus. Every section succeeded;
+identities, component/hole order and all ring bytes matched the published reader.
+Combined decoder CPU time improved from 1,172 to 328 seconds (3.57 times faster);
+the comparison took 383 seconds and worker peak RSS was 71.7 MiB. Independent
+seeded grammar mutations also matched 10,000 acceptance/rejection outcomes and
+all 842 accepted geometries. This validates decoding, not full-corpus native
+triangulation or rendering quality.
+
+The full suite passes 197 tests with zero skips when real surface, ontology and
+contour inputs are configured. Added regressions cover scalar half-step bounds,
+integer operand normalization and legal rings whose exact areas exceed int64.
+Ruff and whitespace checks pass. The high GPT-6.1 Sol audit found no P1/P2 issues;
+its independent operand, area and topology comparisons also passed. Reproduction
+profiles, source hashes, per-section corpus results and differential receipts are
+ignored under `build/contour-performance/`. Source assets and native engines are
+unchanged; consumer pin adoption and publication are separate integration steps.
